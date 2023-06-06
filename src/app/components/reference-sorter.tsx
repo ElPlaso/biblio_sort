@@ -44,6 +44,7 @@ export default function ReferenceSorter() {
           type="text"
           value={inputValue}
           onChange={handleInputChange}
+          placeholder="Add reference"
           className="bg-white dark:bg-gray-200 rounded p-2 w-full mb-4 border border-gray-300 dark:border-gray-700 mr-1"
         />
         <button
