@@ -4,6 +4,8 @@ import { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Switch from "./switch";
 import copy from "copy-to-clipboard";
+import { MdContentCopy } from "react-icons/md";
+import { Tooltip } from "react-tooltip";
 
 type Item = {
   id: string;
@@ -60,22 +62,28 @@ export default function ReferenceSorter() {
 
   return (
     <div className=" dark:bg-gray-800 p-6 w-full">
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between mb-10">
         <Switch
           label={"Add to start"}
           prepend={prepend}
           onChange={handleCheckboxChange}
         />
+        <a data-tooltip-id="copy" data-tooltip-content="Copy to clipboard">
+          <button
+            onClick={handleCopyToClipboard}
+            className={
+              "disabled:bg-green-200 disabled:cursor-not-allowed bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            }
+            disabled={items.length === 0}
+          >
+            <MdContentCopy size={24} />
+          </button>
+        </a>
 
-        <button
-          onClick={handleCopyToClipboard}
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4"
-        >
-          Copy to clipboard
-        </button>
+        <Tooltip id="copy" />
       </div>
 
-      <div className="flex justify-between items-center mt-4">
+      <div className="flex justify-between items-center">
         <input
           type="text"
           value={inputValue}
