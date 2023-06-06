@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Switch from "./switch";
+import copy from "copy-to-clipboard";
 
 type Item = {
   id: string;
@@ -50,13 +51,29 @@ export default function ReferenceSorter() {
     }
   }
 
+  function handleCopyToClipboard() {
+    const formattedItems = items
+      .map((item, index) => `[${index + 1}] ${item.content}`)
+      .join("\n\n");
+    copy(formattedItems);
+  }
+
   return (
     <div className=" dark:bg-gray-800 p-6 w-full">
-      <Switch
-        label={"Add to start"}
-        prepend={prepend}
-        onChange={handleCheckboxChange}
-      />
+      <div className="flex items-start justify-between">
+        <Switch
+          label={"Add to start"}
+          prepend={prepend}
+          onChange={handleCheckboxChange}
+        />
+
+        <button
+          onClick={handleCopyToClipboard}
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4"
+        >
+          Copy to clipboard
+        </button>
+      </div>
 
       <div className="flex justify-between items-center mt-4">
         <input
