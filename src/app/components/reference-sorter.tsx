@@ -98,7 +98,29 @@ export default function ReferenceSorter() {
     const itemsArray = Array.from(items);
     const [reorderedItem] = itemsArray.splice(result.source.index, 1);
     itemsArray.splice(result.destination.index, 0, reorderedItem);
-    setItems(itemsArray);
+
+    const newItems = itemsArray.map((item, index) => {
+      if (editItem && editItem.index === result.source.index) {
+        return { ...item, content: editItem.text };
+      }
+      return item;
+    });
+
+    const newEditItemIndex =
+      editItem && editItem.index === result.source.index
+        ? result.destination.index
+        : editItem && result.source.index < result.destination.index
+        ? editItem.index - 1
+        : editItem && result.source.index > result.destination.index
+        ? editItem.index + 1
+        : editItem && result.source.index === result.destination.index
+        ? result.destination.index
+        : null;
+
+    setItems(newItems);
+    setEditItem((prevEditItem) =>
+      prevEditItem ? { ...prevEditItem, index: newEditItemIndex } : null
+    );
   }
 
   function handleCheckboxChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -246,10 +268,16 @@ export default function ReferenceSorter() {
                   {(provided, snapshot) => (
                     <li
                       ref={provided.innerRef}
+                      onDoubleClick={() =>
+                        handleItemDoubleClick(index, item.content)
+                      }
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                       className={`bg-white dark:bg-gray-200 p-4 rounded mb-2 ${
-                        snapshot.isDragging ? "shadow-lg" : ""
+                        snapshot.isDragging ||
+                        (editItem && editItem.index === index)
+                          ? "shadow-lg"
+                          : ""
                       }`}
                     >
                       <div className="flex justify-between items-start">
@@ -262,11 +290,11 @@ export default function ReferenceSorter() {
                             onBlur={() => handleBlur(index)}
                             onKeyDown={(e) => handleItemEditKeyDown(e, index)}
                             autoFocus
-                            className="flex-grow mr-4 pl-1 -ml-1"
+                            className="flex-grow mr-4 pl-1 -ml-1 focus:outline-none"
                           />
                         ) : (
                           <span
-                            onDoubleClick={() =>
+                            onClick={() =>
                               handleItemDoubleClick(index, item.content)
                             }
                             className="flex-grow cursor-text"
