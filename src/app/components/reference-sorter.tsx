@@ -44,6 +44,12 @@ export default function ReferenceSorter() {
     setPrepend(e.target.checked);
   }
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      handleAddItem();
+    }
+  }
+
   return (
     <div className=" dark:bg-gray-800 p-6 w-full">
       <Switch
@@ -57,6 +63,7 @@ export default function ReferenceSorter() {
           type="text"
           value={inputValue}
           onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
           placeholder="Add reference"
           className="bg-white dark:bg-gray-200 rounded p-2 w-full mb-4 border border-gray-300 dark:border-gray-700 mr-1"
         />
