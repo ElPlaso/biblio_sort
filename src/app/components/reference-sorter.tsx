@@ -4,7 +4,7 @@ import { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Switch from "./switch";
 import copy from "copy-to-clipboard";
-import { MdContentCopy, MdContentPaste } from "react-icons/md";
+import { MdContentCopy, MdContentPaste, MdDelete } from "react-icons/md";
 import { BiImport } from "react-icons/bi";
 import { Tooltip } from "react-tooltip";
 import toast, { Toaster } from "react-hot-toast";
@@ -96,7 +96,7 @@ export default function ReferenceSorter() {
           onChange={handleCheckboxChange}
         />
         <div className="flex">
-          <div className="mr-4">
+          <div className="mr-1">
             <a
               data-tooltip-id="import"
               data-tooltip-content="Import references"
@@ -110,7 +110,7 @@ export default function ReferenceSorter() {
             </a>
             <Tooltip id="import" />
           </div>
-          <div>
+          <div className="mr-1">
             <a data-tooltip-id="copy" data-tooltip-content="Copy to clipboard">
               <button
                 onClick={handleCopyToClipboard}
@@ -125,6 +125,26 @@ export default function ReferenceSorter() {
 
             <Tooltip id="copy" />
             <Toaster />
+          </div>
+          <div>
+            <a
+              data-tooltip-id="delete"
+              data-tooltip-content="Delete all references"
+            >
+              <button
+                onClick={() => {
+                  setItems([]);
+                }}
+                className={
+                  "disabled:bg-red-200 disabled:cursor-not-allowed bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                }
+                disabled={items.length === 0}
+              >
+                <MdDelete size={24} />
+              </button>
+            </a>
+
+            <Tooltip id="delete" />
           </div>
         </div>
       </div>
@@ -147,7 +167,7 @@ export default function ReferenceSorter() {
             Close
           </button>
         </div>
-        
+
         <textarea
           value={importValue}
           onChange={handleImportChange}
