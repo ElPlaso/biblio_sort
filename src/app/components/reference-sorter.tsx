@@ -123,12 +123,7 @@ export default function ReferenceSorter() {
 
   return (
     <div className=" dark:bg-gray-800 p-6 w-full">
-      <div className="flex items-start justify-between mb-10">
-        <Switch
-          label={"Add to start"}
-          prepend={prepend}
-          onChange={handleCheckboxChange}
-        />
+      <div className="flex items-start justify-end mb1 w-full">
         <div className="flex">
           <div className="mr-1">
             <a
@@ -216,7 +211,12 @@ export default function ReferenceSorter() {
         </button>
       </Modal>
 
-      <div className="flex justify-between items-center">
+      <Switch
+        label={"Add to start"}
+        prepend={prepend}
+        onChange={handleCheckboxChange}
+      />
+      <div className="flex justify-between items-center mt-4">
         <input
           type="text"
           value={inputValue}
