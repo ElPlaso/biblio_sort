@@ -21,12 +21,46 @@ export default function ReferenceSorter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [importValue, setImportValue] = useState("");
   const [prepend, setPrepend] = useState(false);
+  const [editItem, setEditItem] = useState<{
+    index: number;
+    text: string;
+  } | null>(null);
 
   function handleAddItem() {
     if (inputValue !== "") {
       const newItem = { id: Date.now().toString(), content: inputValue };
       setItems(prepend ? [newItem, ...items] : [...items, newItem]);
       setInputValue("");
+    }
+  }
+
+  function handleItemEditChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (editItem) {
+      setEditItem({ ...editItem, text: e.target.value });
+    }
+  }
+
+  function handleItemDoubleClick(index: number, text: string) {
+    setEditItem({ index, text });
+  }
+
+  function handleBlur(index: number) {
+    if (editItem && index === editItem.index) {
+      if (editItem.text.trim() != "") {
+        const newItems = [...items];
+        newItems[editItem.index].content = editItem.text;
+        setItems(newItems);
+      }
+      setEditItem(null);
+    }
+  }
+
+  function handleItemEditKeyDown(
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) {
+    if (e.key === "Enter") {
+      handleBlur(index);
     }
   }
 
@@ -218,14 +252,32 @@ export default function ReferenceSorter() {
                         snapshot.isDragging ? "shadow-lg" : ""
                       }`}
                     >
-                      <div className="flex justify-between items-center w-full">
-                        <span>
-                          [{index + 1}] {item.content}
-                        </span>
+                      <div className="flex justify-between items-start">
+                        <span className="mr-2">[{index + 1}]</span>
+                        {editItem && editItem.index === index ? (
+                          <input
+                            type="text"
+                            value={editItem.text}
+                            onChange={handleItemEditChange}
+                            onBlur={() => handleBlur(index)}
+                            onKeyDown={(e) => handleItemEditKeyDown(e, index)}
+                            autoFocus
+                            className="flex-grow mr-4 pl-1 -ml-1"
+                          />
+                        ) : (
+                          <span
+                            onDoubleClick={() =>
+                              handleItemDoubleClick(index, item.content)
+                            }
+                            className="flex-grow cursor-text"
+                          >
+                            {item.content}
+                          </span>
+                        )}
                         {!snapshot.isDragging && (
                           <button
                             onClick={() => handleRemoveItem(index)}
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded ml-5"
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
                           >
                             x
                           </button>
