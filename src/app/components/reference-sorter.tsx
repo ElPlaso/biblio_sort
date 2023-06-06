@@ -6,6 +6,7 @@ import Switch from "./switch";
 import copy from "copy-to-clipboard";
 import { MdContentCopy } from "react-icons/md";
 import { Tooltip } from "react-tooltip";
+import toast, { Toaster } from "react-hot-toast";
 
 type Item = {
   id: string;
@@ -57,7 +58,10 @@ export default function ReferenceSorter() {
     const formattedItems = items
       .map((item, index) => `[${index + 1}] ${item.content}`)
       .join("\n\n");
-    copy(formattedItems);
+    let copied = copy(formattedItems);
+    if (copied) {
+      toast.success("Copied to clipboard");
+    }
   }
 
   return (
@@ -81,6 +85,7 @@ export default function ReferenceSorter() {
         </a>
 
         <Tooltip id="copy" />
+        <Toaster />
       </div>
 
       <div className="flex justify-between items-center">
