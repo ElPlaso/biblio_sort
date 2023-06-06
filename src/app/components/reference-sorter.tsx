@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import Switch from "./switch";
 
 type Item = {
   id: string;
@@ -11,10 +12,12 @@ type Item = {
 export default function ReferenceSorter() {
   const [items, setItems] = useState<Item[]>([]);
   const [inputValue, setInputValue] = useState("");
+  const [prepend, setPrepend] = useState(false);
 
   function handleAddItem() {
     if (inputValue !== "") {
-      setItems([...items, { id: Date.now().toString(), content: inputValue }]);
+      const newItem = { id: Date.now().toString(), content: inputValue };
+      setItems(prepend ? [newItem, ...items] : [...items, newItem]);
       setInputValue("");
     }
   }
@@ -37,9 +40,19 @@ export default function ReferenceSorter() {
     setItems(itemsArray);
   }
 
+  function handleCheckboxChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setPrepend(e.target.checked);
+  }
+
   return (
     <div className=" dark:bg-gray-800 p-6 w-full">
-      <div className="flex justify-between items-center">
+      <Switch
+        label={"Add to start"}
+        prepend={prepend}
+        onChange={handleCheckboxChange}
+      />
+
+      <div className="flex justify-between items-center mt-4">
         <input
           type="text"
           value={inputValue}
@@ -70,7 +83,9 @@ export default function ReferenceSorter() {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      className={`bg-white dark:bg-gray-200 p-4 rounded mb-2 ${snapshot.isDragging ? 'shadow-lg' : ''}`}
+                      className={`bg-white dark:bg-gray-200 p-4 rounded mb-2 ${
+                        snapshot.isDragging ? "shadow-lg" : ""
+                      }`}
                     >
                       <div className="flex justify-between items-center w-full">
                         <span>
