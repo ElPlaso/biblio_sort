@@ -65,12 +65,12 @@ export default function ReferenceSorter() {
             >
               {items.map((item, index) => (
                 <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(provided) => (
+                  {(provided, snapshot) => (
                     <li
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      className="bg-white dark:bg-gray-200 p-4 rounded mb-2"
+                      className={`bg-white dark:bg-gray-200 p-4 rounded mb-2 ${snapshot.isDragging ? 'shadow-lg' : ''}`}
                     >
                       <div className="flex justify-between items-center w-full">
                         <span>
