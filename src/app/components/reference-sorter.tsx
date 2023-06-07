@@ -135,12 +135,21 @@ export default function ReferenceSorter() {
 
   function handleCopyToClipboard() {
     const formattedItems = items
-      .map((item, index) => `[${index + 1}] ${item.content}`)
+      .map((item, index) => `[${index + 1}] ${renderWithLinks(item.content)}`)
       .join("\n\n");
-    let copied = copy(formattedItems);
-    if (copied) {
+  
+    const formattedItemsHTML = formattedItems.replace(/\n/g, '<br />');
+  
+    navigator.clipboard.write([
+      new ClipboardItem({
+        "text/html": new Blob([formattedItemsHTML], { type: "text/html" }),
+        "text/plain": new Blob([formattedItems], { type: "text/plain" })
+      })
+    ]).then(() => {
       toast.success("Copied to clipboard");
-    }
+    }).catch((error) => {
+      console.error("Could not copy text: ", error);
+    });
   }
 
   return (
