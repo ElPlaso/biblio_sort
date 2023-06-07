@@ -10,7 +10,7 @@ export default function ReferenceSorter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   return (
-    <div className=" dark:bg-gray-800 p-6 w-full">
+    <div className="p-6 w-full">
       <ToolBar setModalIsOpen={setModalIsOpen} />
 
       <ImportModal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />

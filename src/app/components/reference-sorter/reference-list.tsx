@@ -113,14 +113,14 @@ export default function ReferenceList() {
                     }
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className={`bg-white dark:bg-gray-200 p-4 rounded mb-2 ${
+                    className={`bg-white dark:bg-gray-900 p-4 rounded mb-2 ${
                       snapshot.isDragging ||
                       (editItem && editItem.index === index)
                         ? "shadow-lg"
                         : ""
                     }`}
                   >
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start ">
                       <span className="mr-2">[{index + 1}]</span>
                       {editItem && editItem.index === index ? (
                         <input
@@ -130,7 +130,7 @@ export default function ReferenceList() {
                           onBlur={() => handleBlur(index)}
                           onKeyDown={(e) => handleItemEditKeyDown(e, index)}
                           autoFocus
-                          className="flex-grow mr-4 pl-1 -ml-1 focus:outline-none"
+                          className="flex-grow mr-4 pl-1 -ml-1 focus:outline-none  dark:bg-gray-200"
                         />
                       ) : (
                         <span
@@ -146,7 +146,7 @@ export default function ReferenceList() {
                       {!snapshot.isDragging && (
                         <button
                           onClick={() => handleRemoveItem(index)}
-                          className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded select-none"
+                          className="bg-red-500 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-500 text-white font-bold py-1 px-3 rounded select-none"
                         >
                           x
                         </button>

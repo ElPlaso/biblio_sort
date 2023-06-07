@@ -22,7 +22,7 @@ export default function Switch(props: SwitchProps) {
       >
         <div
           className={`block w-14 h-8 rounded-full ${
-            props.checked ? "bg-blue-500" : "bg-gray-400 dark:bg-gray-200"
+            props.checked ? "bg-blue-500 dark:bg-blue-600" : "bg-gray-400 dark:bg-gray-500"
           }`}
         ></div>
         <div

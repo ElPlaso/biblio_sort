@@ -7,6 +7,7 @@ import {
   setImportValue,
   importItems,
 } from "../../features/references/reference-slice";
+import { selectTheme } from "../../features/theme/theme-slice";
 
 interface ImportModalProps {
   modalIsOpen: boolean;
@@ -19,6 +20,7 @@ export default function ImportModal({
 }: ImportModalProps) {
   const dispatch = useDispatch();
   const value = useSelector(selectImportValue);
+  const theme = useSelector(selectTheme);
 
   const handleImport = () => {
     dispatch(importItems());
@@ -34,16 +36,16 @@ export default function ImportModal({
       isOpen={modalIsOpen}
       onRequestClose={() => setModalIsOpen(false)}
       contentLabel="Import References"
-      style={customModalStyles}
+      style={theme === "dark" ? darkStyles : lightStyles}
     >
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between ">
         <div className="flex items-start">
           <MdContentPaste size={24} className="mt-1" />
           <h3 className="text-2xl mb-4 ml-2">Paste</h3>
         </div>
         <button
           onClick={() => setModalIsOpen(false)}
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
+          className="bg-red-500 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-500 text-white font-bold py-1 px-3 rounded"
         >
           Close
         </button>
@@ -52,11 +54,11 @@ export default function ImportModal({
       <textarea
         value={value}
         onChange={handleImportChange}
-        className="w-full h-[450px] mb-2 resize-none border p-1"
+        className="w-full h-[450px] mb-2 resize-none border p-1 dark:bg-gray-700 dark:outline-none dark:border-gray-600"
       />
       <button
         onClick={handleImport}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="bg-blue-500 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-2 px-4 rounded"
         disabled={value === ""}
       >
         Add
@@ -66,7 +68,7 @@ export default function ImportModal({
 }
 
 // Styles
-const customModalStyles = {
+const lightStyles = {
   content: {
     top: "50%",
     left: "50%",
@@ -81,6 +83,28 @@ const customModalStyles = {
     width: "600px",
     height: "600px",
     overflow: "auto",
+  },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+};
+
+const darkStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "rgb(55 65 81 / 9)",
+    paddingLeft: "20px",
+    paddingRight: "20px",
+    borderRadius: "4px",
+    width: "600px",
+    height: "600px",
+    overflow: "auto",
+    border: "none",
   },
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
