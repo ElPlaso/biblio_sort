@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Switch from "./switch";
 import copy from "copy-to-clipboard";
@@ -9,6 +9,7 @@ import { BiImport } from "react-icons/bi";
 import { Tooltip } from "react-tooltip";
 import toast, { Toaster } from "react-hot-toast";
 import Modal from "react-modal";
+import classnames from "classnames";
 
 type Item = {
   id: string;
@@ -22,10 +23,22 @@ export default function ReferenceSorter() {
   const [importValue, setImportValue] = useState("");
   const [prepend, setPrepend] = useState(false);
   const [copyWithLinks, setCopyWithLinks] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [editItem, setEditItem] = useState<{
     index: number;
     text: string;
   } | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setIsScrolled(currentScrollY > 0);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   function handleAddItem() {
     if (inputValue !== "") {
@@ -173,7 +186,31 @@ export default function ReferenceSorter() {
 
   return (
     <div className=" dark:bg-gray-800 p-6 w-full">
-      <div className="flex items-start justify-end mb1 w-full">
+      <div
+        className={classnames(
+          "flex items-center justify-between p-5 w-full sticky top-0 bg-white dark:bg-gray-900 dark:text-white ",
+          {
+            "shadow-lg": isScrolled,
+            "rounded-full": isScrolled,
+          }
+        )}
+      >
+        <div className="flex">
+          <Switch
+            className="mr-4"
+            label={"Add to start"}
+            checked={prepend}
+            id="prepend"
+            onChange={handlePrependChange}
+          />
+
+          <Switch
+            label={"Copy with links"}
+            checked={copyWithLinks}
+            id="copyWithLinks"
+            onChange={handleCopyWithLinksChange}
+          />
+        </div>
         <div className="flex">
           <div className="mr-1">
             <a
@@ -182,7 +219,7 @@ export default function ReferenceSorter() {
             >
               <button
                 onClick={() => setModalIsOpen(true)}
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4"
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
               >
                 <BiImport size={24} />
               </button>
@@ -260,23 +297,6 @@ export default function ReferenceSorter() {
           Add
         </button>
       </Modal>
-
-      <div className="flex">
-        <Switch
-          className="mr-4"
-          label={"Add to start"}
-          checked={prepend}
-          id="prepend"
-          onChange={handlePrependChange}
-        />
-
-        <Switch
-          label={"Copy with links"}
-          checked={copyWithLinks}
-          id="copyWithLinks"
-          onChange={handleCopyWithLinksChange}
-        />
-      </div>
 
       <div className="flex justify-between items-center mt-4">
         <input
