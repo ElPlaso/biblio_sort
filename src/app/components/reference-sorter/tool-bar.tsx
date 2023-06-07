@@ -18,7 +18,7 @@ import {
   togglePrepend,
   toggleCopyWithLinks,
 } from "../../features/references/reference-slice";
-import { renderWithLinks, renderWithLinksHrefOnly } from "../utils";
+import { renderWithLinksHrefOnly } from "../utils";
 
 interface ToolBarProps {
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
