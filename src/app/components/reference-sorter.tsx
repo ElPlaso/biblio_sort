@@ -298,9 +298,10 @@ export default function ReferenceSorter() {
                               handleItemDoubleClick(index, item.content)
                             }
                             className="flex-grow cursor-text"
-                          >
-                            {item.content}
-                          </span>
+                            dangerouslySetInnerHTML={{
+                              __html: renderWithLinks(item.content),
+                            }}
+                          ></span>
                         )}
                         {!snapshot.isDragging && (
                           <button
@@ -344,3 +345,10 @@ const customModalStyles = {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 };
+
+function renderWithLinks(text: string) {
+  const urlPattern = /(https?:\/\/[^\s]+)/g;
+  return text.replace(urlPattern, function (url) {
+    return `<a href="${url}" target="_blank" class='text-blue-600' rel="noopener noreferrer">${url}</a>`;
+  });
+}
