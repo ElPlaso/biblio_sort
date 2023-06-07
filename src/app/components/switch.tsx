@@ -1,32 +1,37 @@
 interface SwitchProps {
+  className?: string;
   label: string;
-  prepend: boolean;
+  checked: boolean;
+  id: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function Switch(props: SwitchProps) {
   return (
-    <div className="flex items-center">
+    <div className={`flex items-center " + ${props.className}`}>
       <input
         type="checkbox"
-        id="prepend"
-        checked={props.prepend}
+        id={props.id}
+        checked={props.checked}
         onChange={props.onChange}
         className="sr-only"
       />
-      <label htmlFor="prepend" className="relative inline-block cursor-pointer">
+      <label
+        htmlFor={props.id}
+        className="relative inline-block cursor-pointer"
+      >
         <div
           className={`block w-14 h-8 rounded-full ${
-            props.prepend ? "bg-blue-500" : "bg-gray-400 dark:bg-gray-200"
+            props.checked ? "bg-blue-500" : "bg-gray-400 dark:bg-gray-200"
           }`}
         ></div>
         <div
           className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${
-            props.prepend ? "transform translate-x-full" : ""
+            props.checked ? "transform translate-x-full" : ""
           }`}
         ></div>
       </label>
-      <label htmlFor="prepend" className="ml-3 text-gray-700 dark:text-white">
+      <label htmlFor={props.id} className="ml-2 text-gray-700 dark:text-white">
         {props.label}
       </label>
     </div>

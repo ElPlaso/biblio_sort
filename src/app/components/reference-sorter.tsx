@@ -21,6 +21,7 @@ export default function ReferenceSorter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [importValue, setImportValue] = useState("");
   const [prepend, setPrepend] = useState(false);
+  const [copyWithLinks, setCopyWithLinks] = useState(false);
   const [editItem, setEditItem] = useState<{
     index: number;
     text: string;
@@ -123,8 +124,12 @@ export default function ReferenceSorter() {
     );
   }
 
-  function handleCheckboxChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handlePrependChange(e: React.ChangeEvent<HTMLInputElement>) {
     setPrepend(e.target.checked);
+  }
+
+  function handleCopyWithLinksChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setCopyWithLinks(e.target.checked);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -135,21 +140,35 @@ export default function ReferenceSorter() {
 
   function handleCopyToClipboard() {
     const formattedItems = items
-      .map((item, index) => `[${index + 1}] ${renderWithLinks(item.content)}`)
+      .map(
+        (item, index) =>
+          `[${index + 1}] ${
+            copyWithLinks ? renderWithLinks(item.content) : item.content
+          }`
+      )
       .join("\n\n");
-  
-    const formattedItemsHTML = formattedItems.replace(/\n/g, '<br />');
-  
-    navigator.clipboard.write([
-      new ClipboardItem({
-        "text/html": new Blob([formattedItemsHTML], { type: "text/html" }),
-        "text/plain": new Blob([formattedItems], { type: "text/plain" })
-      })
-    ]).then(() => {
-      toast.success("Copied to clipboard");
-    }).catch((error) => {
-      console.error("Could not copy text: ", error);
-    });
+
+    if (copyWithLinks) {
+      const formattedItemsHTML = formattedItems.replace(/\n/g, "<br />");
+      navigator.clipboard
+        .write([
+          new ClipboardItem({
+            "text/html": new Blob([formattedItemsHTML], { type: "text/html" }),
+            "text/plain": new Blob([formattedItems], { type: "text/plain" }),
+          }),
+        ])
+        .then(() => {
+          toast.success("Copied to clipboard");
+        })
+        .catch((error) => {
+          console.error("Could not copy text: ", error);
+        });
+    } else {
+      let copied = copy(formattedItems);
+      if (copied) {
+        toast.success("Copied to clipboard");
+      }
+    }
   }
 
   return (
@@ -242,11 +261,23 @@ export default function ReferenceSorter() {
         </button>
       </Modal>
 
-      <Switch
-        label={"Add to start"}
-        prepend={prepend}
-        onChange={handleCheckboxChange}
-      />
+      <div className="flex">
+        <Switch
+          className="mr-4"
+          label={"Add to start"}
+          checked={prepend}
+          id="prepend"
+          onChange={handlePrependChange}
+        />
+
+        <Switch
+          label={"Copy with links"}
+          checked={copyWithLinks}
+          id="copyWithLinks"
+          onChange={handleCopyWithLinksChange}
+        />
+      </div>
+
       <div className="flex justify-between items-center mt-4">
         <input
           type="text"
