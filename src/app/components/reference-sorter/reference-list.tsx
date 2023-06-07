@@ -28,11 +28,23 @@ export default function ReferenceList() {
     setEditItem({ index, text });
   }
 
+  // Redux toolkit creates a "readonly" version of the state.
+  // It uses Immer under the hood, which makes original state drafts "immutable".
+  // So, the state cannot be directly mutated; instead, a new state needs to be produced.
+  // A new object must be created when updating the content of an item.
+  // Array.map() is used to create a new array.
+  // For each item, if the current index matches the index of the item being edited, it returns a new object with the updated content.
+  // Otherwise, it returns the item as is.
+
   function handleBlur(index: number) {
     if (editItem && index === editItem.index) {
       if (editItem.text.trim() != "") {
-        const newItems = [...items];
-        newItems[editItem.index].content = editItem.text;
+        const newItems = items.map((item, idx) => {
+          if (idx === editItem.index) {
+            return { ...item, content: editItem.text };
+          }
+          return item;
+        });
         dispatch(setItems(newItems));
       }
       setEditItem(null);
