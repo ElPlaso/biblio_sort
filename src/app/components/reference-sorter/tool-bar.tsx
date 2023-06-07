@@ -18,7 +18,7 @@ import {
   togglePrepend,
   toggleCopyWithLinks,
 } from "../../features/references/reference-slice";
-import { renderWithLinks } from "../utils";
+import { renderWithLinks, renderWithLinksHrefOnly } from "../utils";
 
 interface ToolBarProps {
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -60,7 +60,7 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
       .map(
         (item, index) =>
           `[${index + 1}] ${
-            copyWithLinks ? renderWithLinks(item.content) : item.content
+            copyWithLinks ? renderWithLinksHrefOnly(item.content) : item.content
           }`
       )
       .join("\n\n");
