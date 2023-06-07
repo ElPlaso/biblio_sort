@@ -305,7 +305,7 @@ export default function ReferenceSorter() {
                         {!snapshot.isDragging && (
                           <button
                             onClick={() => handleRemoveItem(index)}
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded"
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded select-none"
                           >
                             x
                           </button>
