@@ -18,7 +18,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <TopAppBar />
-        {children}
+        <main className="flex min-h-screen flex-col items-center p-24 w-full">
+          {children}
+        </main>
       </body>
     </html>
   );
