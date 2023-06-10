@@ -1,4 +1,4 @@
-import TopAppBar from "./components/top-app-bar";
+import Layout from "./components/layout/layout";
 import "./globals.css";
 import { Inter } from "next/font/google";
 
@@ -17,10 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <TopAppBar />
-        <main className="flex min-h-screen flex-col items-center p-24 w-full">
-          {children}
-        </main>
+        <Layout>{children}</Layout>
       </body>
     </html>
   );
