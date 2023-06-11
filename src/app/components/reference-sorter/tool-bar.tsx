@@ -100,6 +100,7 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
           "rounded-full": isScrolled,
           "bg-white": isScrolled,
           "dark:bg-darkColor": isScrolled,
+          "top-[100px]": isScrolled,
         }
       )}
     >
