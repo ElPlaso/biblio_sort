@@ -93,7 +93,7 @@ export default function SignUpForm() {
 
         <Link
           href="/login"
-          className="underline text-blue-500 mt-10 w-full flex justify-center"
+          className="hover:underline text-blue-500 mt-10 w-full flex justify-center"
         >
           Sign in
         </Link>
@@ -137,7 +137,7 @@ export default function SignUpForm() {
       <GoogleSignIn />
       <Link
         href="/login"
-        className="underline text-blue-500 mt-3 w-full flex justify-center"
+        className="hover:underline text-blue-500 mt-3 w-full flex justify-center"
       >
         Sign in with email & password
       </Link>

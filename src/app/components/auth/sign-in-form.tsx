@@ -71,7 +71,7 @@ export default function SignInForm() {
   return (
     <>
       <form
-        className="flex flex-col space-y-4 items-center"
+        className="flex flex-col space-y-4"
         onSubmit={handleFormSubmit}
       >
         <h1 className="text-4xl font-bold w-full">Login.</h1>
@@ -100,7 +100,10 @@ export default function SignInForm() {
 
         <GoogleSignIn />
 
-        <Link href="/register" className="underline text-blue-500 mt-3 w-full flex justify-center">
+        <Link
+          href="/register"
+          className="hover:underline text-blue-500 mt-3 w-full flex justify-center"
+        >
           Register with email & password
         </Link>
       </form>
