@@ -16,7 +16,6 @@ import {
 } from "../../features/auth/auth-slice";
 import { useDispatch } from "react-redux";
 import GoogleSignIn from "./google-sign-in";
-import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import { useSelector } from "react-redux";
