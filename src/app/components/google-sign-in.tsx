@@ -9,29 +9,39 @@ import {
 } from "../features/auth/auth-slice";
 import { auth } from "../../../firebase";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
+import AuthUser from "../types/auth-user";
 
 const provider = new GoogleAuthProvider();
 
-export const loginWithGoogle = () => async (dispatch: AppDispatch) => {
-  dispatch(loginStart());
-  try {
-    const result = await signInWithPopup(auth, provider);
-    dispatch(loginSuccess(result.user));
-    useRouter().push("/");
-  } catch (error) {
-    const errorCode = (error as { code?: string }).code;
-    const errorMessage = (error as { message?: string }).message;
-    dispatch(loginFailure(errorMessage || `Unknown error ${errorCode}`));
-  }
-};
+export const loginWithGoogle =
+  (router: ReturnType<typeof useRouter>) => async (dispatch: AppDispatch) => {
+    dispatch(loginStart());
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = {
+        uid: result.user.uid,
+        displayName: result.user.displayName,
+        email: result.user.email,
+        photoUrl: result.user.photoURL,
+      };
+      dispatch(loginSuccess(user as AuthUser));
+      router.push("/");
+    } catch (error) {
+      const errorCode = (error as { code?: string }).code;
+      const errorMessage = (error as { message?: string }).message;
+      dispatch(loginFailure(errorMessage || `Unknown error ${errorCode}`));
+      console.log(errorMessage);
+    }
+  };
 
 export default function GoogleSignIn() {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const handleLogin = () => {
-    loginWithGoogle()(dispatch);
+    loginWithGoogle(router)(dispatch);
   };
 
   return (
@@ -40,8 +50,7 @@ export default function GoogleSignIn() {
       onClick={handleLogin}
     >
       <div className="bg-white rounded p-2">
-
-      <FcGoogle size={25} />
+        <FcGoogle size={25} />
       </div>
       <h1 className="flex-grow my-2 ml-2">Sign in with Google</h1>
     </button>

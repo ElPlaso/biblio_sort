@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "firebase/auth";
+import AuthUser from "../../types/auth-user";
 import 'firebase/auth';
 
 interface AuthState {
-  user: User | null;
+  user: AuthUser | null;
   loading: boolean;
   error: string | null;
 }
@@ -21,7 +21,7 @@ export const authSlice = createSlice({
     loginStart: (state) => {
       state.loading = true;
     },
-    loginSuccess: (state, action: PayloadAction<User>) => {
+    loginSuccess: (state, action: PayloadAction<AuthUser>) => {
       state.loading = false;
       state.user = action.payload;
       state.error = null;
