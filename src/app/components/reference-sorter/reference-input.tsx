@@ -1,4 +1,5 @@
 import React, { ChangeEvent, KeyboardEvent } from "react";
+import {MdAdd} from 'react-icons/md';
 
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -38,9 +39,9 @@ export default function ReferenceInput() {
       />
       <button
         onClick={handleAddItem}
-        className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-2 px-4 rounded mb-4"
+        className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-1 px-2 rounded mb-4"
       >
-        +
+        <MdAdd size={35}/>
       </button>
     </div>
   );

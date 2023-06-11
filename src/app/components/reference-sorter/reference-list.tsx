@@ -7,6 +7,7 @@ import {
   setItems,
   removeItem,
 } from "../../features/references/reference-slice";
+import { MdRemove } from "react-icons/md";
 
 export default function ReferenceList() {
   const items = useSelector(selectItems);
@@ -146,9 +147,9 @@ export default function ReferenceList() {
                       {!snapshot.isDragging && (
                         <button
                           onClick={() => handleRemoveItem(index)}
-                          className="bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500 text-white font-bold py-1 px-3 rounded select-none"
+                          className="bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500 text-white font-bold py-2 px-3 rounded select-none"
                         >
-                          x
+                          <MdRemove size={20}/>
                         </button>
                       )}
                     </div>
