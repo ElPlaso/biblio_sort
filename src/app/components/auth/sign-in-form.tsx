@@ -4,7 +4,7 @@ import { SetStateAction, useState } from "react";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../../../firebase";
 import GoogleSignIn from "./google-sign-in";
-import { AppDispatch } from "@/app/store/store";
+import { AppDispatch, RootState } from "@/app/store/store";
 import {
   signupStart,
   loginSuccess,
@@ -70,10 +70,7 @@ export default function SignInForm() {
 
   return (
     <>
-      <form
-        className="flex flex-col space-y-4"
-        onSubmit={handleFormSubmit}
-      >
+      <form className="flex flex-col space-y-4" onSubmit={handleFormSubmit}>
         <h1 className="text-4xl font-bold w-full">Login.</h1>
         <input
           required

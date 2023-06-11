@@ -8,21 +8,21 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth } from "../../../../firebase";
-import { AppDispatch } from "../../store/store";
-import { signupStart, signupFailure } from "../../features/auth/auth-slice";
+import { AppDispatch, RootState } from "../../store/store";
+import {
+  signupStart,
+  signupFailure,
+  signupComplete,
+} from "../../features/auth/auth-slice";
 import { useDispatch } from "react-redux";
 import GoogleSignIn from "./google-sign-in";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 
 export const signUpUser =
-  (
-    email: string,
-    password: string,
-    username: string,
-    router: ReturnType<typeof useRouter>
-  ) =>
+  (email: string, password: string, username: string) =>
   (dispatch: AppDispatch) => {
     dispatch(signupStart());
     return new Promise<void>((resolve, reject) => {
@@ -33,6 +33,7 @@ export const signUpUser =
           }).then(() => {
             sendEmailVerification(result.user);
             signOut(auth);
+            dispatch(signupComplete());
             resolve();
           });
         })
@@ -54,9 +55,9 @@ export default function SignUpForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
   const [isRegistered, setIsRegistered] = useState(false);
   const dispatch = useDispatch();
+  const loading = useSelector((state: RootState) => state.auth.loading);
 
   const handleUsernameChange = (event: {
     target: { value: SetStateAction<string> };
@@ -74,8 +75,7 @@ export default function SignUpForm() {
     signUpUser(
       email,
       password,
-      username,
-      router
+      username
     )(dispatch)
       .then(() => {
         setIsRegistered(true);
@@ -84,6 +84,10 @@ export default function SignUpForm() {
         setIsRegistered(false);
       });
   };
+
+  if (loading) {
+    return <div>Please wait a moment...</div>;
+  }
 
   if (isRegistered) {
     return (
