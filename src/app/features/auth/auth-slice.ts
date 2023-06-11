@@ -44,10 +44,16 @@ export const authSlice = createSlice({
     },
     signupComplete: (state) => {
       state.loading = false;
+    },
+    resetEmailSending: (state) => {
+      state.loading = true;
+    },
+    resetEmailSent: (state) => {
+      state.loading = false;
     }
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, signupStart, signupFailure, logout, signupComplete } = authSlice.actions;
+export const { loginStart, loginSuccess, loginFailure, signupStart, signupFailure, logout, signupComplete, resetEmailSending, resetEmailSent } = authSlice.actions;
 
 export default authSlice.reducer;

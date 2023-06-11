@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import SignInForm from "../components/auth/sign-in-form";
 import Link from "next/link";
+import Loader from "../components/loader/loader";
 
 export default function LoginPage() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -21,6 +22,7 @@ export default function LoginPage() {
   if (user || loading) {
     return (
       <div className="flex flex-col items-center justify-center h-full">
+        <Loader />
         Please wait a moment...
       </div>
     );

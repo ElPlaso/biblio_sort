@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import Loader from "../loader/loader";
 
 export const signUpUser =
   (email: string, password: string, username: string) =>
@@ -86,7 +87,12 @@ export default function SignUpForm() {
   };
 
   if (loading) {
-    return <div>Please wait a moment...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center">
+        <Loader />
+        Please wait a moment...
+      </div>
+    );
   }
 
   if (isRegistered) {
