@@ -78,7 +78,7 @@ export default function SignInForm() {
           placeholder="Email"
           value={email}
           onChange={handleEmailChange}
-          className="px-4 py-2 border rounded-md"
+          className="px-4 py-2 border rounded-md dark:text-black dark:outline-none"
         />
         <input
           required
@@ -86,7 +86,7 @@ export default function SignInForm() {
           placeholder="Password"
           value={password}
           onChange={handlePasswordChange}
-          className="px-4 py-2 border rounded-md"
+          className="px-4 py-2 border rounded-md dark:text-black dark:outline-none"
         />
         <button
           type="submit"

@@ -114,14 +114,14 @@ export default function SignUpForm() {
         placeholder="Username"
         value={username}
         onChange={handleUsernameChange}
-        className="px-4 py-2 border rounded-md"
+        className="px-4 py-2 border rounded-md dark:text-black dark:outline-none"
       />
       <input
         type="email"
         placeholder="Email"
         value={email}
         onChange={handleEmailChange}
-        className="px-4 py-2 border rounded-md"
+        className="px-4 py-2 border rounded-md dark:text-black dark:outline-none"
       />
       <input
         required
@@ -129,7 +129,7 @@ export default function SignUpForm() {
         placeholder="Password"
         value={password}
         onChange={handlePasswordChange}
-        className="px-4 py-2 border rounded-md"
+        className="px-4 py-2 border rounded-md dark:text-black dark:outline-none"
       />
       <button
         type="submit"

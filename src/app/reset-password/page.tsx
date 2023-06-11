@@ -58,7 +58,7 @@ export default function ResetPassword() {
           <h1 className="text-4xl font-bold w-full">Reset Password.</h1>
           <input
             required
-            className="px-4 py-2 border rounded-md"
+            className="px-4 py-2 border rounded-md dark:text-black dark:outline-none"
             type="email"
             placeholder="Email"
             value={email}
