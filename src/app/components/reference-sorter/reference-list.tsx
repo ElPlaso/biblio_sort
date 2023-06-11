@@ -130,7 +130,7 @@ export default function ReferenceList() {
                           onBlur={() => handleBlur(index)}
                           onKeyDown={(e) => handleItemEditKeyDown(e, index)}
                           autoFocus
-                          className="flex-grow mr-4 pl-1 -ml-1 focus:outline-none  dark:bg-gray-200"
+                          className="flex-grow mr-4 pl-1 -ml-1 focus:outline-none  dark:bg-darkColor"
                         />
                       ) : (
                         <span
