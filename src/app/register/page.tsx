@@ -1,12 +1,12 @@
 "use client";
 
-import GoogleSignIn from "../components/auth/google-sign-in";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import SignInForm from "../components/auth/sign-in-form";
+import SignUpForm from "../components/auth/sign-up-form";
 import Link from "next/link";
+import GoogleSignIn from "../components/auth/google-sign-in";
 
 export default function LoginPage() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -20,10 +20,9 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col items-center justify-center h-full">
-      <SignInForm />
-
-      <Link href="/register" className="underline text-blue-500 mt-3">
-        Register with email & password
+      <SignUpForm />
+      <Link href="/login" className="underline text-blue-500 mt-3">
+        Sign in with email & password
       </Link>
     </div>
   );
