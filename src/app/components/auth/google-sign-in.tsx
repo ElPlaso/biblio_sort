@@ -48,7 +48,7 @@ export default function GoogleSignIn() {
   return (
     <button
       type="button"
-      className=" flex bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded w-full items-center shadow-md"
+      className=" flex bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 text-white px-3 py-2 rounded w-full items-center shadow-md"
       onClick={handleLogin}
     >
       <div className="bg-white rounded">

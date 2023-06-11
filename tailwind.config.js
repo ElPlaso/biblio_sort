@@ -7,14 +7,15 @@ module.exports = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    theme: {
-      extend: {
-        screens: {
-          "dark-mode": { raw: "(prefers-color-scheme: dark)" },
-        },
-        transitionProperty: {
-          colors: "background-color, border-color, color, fill",
-        },
+    extend: {
+      screens: {
+        "dark-mode": { raw: "(prefers-color-scheme: dark)" },
+      },
+      transitionProperty: {
+        colors: "background-color, border-color, color, fill",
+      },
+      colors: {
+        darkColor: "#121212",
       },
     },
   },

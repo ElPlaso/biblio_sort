@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import copy from "copy-to-clipboard";
 import Switch from "../switch";
 import { BiImport } from "react-icons/bi";
 import { MdContentCopy, MdDelete } from "react-icons/md";
@@ -77,13 +76,21 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
           toast.success("Copied to clipboard with links");
         })
         .catch((error) => {
-          toast.error("Could not copy text: ", error);
+          toast.error("Could not copy text");
         });
     } else {
-      let copied = copy(formattedItems);
-      if (copied) {
-        toast.success("Copied to clipboard");
-      }
+      navigator.clipboard
+        .write([
+          new ClipboardItem({
+            "text/plain": new Blob([formattedItems], { type: "text/plain" }),
+          }),
+        ])
+        .then(() => {
+          toast.success("Copied to clipboard");
+        })
+        .catch((error) => {
+          toast.error("Could not copy text");
+        });
     }
   }
 
@@ -99,7 +106,8 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
           "shadow-lg": isScrolled,
           "rounded-full": isScrolled,
           "bg-white": isScrolled,
-          "dark:bg-black": isScrolled,
+          "dark:bg-darkColor": isScrolled,
+          "top-[100px]": isScrolled,
         }
       )}
     >
@@ -124,7 +132,7 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
           <a data-tooltip-id="import" data-tooltip-content="Import references">
             <button
               onClick={() => setModalIsOpen(true)}
-              className="bg-green-600 dark:hover:bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-green-500 dark:hover:bg-green-500 dark:bg-green-600 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
             >
               <BiImport size={24} />
             </button>
@@ -136,7 +144,7 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
             <button
               onClick={handleCopyToClipboard}
               className={
-                "  disabled:bg-green-200 dark:disabled:bg-green-800 disabled:cursor-not-allowed bg-green-600 dark:hover:bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                "  disabled:bg-green-200 dark:disabled:bg-green-800 disabled:cursor-not-allowed bg-green-500 dark:bg-green-600 dark:hover:bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
               }
               disabled={items.length === 0}
             >
@@ -154,7 +162,7 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
             <button
               onClick={handleClearItems}
               className={
-                "disabled:bg-red-200 dark:disabled:bg-red-800 disabled:cursor-not-allowed bg-red-600 dark:hover:bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                "disabled:bg-red-200 dark:disabled:bg-red-800 disabled:cursor-not-allowed bg-red-500 dark:bg-red-600 hover:bg-red-600 dark:hover:bg-red-500 text-white font-bold py-2 px-4 rounded"
               }
               disabled={items.length === 0}
             >

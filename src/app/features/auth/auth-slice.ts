@@ -42,9 +42,18 @@ export const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
     },
+    signupComplete: (state) => {
+      state.loading = false;
+    },
+    resetEmailSending: (state) => {
+      state.loading = true;
+    },
+    resetEmailSent: (state) => {
+      state.loading = false;
+    }
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, signupStart, signupFailure, logout } = authSlice.actions;
+export const { loginStart, loginSuccess, loginFailure, signupStart, signupFailure, logout, signupComplete, resetEmailSending, resetEmailSent } = authSlice.actions;
 
 export default authSlice.reducer;

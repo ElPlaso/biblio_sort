@@ -45,7 +45,7 @@ export default function ImportModal({
         </div>
         <button
           onClick={() => setModalIsOpen(false)}
-          className="bg-red-500 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-500 text-white font-bold py-1 px-3 rounded"
+          className="bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500 text-white font-bold py-1 px-3 rounded"
         >
           Close
         </button>
@@ -54,11 +54,11 @@ export default function ImportModal({
       <textarea
         value={value}
         onChange={handleImportChange}
-        className="w-full h-[450px] mb-2 resize-none border p-1 dark:bg-gray-700 dark:outline-none dark:border-gray-600"
+        className="w-full h-[450px] mb-2 resize-none border p-1 dark:bg-darkColor dark:outline-none dark:border-gray-600"
       />
       <button
         onClick={handleImport}
-        className="bg-blue-500 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-2 px-4 rounded"
+        className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-2 px-4 rounded"
         disabled={value === ""}
       >
         Add
@@ -98,7 +98,7 @@ const darkStyles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
-    backgroundColor: "rgb(55 65 81 / 9)",
+    backgroundColor: "rgb(18 18 18 )",
     paddingLeft: "20px",
     paddingRight: "20px",
     borderRadius: "4px",

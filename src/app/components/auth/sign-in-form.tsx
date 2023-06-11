@@ -70,10 +70,7 @@ export default function SignInForm() {
 
   return (
     <>
-      <form
-        className="flex flex-col space-y-4"
-        onSubmit={handleFormSubmit}
-      >
+      <form className="flex flex-col space-y-4" onSubmit={handleFormSubmit}>
         <h1 className="text-4xl font-bold w-full">Login.</h1>
         <input
           required
@@ -81,7 +78,7 @@ export default function SignInForm() {
           placeholder="Email"
           value={email}
           onChange={handleEmailChange}
-          className="px-4 py-2 border rounded-md"
+          className="px-4 py-2 border rounded-md dark:text-black dark:outline-none"
         />
         <input
           required
@@ -89,11 +86,11 @@ export default function SignInForm() {
           placeholder="Password"
           value={password}
           onChange={handlePasswordChange}
-          className="px-4 py-2 border rounded-md"
+          className="px-4 py-2 border rounded-md dark:text-black dark:outline-none"
         />
         <button
           type="submit"
-          className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded w-full shadow-md"
+          className="px-4 py-2 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-500 text-white rounded w-full shadow-md"
         >
           Sign In
         </button>

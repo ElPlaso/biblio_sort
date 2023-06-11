@@ -5,10 +5,16 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../../firebase";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
+import { resetEmailSending, resetEmailSent } from "../features/auth/auth-slice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import Loader from "../components/loader/loader";
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");
   const [emailSent, setEmailSent] = useState(false);
+  const loading = useSelector((state: RootState) => state.auth.loading);
+  const dispatch = useDispatch();
 
   const handleEmailChange = (event: {
     target: { value: SetStateAction<string> };
@@ -16,9 +22,11 @@ export default function ResetPassword() {
 
   const handleFormSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
+    dispatch(resetEmailSending());
     sendPasswordResetEmail(auth, email)
       .then(() => {
         setEmailSent(true);
+        dispatch(resetEmailSent());
       })
       .catch((error: any) => {
         if (error.code === "auth/user-not-found") {
@@ -29,6 +37,15 @@ export default function ResetPassword() {
       });
   };
 
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full space-y-2">
+        <Loader />
+        Sending...
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col items-center justify-center h-full">
       {emailSent ? (
@@ -37,11 +54,9 @@ export default function ResetPassword() {
             Password Reset Email sent.
           </h1>
           <h2 className="font-bold">Don&apos;t see any email?</h2>
-          <p>
-            Please check your spam folder or...
-          </p>
+          <p>Please check your spam folder or...</p>
           <button
-            className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md shadow-md self-center mt-5 w-full"
+            className="px-4 py-2 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-500 text-white rounded-md shadow-md self-center mt-5 w-full"
             onClick={handleFormSubmit}
           >
             Resend Email
@@ -58,7 +73,7 @@ export default function ResetPassword() {
           <h1 className="text-4xl font-bold w-full">Reset Password.</h1>
           <input
             required
-            className="px-4 py-2 border rounded-md"
+            className="px-4 py-2 border rounded-md dark:text-black dark:outline-none"
             type="email"
             placeholder="Email"
             value={email}
