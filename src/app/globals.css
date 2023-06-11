@@ -13,8 +13,10 @@ body {
   background: rgb(var(--background-rgb));
 }
 
-body {
+body,
+body .color-transition-applied {
   @apply transition-colors duration-500;
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 body.dark {

@@ -28,14 +28,14 @@ export default function ReferenceInput() {
   }
 
   return (
-    <div className="flex justify-between items-center mt-4">
+    <div className="flex justify-between items-center mt-4 ">
       <input
         type="text"
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder="Add reference"
-        className="bg-white dark:bg-darkColor rounded p-2 w-full mb-4 border border-gray-300 dark:border-none dark:outline-none mr-1"
+        className="bg-white dark:bg-darkColor rounded p-2 w-full mb-4 border border-gray-300 dark:border-none dark:outline-none mr-1 color-transition-applied"
       />
       <button
         onClick={handleAddItem}

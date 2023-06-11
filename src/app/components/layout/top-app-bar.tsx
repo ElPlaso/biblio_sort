@@ -10,7 +10,7 @@ export default function TopAppBar() {
   const user = useSelector((state: RootState) => state.auth.user);
 
   return (
-    <header className="flex justify-between items-center w-full shadow-md fixed top-0 p-[25px] dark:bg-darkColor bg-white h-24">
+    <header className="flex justify-between items-center w-full shadow-md fixed top-0 p-[25px] dark:bg-darkColor bg-white h-24 color-transition-applied">
       <Link href="/" className="flex items-center cursor-pointer">
         <Image
           src="/favicon.ico"
