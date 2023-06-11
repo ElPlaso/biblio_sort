@@ -1,4 +1,5 @@
 import React, { ChangeEvent, KeyboardEvent } from "react";
+import {MdAdd} from 'react-icons/md';
 
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -27,20 +28,20 @@ export default function ReferenceInput() {
   }
 
   return (
-    <div className="flex justify-between items-center mt-4">
+    <div className="flex justify-between items-center mt-4 ">
       <input
         type="text"
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
         placeholder="Add reference"
-        className="bg-white dark:bg-gray-800 rounded p-2 w-full mb-4 border border-gray-300 dark:border-none dark:outline-none mr-1"
+        className="bg-white dark:bg-darkColor rounded p-2 w-full mb-4 border border-gray-300 dark:border-none dark:outline-none mr-1 color-transition-applied"
       />
       <button
         onClick={handleAddItem}
-        className="bg-blue-500 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-2 px-4 rounded mb-4"
+        className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-1 px-2 rounded mb-4"
       >
-        +
+        <MdAdd size={35}/>
       </button>
     </div>
   );
