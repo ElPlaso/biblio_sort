@@ -6,8 +6,8 @@ import GoogleSignIn from "../components/google-sign-in";
 
 export default function LoginPage() {
   return (
-    <Provider store={store}>
+    <div className="flex items-center justify-center h-full">
       <GoogleSignIn />
-    </Provider>
+    </div>
   );
 }
