@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import AuthUser from "../../types/auth-user";
+import { toast } from "react-hot-toast";
 
 const provider = new GoogleAuthProvider();
 
@@ -27,6 +28,7 @@ export const loginWithGoogle =
         photoUrl: result.user.photoURL,
       };
       dispatch(loginSuccess(user as AuthUser));
+      toast.success("Signed in");
       router.push("/");
     } catch (error) {
       const errorCode = (error as { code?: string }).code;
@@ -45,6 +47,7 @@ export default function GoogleSignIn() {
 
   return (
     <button
+      type="button"
       className=" flex bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded w-full items-center shadow-md"
       onClick={handleLogin}
     >

@@ -13,6 +13,7 @@ import {
 import { useDispatch } from "react-redux";
 import GoogleSignIn from "./google-sign-in";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 export const signUpUser =
   (
@@ -39,8 +40,16 @@ export const signUpUser =
       };
 
       dispatch(loginSuccess(authUser));
+      toast.success("Signed up");
       router.push("/");
     } catch (error: any) {
+      if (error.code! === "auth/email-already-in-use") {
+        toast.error("Email already in use");
+      } else if (password.length < 6  ) {
+        toast.error("Password must be at least 6 characters");
+      } else {
+        toast.error("Sign up failed");
+      }
       dispatch(signupFailure(error.message));
     }
   };
@@ -72,6 +81,7 @@ export default function SignUpForm() {
     <form className="flex flex-col space-y-4" onSubmit={handleFormSubmit}>
       <h1 className="text-4xl font-bold w-full">Register.</h1>
       <input
+        required
         type="text"
         placeholder="Username"
         value={username}
@@ -86,6 +96,7 @@ export default function SignUpForm() {
         className="px-4 py-2 border rounded-md"
       />
       <input
+        required
         type="password"
         placeholder="Password"
         value={password}
