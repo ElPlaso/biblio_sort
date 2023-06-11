@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import copy from "copy-to-clipboard";
 import Switch from "../switch";
 import { BiImport } from "react-icons/bi";
 import { MdContentCopy, MdDelete } from "react-icons/md";
@@ -77,13 +76,21 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
           toast.success("Copied to clipboard with links");
         })
         .catch((error) => {
-          toast.error("Could not copy text: ", error);
+          toast.error("Could not copy text");
         });
     } else {
-      let copied = copy(formattedItems);
-      if (copied) {
-        toast.success("Copied to clipboard");
-      }
+      navigator.clipboard
+        .write([
+          new ClipboardItem({
+            "text/plain": new Blob([formattedItems], { type: "text/plain" }),
+          }),
+        ])
+        .then(() => {
+          toast.success("Copied to clipboard");
+        })
+        .catch((error) => {
+          toast.error("Could not copy text");
+        });
     }
   }
 
