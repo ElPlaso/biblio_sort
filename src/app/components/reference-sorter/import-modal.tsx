@@ -83,6 +83,7 @@ const lightStyles = {
     width: "600px",
     height: "600px",
     overflow: "auto",
+    zIndex: 200,
   },
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -105,6 +106,7 @@ const darkStyles = {
     height: "600px",
     overflow: "auto",
     border: "none",
+    zIndex: 200,
   },
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",

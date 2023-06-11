@@ -7,7 +7,6 @@ import Switch from "../switch";
 import { BiImport } from "react-icons/bi";
 import { MdContentCopy, MdDelete } from "react-icons/md";
 import { Tooltip } from "react-tooltip";
-import { Toaster } from "react-hot-toast";
 import classnames from "classnames";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -146,7 +145,6 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
           </a>
 
           <Tooltip id="copy" />
-          <Toaster />
         </div>
         <div>
           <a
