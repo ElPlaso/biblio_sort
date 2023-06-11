@@ -3,7 +3,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setTheme, selectTheme } from "../features/theme/theme-slice";
 import { useEffect } from "react";
-import Switch from "./switch";
+import { IoSunnyOutline, IoMoonOutline } from "react-icons/io5";
 
 export default function ThemeModeToggle() {
   const dispatch = useDispatch();
@@ -33,11 +33,18 @@ export default function ThemeModeToggle() {
   }, [dispatch]);
 
   return (
-    <Switch
-      label={theme === "light" ? "light" : "dark"}
-      checked={theme === "dark"}
-      id={"theme"}
-      onChange={handleThemeChange}
-    />
+    <button
+      onClick={handleThemeChange}
+      aria-label={
+        theme === "light" ? "Switch to dark mode" : "Switch to light mode"
+      }
+      className="transition-colors duration-200"
+    >
+      {theme === "light" ? (
+        <IoSunnyOutline size={25} />
+      ) : (
+        <IoMoonOutline size={25} />
+      )}
+    </button>
   );
 }
