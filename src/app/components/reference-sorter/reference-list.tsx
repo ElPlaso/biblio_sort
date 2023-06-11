@@ -113,7 +113,7 @@ export default function ReferenceList() {
                     }
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className={`bg-white dark:bg-gray-900 p-4 rounded mb-2 ${
+                    className={`bg-white dark:bg-darkColor p-4 rounded mb-2 ${
                       snapshot.isDragging ||
                       (editItem && editItem.index === index)
                         ? "shadow-lg"

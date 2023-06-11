@@ -93,7 +93,7 @@ export default function SignInForm() {
         />
         <button
           type="submit"
-          className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded w-full shadow-md"
+          className="px-4 py-2 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-500 text-white rounded w-full shadow-md"
         >
           Sign In
         </button>

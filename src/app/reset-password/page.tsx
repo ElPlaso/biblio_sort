@@ -41,7 +41,7 @@ export default function ResetPassword() {
             Please check your spam folder or...
           </p>
           <button
-            className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md shadow-md self-center mt-5 w-full"
+            className="px-4 py-2 bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-500 text-white rounded-md shadow-md self-center mt-5 w-full"
             onClick={handleFormSubmit}
           >
             Resend Email

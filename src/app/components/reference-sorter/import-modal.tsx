@@ -54,7 +54,7 @@ export default function ImportModal({
       <textarea
         value={value}
         onChange={handleImportChange}
-        className="w-full h-[450px] mb-2 resize-none border p-1 dark:bg-gray-700 dark:outline-none dark:border-gray-600"
+        className="w-full h-[450px] mb-2 resize-none border p-1 dark:bg-darkColor dark:outline-none dark:border-gray-600"
       />
       <button
         onClick={handleImport}
@@ -98,7 +98,7 @@ const darkStyles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
-    backgroundColor: "rgb(55 65 81 / 9)",
+    backgroundColor: "rgb(18 18 18 )",
     paddingLeft: "20px",
     paddingRight: "20px",
     borderRadius: "4px",

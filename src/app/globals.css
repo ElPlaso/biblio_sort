@@ -5,6 +5,7 @@
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-rgb: 255, 255, 255;
+  --dark-background-rgb: 18, 18, 18; /*#121212*/
 }
 
 body {
@@ -18,5 +19,5 @@ body {
 
 body.dark {
   color: rgb(var(--background-rgb));
-  background: rgb(var(--foreground-rgb));
+  background: rgb(var(--dark-background-rgb));
 }
