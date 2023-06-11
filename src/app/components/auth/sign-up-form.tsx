@@ -1,19 +1,20 @@
 "use client";
 
 import { SetStateAction, useState } from "react";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  sendEmailVerification,
+  signOut,
+} from "firebase/auth";
 import { auth } from "../../../../firebase";
 import { AppDispatch } from "../../store/store";
-import AuthUser from "../../types/auth-user";
-import {
-  signupStart,
-  signupFailure,
-  loginSuccess,
-} from "../../features/auth/auth-slice";
+import { signupStart, signupFailure } from "../../features/auth/auth-slice";
 import { useDispatch } from "react-redux";
 import GoogleSignIn from "./google-sign-in";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import Link from "next/link";
 
 export const signUpUser =
   (
@@ -22,36 +23,31 @@ export const signUpUser =
     username: string,
     router: ReturnType<typeof useRouter>
   ) =>
-  async (dispatch: AppDispatch) => {
+  (dispatch: AppDispatch) => {
     dispatch(signupStart());
-    try {
-      const result = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      await updateProfile(result.user, {
-        displayName: username,
-      });
-      const authUser: AuthUser = {
-        uid: result.user.uid,
-        displayName: result.user.displayName || "",
-        email: result.user.email || "",
-      };
-
-      dispatch(loginSuccess(authUser));
-      toast.success("Signed up");
-      router.push("/");
-    } catch (error: any) {
-      if (error.code! === "auth/email-already-in-use") {
-        toast.error("Email already in use");
-      } else if (password.length < 6  ) {
-        toast.error("Password must be at least 6 characters");
-      } else {
-        toast.error("Sign up failed");
-      }
-      dispatch(signupFailure(error.message));
-    }
+    return new Promise<void>((resolve, reject) => {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((result) => {
+          updateProfile(result.user, {
+            displayName: username,
+          }).then(() => {
+            sendEmailVerification(result.user);
+            signOut(auth);
+            resolve();
+          });
+        })
+        .catch((error) => {
+          if (error.code === "auth/email-already-in-use") {
+            toast.error("Email already in use");
+          } else if (password.length < 6) {
+            toast.error("Password must be at least 6 characters");
+          } else {
+            toast.error("Sign up failed");
+          }
+          dispatch(signupFailure(error.message));
+          reject();
+        });
+    });
   };
 
 export default function SignUpForm() {
@@ -59,6 +55,7 @@ export default function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const [isRegistered, setIsRegistered] = useState(false);
   const dispatch = useDispatch();
 
   const handleUsernameChange = (event: {
@@ -74,8 +71,35 @@ export default function SignUpForm() {
   const handleFormSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
 
-    signUpUser(email, password, username, router)(dispatch);
+    signUpUser(
+      email,
+      password,
+      username,
+      router
+    )(dispatch)
+      .then(() => {
+        setIsRegistered(true);
+      })
+      .catch(() => {
+        setIsRegistered(false);
+      });
   };
+
+  if (isRegistered) {
+    return (
+      <div>
+        <h1 className="text-4xl font-bold w-full">Verification email sent.</h1>
+        <p>Please verify before signing in.</p>
+
+        <Link
+          href="/login"
+          className="underline text-blue-500 mt-10 w-full flex justify-center"
+        >
+          Sign in
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <form className="flex flex-col space-y-4" onSubmit={handleFormSubmit}>
@@ -111,6 +135,12 @@ export default function SignUpForm() {
       </button>
 
       <GoogleSignIn />
+      <Link
+        href="/login"
+        className="underline text-blue-500 mt-3 w-full flex justify-center"
+      >
+        Sign in with email & password
+      </Link>
     </form>
   );
 }

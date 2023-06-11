@@ -1,7 +1,7 @@
 "use client";
 
 import { SetStateAction, useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../../../firebase";
 import GoogleSignIn from "./google-sign-in";
 import { AppDispatch } from "@/app/store/store";
@@ -14,6 +14,7 @@ import AuthUser from "@/app/types/auth-user";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
+import Link from "next/link";
 
 export const signInUser =
   (email: string, password: string, router: ReturnType<typeof useRouter>) =>
@@ -21,6 +22,13 @@ export const signInUser =
     dispatch(signupStart());
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
+
+      // If email is not verified, sign the user out immediately
+      if (!result.user.emailVerified) {
+        await signOut(auth);
+        toast.error("Please verify your email first");
+        return;
+      }
 
       const user: AuthUser = {
         uid: result.user.uid,
@@ -31,15 +39,13 @@ export const signInUser =
       toast.success("Signed in");
       router.push("/");
     } catch (error: any) {
-      if (
-        error.code! === "auth/user-not-found" ||
-        error.code! === "auth/wrong-password"
-      ) {
-        toast.error("Incorrect email or password");
+      if (error.code === "auth/user-not-found") {
+        toast.error("No user found with this email");
+      } else if (error.code === "auth/wrong-password") {
+        toast.error("Wrong password");
       } else {
         toast.error("Sign in failed");
       }
-
       dispatch(signupFailure(error.message));
     }
   };
@@ -93,6 +99,10 @@ export default function SignInForm() {
         </button>
 
         <GoogleSignIn />
+
+        <Link href="/register" className="underline text-blue-500 mt-3 w-full flex justify-center">
+          Register with email & password
+        </Link>
       </form>
     </>
   );
