@@ -147,7 +147,7 @@ export default function ReferenceList() {
                       {!snapshot.isDragging && (
                         <button
                           onClick={() => handleRemoveItem(index)}
-                          className="bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500 text-white font-bold py-2 px-3 rounded select-none"
+                          className="bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500 text-white font-bold py-2 px-2 rounded-full select-none"
                         >
                           <MdRemove size={20}/>
                         </button>
