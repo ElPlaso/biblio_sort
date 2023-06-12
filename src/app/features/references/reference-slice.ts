@@ -44,9 +44,12 @@ export const referenceSlice = createSlice({
         },
         importItems: (state) => {
             const newItems = state.importValue
-                .split("\n\n")
-                .filter((content) => content.trim() !== "") // Filter out empty strings
-                .map((content) => content.replace(/^\[\d+\]\s/, "")) // Removing numbers
+                .split("\n") // Split by each line
+                .map((line) => line.trim()) // Remove leading and trailing spaces on each line
+                .join("\n") // Join them back into a single string
+                .split("\n\n") // Split by double newlines
+                .filter((content) => content.trim() !== "")
+                .map((content) => content.replace(/^\[\d+\]\s/, ""))
                 .map((content, index) => ({
                     id: `${Date.now().toString()}-${index}`,
                     content: content.trim(),
