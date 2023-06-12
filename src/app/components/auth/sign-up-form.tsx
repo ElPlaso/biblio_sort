@@ -38,13 +38,7 @@ export const signUpUser =
           });
         })
         .catch((error) => {
-          if (error.code === "auth/email-already-in-use") {
-            toast.error("Email already in use");
-          } else if (password.length < 6) {
-            toast.error("Password must be at least 6 characters");
-          } else {
-            toast.error("Sign up failed");
-          }
+          toast.error(error.code.split("/")[1].replaceAll("-", " "));
           dispatch(signupFailure(error.message));
           reject();
         });
@@ -56,8 +50,9 @@ export default function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isRegistered, setIsRegistered] = useState(false);
-  const dispatch = useDispatch();
   const loading = useSelector((state: RootState) => state.auth.loading);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const dispatch = useDispatch();
 
   const handleUsernameChange = (event: {
     target: { value: SetStateAction<string> };
@@ -92,6 +87,10 @@ export default function SignUpForm() {
         Please wait a moment...
       </div>
     );
+  }
+
+  if (user) {
+    return <></>;
   }
 
   if (isRegistered) {

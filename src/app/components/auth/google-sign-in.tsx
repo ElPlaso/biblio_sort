@@ -33,6 +33,7 @@ export const loginWithGoogle =
     } catch (error) {
       const errorCode = (error as { code?: string }).code;
       const errorMessage = (error as { message?: string }).message;
+      toast.error("Sign in failed");
       dispatch(loginFailure(errorMessage || `Unknown error ${errorCode}`));
     }
   };

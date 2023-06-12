@@ -39,7 +39,7 @@ export default function ReferenceInput() {
       />
       <button
         onClick={handleAddItem}
-        className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-1 px-2 rounded mb-4"
+        className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500 text-white font-bold py-1 px-1 rounded mb-4"
       >
         <MdAdd size={35}/>
       </button>

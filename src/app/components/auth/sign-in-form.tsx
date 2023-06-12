@@ -4,22 +4,23 @@ import { SetStateAction, useState } from "react";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../../../firebase";
 import GoogleSignIn from "./google-sign-in";
-import { AppDispatch } from "@/app/store/store";
+import { AppDispatch, RootState } from "@/app/store/store";
 import {
-  signupStart,
+  loginStart,
   loginSuccess,
-  signupFailure,
+  loginFailure,
 } from "@/app/features/auth/auth-slice";
 import AuthUser from "@/app/types/auth-user";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
+import Loader from "../loader/loader";
 
 export const signInUser =
   (email: string, password: string, router: ReturnType<typeof useRouter>) =>
   async (dispatch: AppDispatch) => {
-    dispatch(signupStart());
+    dispatch(loginStart());
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
 
@@ -39,14 +40,8 @@ export const signInUser =
       toast.success("Signed in");
       router.push("/");
     } catch (error: any) {
-      if (error.code === "auth/user-not-found") {
-        toast.error("No user found with this email");
-      } else if (error.code === "auth/wrong-password") {
-        toast.error("Wrong password");
-      } else {
-        toast.error("Sign in failed");
-      }
-      dispatch(signupFailure(error.message));
+      toast.error(error.code.split("/")[1].replaceAll("-", " "));
+      dispatch(loginFailure(error.message));
     }
   };
 
@@ -54,6 +49,8 @@ export default function SignInForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const loading = useSelector((state: RootState) => state.auth.loading);
   const dispatch = useDispatch();
 
   const handleEmailChange = (event: {
@@ -67,6 +64,19 @@ export default function SignInForm() {
     event.preventDefault();
     signInUser(email, password, router)(dispatch);
   };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <Loader />
+        Please wait a moment...
+      </div>
+    );
+  }
+
+  if (user) {
+    return <></>;
+  }
 
   return (
     <>
@@ -102,6 +112,13 @@ export default function SignInForm() {
           className="hover:underline text-blue-500 mt-3 w-full flex justify-center"
         >
           Register with email & password
+        </Link>
+
+        <Link
+          href="/reset-password"
+          className="text-blue-500 hover:underline w-full flex justify-center"
+        >
+          Forgot password?
         </Link>
       </form>
     </>

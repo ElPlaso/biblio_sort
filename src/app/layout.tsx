@@ -1,4 +1,4 @@
-import Layout from "./components/layout/layout";
+import LayoutWrapper from "./components/layout/layout-wrapper";
 import "./globals.css";
 import { Inter } from "next/font/google";
 
@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Layout>{children}</Layout>
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );
