@@ -38,13 +38,7 @@ export const signUpUser =
           });
         })
         .catch((error) => {
-          if (error.code === "auth/email-already-in-use") {
-            toast.error("Email already in use");
-          } else if (password.length < 6) {
-            toast.error("Password must be at least 6 characters");
-          } else {
-            toast.error("Sign up failed");
-          }
+          toast.error(error.code.split("/")[1].replaceAll("-", " "));
           dispatch(signupFailure(error.message));
           reject();
         });

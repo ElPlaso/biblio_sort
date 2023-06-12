@@ -40,13 +40,7 @@ export const signInUser =
       toast.success("Signed in");
       router.push("/");
     } catch (error: any) {
-      if (error.code === "auth/user-not-found") {
-        toast.error("No user found with this email");
-      } else if (error.code === "auth/wrong-password") {
-        toast.error("Wrong password");
-      } else {
-        toast.error("Sign in failed");
-      }
+      toast.error(error.code.split("/")[1].replaceAll("-", " "));
       dispatch(loginFailure(error.message));
     }
   };
