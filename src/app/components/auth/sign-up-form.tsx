@@ -56,8 +56,9 @@ export default function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isRegistered, setIsRegistered] = useState(false);
-  const dispatch = useDispatch();
   const loading = useSelector((state: RootState) => state.auth.loading);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const dispatch = useDispatch();
 
   const handleUsernameChange = (event: {
     target: { value: SetStateAction<string> };
@@ -92,6 +93,10 @@ export default function SignUpForm() {
         Please wait a moment...
       </div>
     );
+  }
+
+  if (user) {
+    return <></>;
   }
 
   if (isRegistered) {

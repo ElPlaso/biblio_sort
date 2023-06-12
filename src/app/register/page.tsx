@@ -8,13 +8,14 @@ import SignUpForm from "../components/auth/sign-up-form";
 
 export default function LoginPage() {
   const user = useSelector((state: RootState) => state.auth.user);
+  const signingUp = useSelector((state: RootState) => state.auth.signingUp);
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
+    if (user && !signingUp) {
       router.replace("/");
     }
-  }, [user, router]);
+  }, [user, router, signingUp]);
 
   return (
     <div className="flex flex-col items-center justify-center h-full">

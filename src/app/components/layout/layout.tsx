@@ -2,14 +2,29 @@
 
 import SideNav from "./side-nav";
 import TopAppBar from "./top-app-bar";
-import { Provider } from "react-redux";
-import { store } from "../../store/store";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 import { Toaster } from "react-hot-toast";
+import { authStateObserver } from "../../../../firebase";
+import { useEffect } from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    authStateObserver();
+  }, []);
+  const authInitialized = useSelector(
+    (state: RootState) => state.auth.authInitialized
+  );
+
+  if (!authInitialized) {
+    return <></>;
+  }
+
   return (
-    <Provider store={store}>
-      <Toaster  toastOptions={{className:"dark:bg-darkColor dark:text-white"}}/>
+    <>
+      <Toaster
+        toastOptions={{ className: "dark:bg-darkColor dark:text-white" }}
+      />
       <div className="flex h-screen">
         <div className="flex flex-row flex-grow w-full">
           <SideNav />
@@ -17,6 +32,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
         <TopAppBar />
       </div>
-    </Provider>
+    </>
   );
 }

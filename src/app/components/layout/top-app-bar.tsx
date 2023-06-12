@@ -9,6 +9,7 @@ import ThemeModeToggle from "../theme-mode-toggle";
 export default function TopAppBar() {
   const user = useSelector((state: RootState) => state.auth.user);
   const userFirstLetter = user?.displayName?.charAt(0).toUpperCase();
+  const signingUp = useSelector((state: RootState) => state.auth.signingUp);
 
   return (
     <header className="flex justify-between items-center w-full shadow-md fixed top-0 p-[25px] dark:bg-darkColor bg-white h-24 color-transition-applied">
@@ -25,7 +26,7 @@ export default function TopAppBar() {
       </Link>
       <div className="flex items-center">
         <ThemeModeToggle />
-        {user ? (
+        {user && !signingUp ? (
           user.photoUrl ? (
             <Image
               className="ml-4 rounded-full cursor-pointer"

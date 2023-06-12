@@ -1,6 +1,6 @@
 "use client";
 
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../../firebase";
 import { toast } from "react-hot-toast";
@@ -9,12 +9,21 @@ import { resetEmailSending, resetEmailSent } from "../features/auth/auth-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import Loader from "../components/loader/loader";
+import { useRouter } from "next/navigation";
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");
   const [emailSent, setEmailSent] = useState(false);
   const loading = useSelector((state: RootState) => state.auth.loading);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const router = useRouter();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user) {
+      router.replace("/");
+    }
+  }, [user, router]);
 
   const handleEmailChange = (event: {
     target: { value: SetStateAction<string> };
@@ -44,6 +53,10 @@ export default function ResetPassword() {
         Sending...
       </div>
     );
+  }
+
+  if (user) {
+    return <></>;
   }
 
   return (
