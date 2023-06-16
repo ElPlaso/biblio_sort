@@ -3,6 +3,7 @@ import Link from "next/link";
 import { RootState } from "../../store/store";
 import SignOutButton from "../auth/sign-out";
 import { usePathname } from "next/navigation";
+import ProjectList from "../project-list";
 
 export default function SideNav() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -11,7 +12,11 @@ export default function SideNav() {
     <nav className="fixed left-0 h-screen w-64 bg-white dark:bg-darkColor shadow-xl px-2 z-2 pt-5 z-2 color-transition-applied">
       <div className="pt-24">
         {user && user.emailVerified ? (
-          <SignOutButton />
+          <div className="flex flex-col space-y-4">
+            <ProjectList />
+            <div className="border-t border-gray-200 dark:border-gray-700" />
+            <SignOutButton />
+          </div>
         ) : pathName === "/login" ||
           pathName === "/register" ||
           pathName === "/reset-password" ? (
