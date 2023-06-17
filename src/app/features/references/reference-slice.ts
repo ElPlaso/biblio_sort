@@ -1,10 +1,11 @@
 import { RootState } from '@/app/store/store';
+import { SortableItem } from '@/app/types/sortable-item';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ReferenceState {
     inputValue: string;
     importValue: string;
-    items: any[];
+    items: SortableItem[];
     prepend: boolean;
     copyWithLinks: boolean;
     projectId?: string;

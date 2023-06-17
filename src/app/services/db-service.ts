@@ -75,3 +75,16 @@ export const projectExists = async (projectId: string, uid: string) => {
     return false;
 }
 
+// gets all items from a project with given id 
+export const getProjectItems = async (projectId: string) => {
+    const docRef = doc(db, "projects", projectId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        const projectData = docSnap.data();
+        return projectData.items as string[];
+    }
+
+    return [] as string[];
+}
+

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createProject, deleteProject, getProjects, updateProjectItems, projectExists } from '@/app/services/db-service';
+import { createProject, deleteProject, getProjects, updateProjectItems, projectExists, getProjectItems } from '@/app/services/db-service';
 import Project from '@/app/types/project';
 
 interface ProjectsState {
@@ -32,10 +32,16 @@ export const deleteProjectAction = createAsyncThunk('projects/deleteProject', as
     return projectId;
 });
 
-export const checkProjectExists = createAsyncThunk('projects/checkProjectExists', async ({projectId, uid} : {projectId: string, uid: string}) => {
+export const checkProjectExists = createAsyncThunk('projects/checkProjectExists', async ({ projectId, uid }: { projectId: string, uid: string }) => {
     const exists = await projectExists(projectId, uid);
     return exists;
 });
+
+export const getItems = createAsyncThunk('projects/getItems', async (projectId: string) => {
+    const items = await getProjectItems(projectId) as string[];
+    return items;
+});
+
 
 export const fetchProjects = createAsyncThunk(
     "projects/fetchProjects",
@@ -72,6 +78,10 @@ const projectsSlice = createSlice({
                 state.loading = false;
                 state.error = null;
             })
+            .addCase(getItems.fulfilled, (state, action: PayloadAction<string[]>) => {
+                state.loading = false;
+                state.error = null;
+            });
     },
 });
 
