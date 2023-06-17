@@ -1,20 +1,31 @@
-"use client";
-
+"use client'";
+import { fetchProjects } from "@/app/features/projects/project-slice";
+import { useDispatch } from "react-redux";
 import SideNav from "./side-nav";
 import TopAppBar from "./top-app-bar";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { AppDispatch, RootState } from "@/app/store/store";
 import { Toaster } from "react-hot-toast";
 import { authStateObserver } from "@/app/services/auth-service";
 import { useEffect } from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     authStateObserver();
   }, []);
+
   const authInitialized = useSelector(
     (state: RootState) => state.auth.authInitialized
   );
+
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  useEffect(() => {
+    if (authInitialized && user) {
+      dispatch(fetchProjects(user.uid));
+    }
+  }, [authInitialized, user, dispatch]);
 
   if (!authInitialized) {
     return <></>;

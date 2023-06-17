@@ -1,11 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createProject, deleteProject, updateProjectItems } from '@/app/services/db-service';
-
-interface Project {
-    id: string;
-    title: string;
-    items: string[];
-}
+import { createProject, deleteProject, getProjects, updateProjectItems } from '@/app/services/db-service';
+import Project from '@/app/types/project';
 
 interface ProjectsState {
     projects: Project[];
@@ -37,6 +32,14 @@ export const deleteProjectAction = createAsyncThunk('projects/deleteProject', as
     return projectId;
 });
 
+export const fetchProjects = createAsyncThunk(
+    "projects/fetchProjects",
+    async (userId: string, thunkAPI) => {
+        const projects = await getProjects(userId);
+        return projects;
+    }
+);
+
 
 const projectsSlice = createSlice({
     name: 'projects',
@@ -46,6 +49,9 @@ const projectsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(fetchProjects.fulfilled, (state, action: PayloadAction<Project[]>) => {
+                state.projects = action.payload;
+            })
             .addCase(createProjectAction.fulfilled, (state, action: PayloadAction<{ projectId: string, title: string, items: string[] }>) => {
                 state.projects.push({ id: action.payload.projectId, title: action.payload.title, items: action.payload.items });
             })
