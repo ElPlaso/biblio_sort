@@ -5,7 +5,7 @@ import TopAppBar from "./top-app-bar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { Toaster } from "react-hot-toast";
-import { authStateObserver } from "../../../../firebase";
+import { authStateObserver } from "@/app/services/auth-service";
 import { useEffect } from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
