@@ -8,16 +8,20 @@ import {
   removeItem,
 } from "../../features/references/reference-slice";
 import { MdRemove } from "react-icons/md";
+import { createProjectAction } from "../../features/projects/project-slice";
+import { AppDispatch, RootState } from "../../store/store";
 
 export default function ReferenceList() {
   const items = useSelector(selectItems);
+  const [projectTitle, setProjectTitle] = useState("");
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const [editItem, setEditItem] = useState<{
     index: number;
     text: string;
   } | null>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   function handleItemEditChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (editItem) {
@@ -28,6 +32,18 @@ export default function ReferenceList() {
   function handleItemDoubleClick(index: number, text: string) {
     setEditItem({ index, text });
   }
+
+  const handleSaveProject = () => {
+    if(!user) return;
+    dispatch(
+      createProjectAction({
+        title: projectTitle,
+        items: items.map((item) => item.content),
+        uid: user.uid,
+      })
+    );
+    setProjectTitle(""); // Clear the input field
+  };
 
   // Redux toolkit creates a "readonly" version of the state.
   // It uses Immer under the hood, which makes original state drafts "immutable".
