@@ -35,6 +35,7 @@ export const signInUser =
         uid: result.user.uid,
         displayName: result.user.displayName || "",
         email: result.user.email || "",
+        emailVerified: result.user.emailVerified,
       };
       dispatch(loginSuccess(user));
       toast.success("Signed in");

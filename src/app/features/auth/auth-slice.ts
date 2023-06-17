@@ -5,7 +5,6 @@ import 'firebase/auth';
 interface AuthState {
   user: AuthUser | null;
   loading: boolean;
-  signingUp: boolean;
   error: string | null;
   authInitialized: boolean;
 }
@@ -15,7 +14,6 @@ const initialState: AuthState = {
   loading: false,
   error: null,
   authInitialized: false,
-  signingUp: false,
 };
 
 export const authSlice = createSlice({
@@ -37,13 +35,11 @@ export const authSlice = createSlice({
     },
     signupStart: (state) => {
       state.loading = true;
-      state.signingUp = true;
     },
     signupFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.user = null;
       state.error = action.payload;
-      state.signingUp = false;
     },
     logout: (state) => {
       state.user = null;
@@ -51,7 +47,6 @@ export const authSlice = createSlice({
     },
     signupComplete: (state) => {
       state.loading = false;
-      state.signingUp = false;
     },
     resetEmailSending: (state) => {
       state.loading = true;
