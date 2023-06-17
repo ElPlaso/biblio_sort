@@ -5,10 +5,25 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { checkProjectExists } from "../features/projects/project-slice";
+import {
+  checkProjectExists,
+  getItems,
+} from "../features/projects/project-slice";
 import { useSearchParams } from "next/navigation";
 import ReferenceSorter from "../components/reference-sorter";
 import { AppDispatch, RootState } from "../store/store";
+import { setProject, setItems } from "../features/references/reference-slice";
+import { SortableItem } from "../types/sortable-item";
+
+// transforms an array of strings into an array of sortable items
+function transformItems(items: string[]): SortableItem[] {
+  return items.map((item) => {
+    return {
+      id: Date.now().toString(),
+      content: item,
+    };
+  });
+}
 
 export default function ProjectPage() {
   const [projectExists, setProjectExists] = useState(true);
@@ -26,6 +41,12 @@ export default function ProjectPage() {
           if (!projectExists) {
             toast.error("Project does not exist");
             router.push("/");
+          } else {
+            dispatch(setProject(projectId));
+            dispatch(getItems(projectId)).then((result) => {
+              const items = unwrapResult(result);
+              dispatch(setItems(transformItems(items)));
+            });
           }
         })
         .catch((error) => {
