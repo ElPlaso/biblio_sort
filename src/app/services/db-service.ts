@@ -1,4 +1,4 @@
-import { doc, collection, addDoc, deleteDoc, updateDoc, getDocs, query, where } from "firebase/firestore";
+import { doc, collection, addDoc, deleteDoc, updateDoc, getDocs, query, where, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
 import Project from "../types/project";
 
@@ -59,4 +59,19 @@ export const getProjects = async (userId: string) => {
 
     return projects;
 };
+
+// checks if project exists and belongs to current user
+export const projectExists = async (projectId: string, uid: string) => {
+    const docRef = doc(db, "projects", projectId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        const projectData = docSnap.data();
+        if (projectData.userId === uid) {
+            return true;
+        }
+    }
+
+    return false;
+}
 
