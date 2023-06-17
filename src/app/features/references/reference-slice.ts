@@ -17,7 +17,7 @@ const initialState: ReferenceState = {
     items: [],
     prepend: false,
     copyWithLinks: false,
-    projectId: undefined,
+    projectId: null as any,
 };
 
 export const referenceSlice = createSlice({
@@ -26,6 +26,9 @@ export const referenceSlice = createSlice({
     reducers: {
         setProject: (state, action: PayloadAction<string>) => {
             state.projectId = action.payload;
+            if (action.payload === null) {
+                state.items = [];
+            }
         },
         setItems: (state, action: PayloadAction<any[]>) => {
             state.items = action.payload;

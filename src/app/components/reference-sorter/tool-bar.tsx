@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import toast from "react-hot-toast";
 import Switch from "../switch";
 import { BiImport } from "react-icons/bi";
@@ -17,11 +17,23 @@ import {
   toggleCopyWithLinks,
 } from "../../features/references/reference-slice";
 import { renderWithLinksHrefOnly } from "../utils";
-import { createProjectAction } from "../../features/projects/project-slice";
+import {
+  createProjectAction,
+  updateProjectItemsAction,
+  getTitle,
+  updateProjectTitleAction,
+} from "../../features/projects/project-slice";
 import { AppDispatch, RootState } from "../../store/store";
+import { SortableItem } from "@/app/types/sortable-item";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 interface ToolBarProps {
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+// transforms an array of items into an array of strings
+function transformItemsToStrings(items: SortableItem[]) {
+  return items.map((item) => item.content);
 }
 
 export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
@@ -31,6 +43,17 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [projectTitle, setProjectTitle] = useState("");
   const user = useSelector((state: RootState) => state.auth.user);
+  const projectId = useSelector(
+    (state: RootState) => state.references.projectId
+  );
+
+  useEffect(() => {
+    if (!projectId) return;
+    dispatch(getTitle(projectId)).then((result) => {
+      const title = unwrapResult(result);
+      setProjectTitle(title);
+    });
+  }, [projectId, dispatch]);
 
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -39,14 +62,38 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
       toast("Please sign in to create a project");
       return;
     }
-    dispatch(
-      createProjectAction({
-        title: projectTitle,
-        items: items.map((item) => item.content),
-        uid: user.uid,
-      })
-    );
-    setProjectTitle(""); // Clear the input field
+    if (projectId) {
+      // update existing project
+      const itemsAsStrings = transformItemsToStrings(items);
+      dispatch(
+        updateProjectItemsAction({
+          projectId: projectId,
+          items: itemsAsStrings,
+        })
+      );
+      // update title if it has changed
+      dispatch(getTitle(projectId)).then((result) => {
+        const title = unwrapResult(result);
+        if (title !== projectTitle) {
+          dispatch(
+            updateProjectTitleAction({
+              title: projectTitle,
+              projectId: projectId,
+            })
+          );
+        }
+      });
+    } else {
+      // create new project
+      dispatch(
+        createProjectAction({
+          title: projectTitle,
+          items: items.map((item) => item.content),
+          uid: user.uid,
+        })
+      );
+      setProjectTitle(""); // Clear the input field
+    }
   };
 
   useEffect(() => {
@@ -141,7 +188,9 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
           type="text"
           disabled={!user}
           className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none dark:outline-none color-transition-applied"
-          placeholder="New project"
+          placeholder={
+            projectTitle.trim() === "" ? "New project" : projectTitle
+          }
           value={projectTitle}
           onChange={(e) => setProjectTitle(e.target.value)}
         />

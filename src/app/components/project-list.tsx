@@ -16,7 +16,10 @@ export default function ProjectList() {
       <h1 className="text-2xl font-bold w-full text-gray-600 ml-2 mb-3 dark:text-white">
         Projects
       </h1>
-      <button className="rounded-lg bg-gray-100 dark:bg-darkColor w-full px-3 py-2 flex items-center justify-between border z-20 hover:shadow-md color-transition-applied">
+      <Link
+        className="rounded-lg bg-gray-100 dark:bg-darkColor w-full px-3 py-2 flex items-center justify-between border z-20 hover:shadow-md color-transition-applied"
+        href={"/"}
+      >
         <h2 className=" text-gray-700 font-medium dark:text-gray-200 ">
           New Project
         </h2>
@@ -24,7 +27,7 @@ export default function ProjectList() {
           className="inline-block text-gray-400 dark:text-gray-200 "
           size={35}
         />
-      </button>
+      </Link>
       <FlipMove className="project-list flex flex-col overflow-y-scroll border-b-[1px]">
         {sortedProjects.map((project) => (
           <div
