@@ -37,6 +37,7 @@ export const authStateObserver = () => {
         displayName: firebaseUser.displayName || "",
         email: firebaseUser.email || "",
         photoUrl: firebaseUser.photoURL || "",
+        emailVerified: firebaseUser.emailVerified,
       };
       store.dispatch(loginSuccess(user));
     }

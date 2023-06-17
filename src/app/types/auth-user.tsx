@@ -3,4 +3,5 @@ export default interface AuthUser {
   displayName: string;
   email: string;
   photoUrl?: string;
+  emailVerified: boolean;
 }
