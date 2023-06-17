@@ -31,7 +31,7 @@ export default function ProjectList() {
             key={project.id}
             className=" bg-white dark:bg-darkColor dark:hover:bg-darkColor color-transition-applied"
           >
-            <Link href={"/"} key={project.id}>
+            <Link href={`/project?id=${project.id}`} key={project.id}>
               <h2 className="flex p-3 space-x-2 items-center text-gray-400 hover:text-black dark:text-gray-400 dark:hover:text-white">
                 <AiOutlineFile size={17} />
                 <span>

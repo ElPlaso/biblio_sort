@@ -7,6 +7,7 @@ interface ReferenceState {
     items: any[];
     prepend: boolean;
     copyWithLinks: boolean;
+    projectId?: string;
 }
 
 const initialState: ReferenceState = {
@@ -15,12 +16,16 @@ const initialState: ReferenceState = {
     items: [],
     prepend: false,
     copyWithLinks: false,
+    projectId: undefined,
 };
 
 export const referenceSlice = createSlice({
     name: 'references',
     initialState,
     reducers: {
+        setProject: (state, action: PayloadAction<string>) => {
+            state.projectId = action.payload;
+        },
         setItems: (state, action: PayloadAction<any[]>) => {
             state.items = action.payload;
         },
@@ -68,6 +73,7 @@ export const referenceSlice = createSlice({
 });
 
 export const {
+    setProject,
     setItems,
     addItem,
     removeItem,
