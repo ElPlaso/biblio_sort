@@ -9,11 +9,12 @@ import {
 } from "../../features/references/reference-slice";
 import { MdRemove } from "react-icons/md";
 import { createProjectAction } from "../../features/projects/project-slice";
-import { AppDispatch } from "../../store/store";
+import { AppDispatch, RootState } from "../../store/store";
 
 export default function ReferenceList() {
   const items = useSelector(selectItems);
   const [projectTitle, setProjectTitle] = useState("");
+  const user = useSelector((state: RootState) => state.auth.user);
 
   const [editItem, setEditItem] = useState<{
     index: number;
@@ -33,10 +34,12 @@ export default function ReferenceList() {
   }
 
   const handleSaveProject = () => {
+    if(!user) return;
     dispatch(
       createProjectAction({
         title: projectTitle,
         items: items.map((item) => item.content),
+        uid: user.uid,
       })
     );
     setProjectTitle(""); // Clear the input field

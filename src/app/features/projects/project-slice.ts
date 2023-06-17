@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../../store/store';
-import { createProject, deleteProject, updateProjectItems } from '../../../../firebase';
+import { createProject, deleteProject, updateProjectItems } from '@/app/services/db-service';
 
 interface Project {
     id: string;
@@ -20,10 +19,8 @@ const initialState: ProjectsState = {
     error: null,
 };
 
-export const createProjectAction = createAsyncThunk('projects/createProject', async ({ title, items }: { title: string, items: string[] }, { getState }) => {
-    const state = getState() as RootState;
-    const userId = state.auth.user!.uid;
-    const projectId = await createProject(userId, title, items);
+export const createProjectAction = createAsyncThunk('projects/createProject', async ({ title, items, uid }: { title: string, items: string[], uid: string }) => {
+    const projectId = await createProject(uid, title, items);
     if (!projectId) {
         throw new Error('Project ID was not created');
     }
@@ -44,7 +41,9 @@ export const deleteProjectAction = createAsyncThunk('projects/deleteProject', as
 const projectsSlice = createSlice({
     name: 'projects',
     initialState,
-    reducers: {},
+    reducers: {
+
+    },
     extraReducers: (builder) => {
         builder
             .addCase(createProjectAction.fulfilled, (state, action: PayloadAction<{ projectId: string, title: string, items: string[] }>) => {
