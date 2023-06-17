@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createProject, deleteProject, getProjects, updateProjectItems, projectExists, getProjectItems } from '@/app/services/db-service';
+import { createProject, deleteProject, getProjects, updateProjectItems, projectExists, getProjectItems, getProjectTitle, updateProjectTitle } from '@/app/services/db-service';
 import Project from '@/app/types/project';
 
 interface ProjectsState {
@@ -27,6 +27,11 @@ export const updateProjectItemsAction = createAsyncThunk('projects/updateProject
     return { projectId, items };
 });
 
+export const updateProjectTitleAction = createAsyncThunk('projects/updateProjectTitle', async ({ projectId, title }: { projectId: string, title: string }) => {
+    await updateProjectTitle(projectId, title);
+    return { projectId, title };
+});
+
 export const deleteProjectAction = createAsyncThunk('projects/deleteProject', async (projectId: string) => {
     await deleteProject(projectId);
     return projectId;
@@ -42,6 +47,10 @@ export const getItems = createAsyncThunk('projects/getItems', async (projectId: 
     return items;
 });
 
+export const getTitle = createAsyncThunk('projects/getTitle', async (projectId: string) => {
+    const title = await getProjectTitle(projectId) as string;
+    return title;
+});
 
 export const fetchProjects = createAsyncThunk(
     "projects/fetchProjects",
@@ -71,6 +80,12 @@ const projectsSlice = createSlice({
                     project.items = action.payload.items;
                 }
             })
+            .addCase(updateProjectTitleAction.fulfilled, (state, action: PayloadAction<{ projectId: string, title: string }>) => {
+                const project = state.projects.find(project => project.id === action.payload.projectId);
+                if (project) {
+                    project.title = action.payload.title;
+                }
+            })
             .addCase(deleteProjectAction.fulfilled, (state, action: PayloadAction<string>) => {
                 state.projects = state.projects.filter(project => project.id !== action.payload);
             })
@@ -79,6 +94,10 @@ const projectsSlice = createSlice({
                 state.error = null;
             })
             .addCase(getItems.fulfilled, (state, action: PayloadAction<string[]>) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(getTitle.fulfilled, (state, action: PayloadAction<string>) => {
                 state.loading = false;
                 state.error = null;
             });
