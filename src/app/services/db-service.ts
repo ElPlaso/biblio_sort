@@ -1,5 +1,6 @@
-import { doc, collection, addDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import { doc, collection, addDoc, deleteDoc, updateDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebase";
+import Project from "../types/project";
 
 // Database functions
 
@@ -38,5 +39,24 @@ export const deleteProject = async (projectId: string) => {
         console.error("Error deleting document: ", e);
     }
 };
-export { db };
+
+export const getProjects = async (userId: string) => {
+    const projects: Project[] = [];
+
+    const q = query(collection(db, "projects"), where("userId", "==", userId));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        console.log(doc.id, " => ", doc.data());
+
+        const projectData = doc.data();
+        projects.push({
+            id: doc.id,
+            title: projectData.title,
+            items: projectData.items,
+        });
+    });
+
+    return projects;
+};
 
