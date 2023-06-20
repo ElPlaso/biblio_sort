@@ -15,22 +15,28 @@ export default function SideNav() {
           <div className="min-h-full">
             <ProjectList />
           </div>
-          <div className="pl-4"><SignOutButton /></div>
+          <div className="pl-4">
+            <SignOutButton />
+          </div>
         </div>
       ) : pathName === "/login" ||
         pathName === "/register" ||
         pathName === "/reset-password" ? (
-        <Link href={"./"}>
-          <div className="flex py-2 px-4 bg-blue-500 dark:bg-blue-600 dark:hover:bg-blue-500 hover:bg-blue-600 text-white font-bold rounded items-center justify-center">
-            Home
-          </div>
-        </Link>
+        <div className="pl-4">
+          <Link href={"./"}>
+            <div className="flex py-2 px-4 bg-blue-500 dark:bg-blue-600 dark:hover:bg-blue-500 hover:bg-blue-600 text-white font-bold rounded items-center justify-center">
+             Back
+            </div>
+          </Link>
+        </div>
       ) : (
-        <Link href={"./login"}>
-          <div className="flex py-2 px-4 bg-blue-500 dark:bg-blue-600 dark:hover:bg-blue-500 hover:bg-blue-600 text-white font-bold rounded items-center justify-center">
-            Sign in
-          </div>
-        </Link>
+        <div className="pl-4">
+          <Link href={"./login"}>
+            <div className="flex py-2 px-4 bg-blue-500 dark:bg-blue-600 dark:hover:bg-blue-500 hover:bg-blue-600 text-white font-bold rounded items-center justify-center">
+              Sign in
+            </div>
+          </Link>
+        </div>
       )}
     </nav>
   );
