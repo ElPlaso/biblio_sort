@@ -135,15 +135,17 @@ export default function ReferenceList() {
                           className="flex-grow mr-4 pl-1 -ml-1 focus:outline-none  dark:bg-darkColor"
                         />
                       ) : (
-                        <span
-                          onClick={() =>
-                            handleItemDoubleClick(index, item.content)
-                          }
-                          className="flex-grow cursor-text"
-                          dangerouslySetInnerHTML={{
-                            __html: renderWithLinks(item.content),
-                          }}
-                        ></span>
+                        <div className="flex-grow">
+                          <span
+                            onClick={() =>
+                              handleItemDoubleClick(index, item.content)
+                            }
+                            className="cursor-text"
+                            dangerouslySetInnerHTML={{
+                              __html: renderWithLinks(item.content),
+                            }}
+                          />
+                        </div>
                       )}
                       {!snapshot.isDragging && (
                         <button
