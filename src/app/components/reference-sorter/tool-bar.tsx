@@ -172,7 +172,7 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
       className={classnames(
         "flex items-center justify-between w-full sticky top-0 dark:text-white transition-all duration-100",
         {
-          "shadow-lg rounded-full bg-white dark:bg-darkColor top-[100px] py-5 px-7":
+          "shadow-lg rounded-full bg-white dark:bg-darkColor top-[100px] py-5 px-7 dark:shadow-xl":
             isScrolled,
         }
       )}
