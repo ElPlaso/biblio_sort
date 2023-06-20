@@ -109,9 +109,10 @@ export default function ReferenceList() {
                 {(provided, snapshot) => (
                   <li
                     ref={provided.innerRef}
-                    onDoubleClick={() =>
-                      handleItemDoubleClick(index, item.content)
-                    }
+                    onDoubleClick={() => {
+                      console.log(item.id, item.content);
+                      return handleItemDoubleClick(index, item.content);
+                    }}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     className={`color-transition-applied bg-white dark:bg-darkColor p-4 rounded mb-2 ${
