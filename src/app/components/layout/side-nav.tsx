@@ -9,13 +9,13 @@ export default function SideNav() {
   const user = useSelector((state: RootState) => state.auth.user);
   const pathName = usePathname();
   return (
-    <nav className="fixed left-0 h-screen w-64 bg-white dark:bg-darkColor shadow-xl px-2 z-2 pt-32 pb-4 z-2 color-transition-applied">
+    <nav className="fixed left-0 h-screen w-64 bg-white dark:bg-darkColor z-2 pt-28 pb-4 z-2 color-transition-applied">
       {user && user.emailVerified ? (
         <div className="flex flex-col h-full pb-16 space-y-4 transition-all">
           <div className="min-h-full">
             <ProjectList />
           </div>
-          <SignOutButton />
+          <div className="pl-4"><SignOutButton /></div>
         </div>
       ) : pathName === "/login" ||
         pathName === "/register" ||
