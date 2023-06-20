@@ -246,7 +246,7 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
             <button
               onClick={handleClearItems}
               className={
-                "disabled:bg-red-200 dark:disabled:bg-red-800 disabled:cursor-not-allowed bg-red-500 dark:bg-red-600 hover:bg-red-600 dark:hover:bg-red-500 text-white font-bold py-2 px-4 rounded"
+                "disabled:bg-red-200 dark:disabled:bg-gray-600 disabled:cursor-not-allowed bg-red-500 dark:bg-gray-500 hover:bg-red-600 dark:hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
               }
               disabled={items.length === 0}
             >
