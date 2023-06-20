@@ -14,12 +14,13 @@ import ReferenceSorter from "../components/reference-sorter";
 import { AppDispatch, RootState } from "../store/store";
 import { setProject, setItems } from "../features/references/reference-slice";
 import { SortableItem } from "../types/sortable-item";
+import {uid} from "uid";
 
 // transforms an array of strings into an array of sortable items
 function transformItems(items: string[]): SortableItem[] {
   return items.map((item) => {
     return {
-      id: Date.now().toString(),
+      id: uid(),
       content: item,
     };
   });
