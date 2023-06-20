@@ -191,7 +191,7 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
         <input
           type="text"
           disabled={!user}
-          className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none dark:outline-none color-transition-applied"
+          className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none color-transition-applied"
           placeholder={
             projectTitle.trim() === "" ? "New project" : projectTitle
           }
@@ -219,7 +219,7 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
           <a data-tooltip-id="import" data-tooltip-content="Import references">
             <button
               onClick={() => setModalIsOpen(true)}
-              className="bg-green-500 dark:hover:bg-green-500 dark:bg-green-600 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+              className="bg-green-500 dark:hover:bg-green-500 dark:bg-green-600 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
             >
               <BiImport size={24} />
             </button>
@@ -230,7 +230,7 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
             <button
               onClick={handleCopyToClipboard}
               className={
-                "  disabled:bg-green-200 dark:disabled:bg-green-800 disabled:cursor-not-allowed bg-green-500 dark:bg-green-600 dark:hover:bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+                "  disabled:bg-green-300 dark:disabled:bg-green-800 disabled:cursor-not-allowed bg-green-500 dark:bg-green-600 dark:hover:bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
               }
               disabled={items.length === 0}
             >
@@ -247,7 +247,7 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
             <button
               onClick={handleClearItems}
               className={
-                "disabled:bg-red-200 dark:disabled:bg-gray-600 disabled:cursor-not-allowed bg-red-500 dark:bg-gray-500 hover:bg-red-600 dark:hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+                "disabled:bg-red-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed bg-red-500 dark:bg-gray-500 hover:bg-red-600 dark:hover:bg-gray-600 text-white font-bold py-2 px-2 rounded"
               }
               disabled={items.length === 0}
             >

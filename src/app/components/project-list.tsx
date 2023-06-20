@@ -53,7 +53,7 @@ export default function ProjectList() {
                 className={classnames(
                   "flex p-3 space-x-2 items-center text-gray-400 hover:text-black dark:text-gray-400 dark:hover:text-white",
                   {
-                    "text-black dark:text-white bg-gray-100 dark:bg-opacity-10 rounded-r-lg":
+                    "text-black dark:text-white bg-gray-50 dark:bg-opacity-10 rounded":
                       currentId == project.id,
                   }
                 )}
