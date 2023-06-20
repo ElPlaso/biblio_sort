@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect} from "react";
 import toast from "react-hot-toast";
 import Switch from "../switch";
 import { BiImport } from "react-icons/bi";

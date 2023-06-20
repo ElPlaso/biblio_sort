@@ -26,6 +26,7 @@ export const loginWithGoogle =
         displayName: result.user.displayName,
         email: result.user.email,
         photoUrl: result.user.photoURL,
+        emailVerified: result.user.emailVerified,
       };
       dispatch(loginSuccess(user as AuthUser));
       toast.success("Signed in");

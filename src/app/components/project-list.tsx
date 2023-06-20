@@ -5,18 +5,33 @@ import { MdAddCircle } from "react-icons/md";
 import { RootState } from "../store/store";
 import { AiOutlineFile } from "react-icons/ai";
 import FlipMove from "react-flip-move";
+import classnames from "classnames";
+import { useSearchParams } from "next/navigation";
 
 export default function ProjectList() {
   const projects = useSelector((state: RootState) => state.projects.projects);
 
   const sortedProjects = [...projects].reverse();
 
+  const currentId = useSearchParams().get("id");
+
+  console.log(currentId);
+
   return (
     <div className="flex flex-col h-full">
       <h1 className="text-2xl font-bold w-full text-gray-600 ml-2 mb-3 dark:text-white">
         Projects
       </h1>
-      <button className="rounded-lg bg-gray-100 dark:bg-darkColor w-full px-3 py-2 flex items-center justify-between border z-20 hover:shadow-md color-transition-applied">
+      <Link
+        className={classnames(
+          "rounded-lg  w-full px-3 py-2 flex items-center justify-between border z-20 hover:shadow-md color-transition-applied",
+          {
+            "bg-gray-200 dark:bg-opacity-10": !currentId,
+            "bg-white dark:bg-darkColor": currentId,
+          }
+        )}
+        href={"/"}
+      >
         <h2 className=" text-gray-700 font-medium dark:text-gray-200 ">
           New Project
         </h2>
@@ -24,15 +39,23 @@ export default function ProjectList() {
           className="inline-block text-gray-400 dark:text-gray-200 "
           size={35}
         />
-      </button>
+      </Link>
       <FlipMove className="project-list flex flex-col overflow-y-scroll border-b-[1px]">
         {sortedProjects.map((project) => (
           <div
             key={project.id}
-            className=" bg-white dark:bg-darkColor dark:hover:bg-darkColor color-transition-applied"
+            className="bg-white dark:bg-darkColor dark:hover:bg-darkColor color-transition-applied"
           >
-            <Link href={"/"} key={project.id}>
-              <h2 className="flex p-3 space-x-2 items-center text-gray-400 hover:text-black dark:text-gray-400 dark:hover:text-white">
+            <Link href={`/project?id=${project.id}`} key={project.id}>
+              <h2
+                className={classnames(
+                  "flex p-3 space-x-2 items-center text-gray-400 hover:text-black dark:text-gray-400 dark:hover:text-white",
+                  {
+                    "text-black dark:text-white bg-gray-50 dark:bg-opacity-10 rounded":
+                      currentId == project.id,
+                  }
+                )}
+              >
                 <AiOutlineFile size={17} />
                 <span>
                   {project.title.trim() != "" ? project.title : "New project"}
