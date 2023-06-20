@@ -70,19 +70,22 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
           projectId: projectId,
           items: itemsAsStrings,
         })
-      );
-      // update title if it has changed
-      dispatch(getTitle(projectId)).then((result) => {
-        const title = unwrapResult(result);
-        if (title !== projectTitle) {
-          dispatch(
-            updateProjectTitleAction({
-              title: projectTitle,
-              projectId: projectId,
-            })
-          );
-        }
-      });
+      )
+        // update title if it has changed
+        .then(() =>
+          dispatch(getTitle(projectId)).then((result) => {
+            const title = unwrapResult(result);
+            if (title !== projectTitle) {
+              dispatch(
+                updateProjectTitleAction({
+                  title: projectTitle,
+                  projectId: projectId,
+                })
+              );
+            }
+          })
+        )
+        .then((respose) => toast.success("Project saved"));
     } else {
       // create new project
       dispatch(
