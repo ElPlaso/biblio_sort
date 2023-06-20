@@ -15,8 +15,6 @@ export default function ProjectList() {
 
   const currentId = useSearchParams().get("id");
 
-  console.log(currentId);
-
   return (
     <div className="flex flex-col h-full">
       <h1 className="text-2xl font-bold w-full text-gray-600 ml-2 mb-3 dark:text-white">

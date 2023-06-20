@@ -110,7 +110,6 @@ export default function ReferenceList() {
                   <li
                     ref={provided.innerRef}
                     onDoubleClick={() => {
-                      console.log(item.id, item.content);
                       return handleItemDoubleClick(index, item.content);
                     }}
                     {...provided.draggableProps}

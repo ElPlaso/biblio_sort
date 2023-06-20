@@ -16,7 +16,6 @@ export const logoutFromFirebase =
       dispatch(logout());
     } catch (error) {
       toast.error("Failed to sign out");
-      console.log(error);
     }
   };
 
