@@ -1,9 +1,7 @@
 // Import the functions you need from the SDKs you need
-import { loginSuccess, logout, setAuthInitialized } from "@/app/features/auth/auth-slice";
-import { store } from "@/app/store/store";
-import AuthUser from "@/app/types/auth-user";
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -22,30 +20,5 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const db = getFirestore(app);
 
-import { loginStart } from '@/app/features/auth/auth-slice';
-
-export const authStateObserver = () => {
-  store.dispatch(loginStart());
-
-  const auth = getAuth();
-
-  onAuthStateChanged(auth, (firebaseUser) => {
-    if (firebaseUser) {
-      const user: AuthUser = {
-        uid: firebaseUser.uid,
-        displayName: firebaseUser.displayName || "",
-        email: firebaseUser.email || "",
-        photoUrl: firebaseUser.photoURL || "",
-        emailVerified: firebaseUser.emailVerified,
-      };
-      store.dispatch(loginSuccess(user));
-    }
-    else {
-      store.dispatch(logout());
-    }
-
-    // Auth state has been determined
-    store.dispatch(setAuthInitialized());
-  });
-}

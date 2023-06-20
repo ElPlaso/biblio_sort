@@ -8,6 +8,7 @@ import {
   removeItem,
 } from "../../features/references/reference-slice";
 import { MdRemove } from "react-icons/md";
+import { AppDispatch } from "../../store/store";
 
 export default function ReferenceList() {
   const items = useSelector(selectItems);
@@ -17,7 +18,7 @@ export default function ReferenceList() {
     text: string;
   } | null>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   function handleItemEditChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (editItem) {
@@ -109,9 +110,9 @@ export default function ReferenceList() {
                 {(provided, snapshot) => (
                   <li
                     ref={provided.innerRef}
-                    onDoubleClick={() =>
-                      handleItemDoubleClick(index, item.content)
-                    }
+                    onDoubleClick={() => {
+                      return handleItemDoubleClick(index, item.content);
+                    }}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     className={`color-transition-applied bg-white dark:bg-darkColor p-4 rounded mb-2 ${
@@ -149,7 +150,7 @@ export default function ReferenceList() {
                           onClick={() => handleRemoveItem(index)}
                           className="bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500 text-white font-bold py-2 px-2 rounded-full select-none"
                         >
-                          <MdRemove size={20}/>
+                          <MdRemove size={20} />
                         </button>
                       )}
                     </div>

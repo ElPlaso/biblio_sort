@@ -1,12 +1,14 @@
 import { RootState } from '@/app/store/store';
+import { SortableItem } from '@/app/types/sortable-item';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ReferenceState {
     inputValue: string;
     importValue: string;
-    items: any[];
+    items: SortableItem[];
     prepend: boolean;
     copyWithLinks: boolean;
+    projectId?: string;
 }
 
 const initialState: ReferenceState = {
@@ -15,12 +17,19 @@ const initialState: ReferenceState = {
     items: [],
     prepend: false,
     copyWithLinks: false,
+    projectId: null as any,
 };
 
 export const referenceSlice = createSlice({
     name: 'references',
     initialState,
     reducers: {
+        setProject: (state, action: PayloadAction<string>) => {
+            state.projectId = action.payload;
+            if (action.payload === null) {
+                state.items = [];
+            }
+        },
         setItems: (state, action: PayloadAction<any[]>) => {
             state.items = action.payload;
         },
@@ -68,6 +77,7 @@ export const referenceSlice = createSlice({
 });
 
 export const {
+    setProject,
     setItems,
     addItem,
     removeItem,
