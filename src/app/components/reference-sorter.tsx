@@ -10,7 +10,7 @@ export default function ReferenceSorter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   return (
-    <div className="flex-grow p-6">
+    <div className="flex-grow p-6 max-h-screen h-full pr-24 rounded-tl-3xl bg-blue-50 overflow-y-scroll">
       <ToolBar setModalIsOpen={setModalIsOpen} />
 
       <ImportModal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />
