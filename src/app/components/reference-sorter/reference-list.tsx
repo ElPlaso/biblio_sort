@@ -205,7 +205,7 @@ export default function ReferenceList() {
                           {dropdownOpen === item.id && (
                             <div
                               ref={dropdownRef}
-                              className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-darkColor shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                              className="absolute right-full top-1/2 transform -translate-y-1/4 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-darkColor"
                               role="menu"
                               aria-orientation="vertical"
                               aria-labelledby="menu-button"

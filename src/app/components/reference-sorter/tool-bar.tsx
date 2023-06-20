@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import Switch from "../switch";
 import { BiImport } from "react-icons/bi";
@@ -29,6 +29,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 
 interface ToolBarProps {
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  modalIsOpen: boolean;
 }
 
 // transforms an array of items into an array of strings
@@ -36,7 +37,7 @@ function transformItemsToStrings(items: SortableItem[]) {
   return items.map((item) => item.content);
 }
 
-export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
+export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
   const items = useSelector(selectItems);
   const prepend = useSelector(selectPrepend);
   const copyWithLinks = useSelector(selectCopyWithLinks);
@@ -170,10 +171,10 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
   return (
     <div
       className={classnames(
-        "flex items-center justify-between w-full sticky top-0 dark:text-white transition-all duration-100",
+        "flex items-center justify-between w-full sticky top-0 dark:text-white transition-all duration-100 ",
         {
-          "shadow-lg rounded-full bg-white dark:bg-darkColor top-[100px] py-5 px-7 dark:shadow-xl":
-            isScrolled,
+          "shadow-lg rounded-full bg-white dark:bg-darkColor top-[100px] py-5 px-7 dark:shadow-xl z-20":
+            isScrolled && !modalIsOpen,
         }
       )}
     >

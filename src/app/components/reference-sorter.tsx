@@ -11,7 +11,7 @@ export default function ReferenceSorter() {
 
   return (
     <div className="flex-grow min-h-full p-8 rounded-tl-3xl shadow-lg border dark:border-none bg-gray-50 dark:bg-opacity-10">
-      <ToolBar setModalIsOpen={setModalIsOpen} />
+      <ToolBar setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} />
 
       <ImportModal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />
 
