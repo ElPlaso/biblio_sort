@@ -1,4 +1,4 @@
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { loginStart, loginSuccess, logout, setAuthInitialized } from "../features/auth/auth-slice";
 import { store } from "../store/store";
 import AuthUser from "../types/auth-user";
@@ -15,6 +15,7 @@ export const authStateObserver = () => {
                 displayName: firebaseUser.displayName || "",
                 email: firebaseUser.email || "",
                 photoUrl: firebaseUser.photoURL || "",
+                emailVerified: firebaseUser.emailVerified,
             };
             store.dispatch(loginSuccess(user));
         }
