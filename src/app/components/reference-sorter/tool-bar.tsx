@@ -26,6 +26,7 @@ import {
 import { AppDispatch, RootState } from "../../store/store";
 import { SortableItem } from "@/app/types/sortable-item";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { useRouter } from "next/navigation";
 
 interface ToolBarProps {
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -49,6 +50,7 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
   );
   const [editingTitle, setEditingTitle] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (!projectId) return;
@@ -97,14 +99,21 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
           items: items.map((item) => item.content),
           uid: user.uid,
         })
-      );
-      setProjectTitle(""); // Clear the input field
+      )
+        .then((response) => {
+          const projectId = unwrapResult(response).projectId;
+          router.push(`/project?id=${projectId}`);
+        })
+        .then((respose) => toast.success("Project created"))
+        .catch((error) => {
+          toast.error("Failed to create project");
+        });
     }
   };
 
   // close the title input field when clicked outside
   useEffect(() => {
-    function handleClickOutside(event: { target: any; }) {
+    function handleClickOutside(event: { target: any }) {
       if (inputRef.current && !inputRef.current.contains(event.target)) {
         setEditingTitle(false);
       }
