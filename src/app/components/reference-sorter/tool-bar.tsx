@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import Switch from "../switch";
 import { BiImport } from "react-icons/bi";
@@ -47,6 +47,8 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
   const projectId = useSelector(
     (state: RootState) => state.references.projectId
   );
+  const [editingTitle, setEditingTitle] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (!projectId) return;
@@ -99,6 +101,27 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
       setProjectTitle(""); // Clear the input field
     }
   };
+
+  // close the title input field when clicked outside
+  useEffect(() => {
+    function handleClickOutside(event: { target: any; }) {
+      if (inputRef.current && !inputRef.current.contains(event.target)) {
+        setEditingTitle(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // focus the input field when title is clicked
+  useEffect(() => {
+    if (editingTitle) {
+      inputRef.current?.focus();
+    }
+  }, [editingTitle]);
 
   useEffect(() => {
     const checkScroll = () => {
@@ -178,7 +201,7 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
         }
       )}
     >
-      <div className="flex space-x-2">
+      <div className="flex space-x-2 items-center h-full">
         <a data-tooltip-id="save" data-tooltip-content="Save project">
           <button
             onClick={handleSaveProject}
@@ -188,16 +211,24 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
           </button>
           <Tooltip id="save" place="bottom" />
         </a>
-        <input
-          type="text"
-          disabled={!user}
-          className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none color-transition-applied"
-          placeholder={
-            projectTitle.trim() === "" ? "New project" : projectTitle
-          }
-          value={projectTitle}
-          onChange={(e) => setProjectTitle(e.target.value)}
-        />
+        {!projectId || editingTitle ? (
+          <input
+            type="text"
+            ref={inputRef}
+            className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none color-transition-applied"
+            value={projectTitle}
+            placeholder="New project"
+            onChange={(e) => setProjectTitle(e.target.value)}
+            onBlur={() => setEditingTitle(false)}
+          />
+        ) : (
+          <div
+            className="dark:text-white"
+            onClick={() => setEditingTitle(true)}
+          >
+            {projectTitle.trim() === "" ? "New project" : projectTitle}
+          </div>
+        )}
       </div>
       <div className="flex space-x-6">
         <div className="flex space-x-3">
