@@ -27,6 +27,8 @@ import { AppDispatch, RootState } from "../../store/store";
 import { SortableItem } from "@/app/types/sortable-item";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useRouter } from "next/navigation";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 interface ToolBarProps {
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -51,6 +53,7 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
   const [editingTitle, setEditingTitle] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
+  const loading = useSelector((state: RootState) => state.projects.loading);
 
   useEffect(() => {
     if (!projectId) return;
@@ -203,14 +206,14 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
   return (
     <div
       className={classnames(
-        "flex items-center justify-between w-full sticky top-0 dark:text-white transition-all duration-100 ",
+        "flex items-center justify-between w-full sticky top-0 dark:text-white transition-all duration-100 space-x-2",
         {
           "shadow-lg rounded-full bg-white dark:bg-darkColor top-[100px] py-5 px-7 dark:shadow-xl z-20":
             isScrolled && !modalIsOpen,
         }
       )}
     >
-      <div className="flex space-x-2 items-center h-full">
+      <div className="flex space-x-2 items-center h-full w-[25%]">
         <a data-tooltip-id="save" data-tooltip-content="Save project">
           <button
             onClick={handleSaveProject}
@@ -220,7 +223,9 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
           </button>
           <Tooltip id="save" place="bottom" />
         </a>
-        {!projectId || editingTitle ? (
+        {loading ? (
+          <Skeleton containerClassName="flex-1" height={35}/>
+        ) : !projectId || editingTitle ? (
           <input
             type="text"
             ref={inputRef}

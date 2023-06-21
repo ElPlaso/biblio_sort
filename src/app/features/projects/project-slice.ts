@@ -80,6 +80,7 @@ const projectsSlice = createSlice({
                 state.projects.push({ id: action.payload.projectId, title: action.payload.title, items: action.payload.items });
             })
             .addCase(updateProjectItemsAction.fulfilled, (state, action: PayloadAction<{ projectId: string, items: string[] }>) => {
+                state.loading = true;
                 const project = state.projects.find(project => project.id === action.payload.projectId);
                 if (project) {
                     project.items = action.payload.items;
@@ -95,7 +96,7 @@ const projectsSlice = createSlice({
                 state.projects = state.projects.filter(project => project.id !== action.payload);
             })
             .addCase(checkProjectExists.fulfilled, (state, action: PayloadAction<boolean>) => {
-                state.loading = false;
+                state.loading = true;
                 state.error = null;
             })
             .addCase(getItems.fulfilled, (state, action: PayloadAction<string[]>) => {

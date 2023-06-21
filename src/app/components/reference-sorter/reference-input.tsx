@@ -28,7 +28,7 @@ export default function ReferenceInput() {
   }
 
   return (
-    <div className="flex justify-between items-center mt-4 mb-4">
+    <div className="flex justify-between items-center">
       <input
         type="text"
         value={inputValue}
