@@ -36,6 +36,24 @@ export default function ReferenceList() {
     setEditItem({ index, text });
   }
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownOpen &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownOpen]);
+
   // Redux toolkit creates a "readonly" version of the state.
   // It uses Immer under the hood, which makes original state drafts "immutable".
   // So, the state cannot be directly mutated; instead, a new state needs to be produced.
