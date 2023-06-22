@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
 import Modal from "react-modal";
-import { MdContentPaste } from "react-icons/md";
+import { MdAdd, MdContentPaste, MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectImportValue,
@@ -39,29 +39,28 @@ export default function ImportModal({
       style={theme === "dark" ? darkStyles : lightStyles}
     >
       <div className="flex items-start justify-between ">
-        <div className="flex items-start">
-          <MdContentPaste size={24} className="mt-1" />
-          <h3 className="text-2xl mb-4 ml-2">Paste</h3>
+        <div className="flex">
+          <MdContentPaste size={20} className="mt-1" />
+          <h3 className="text-xl ml-2">Paste</h3>
         </div>
-        <button
-          onClick={() => setModalIsOpen(false)}
-          className="bg-red-500 hover:bg-red-600 dark:bg-gray-500 dark:hover:bg-gray-600 text-white font-bold py-1 px-3 rounded"
-        >
-          Close
+        <button onClick={() => setModalIsOpen(false)}>
+          <MdClose size={24} />
         </button>
       </div>
 
       <textarea
         value={value}
         onChange={handleImportChange}
-        className="w-full h-[450px] mb-2 resize-none border p-1 dark:bg-darkColor dark:outline-none dark:border-none"
+        className="w-full mt-3 h-[460px] mb-2 resize-none border p-1 dark:bg-darkColor outline-none dark:border-none"
       />
+
       <button
         onClick={handleImport}
-        className="bg-blue-500 hover:bg-blue-600 dark:bg-gray-500 dark:hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+        className="w-full flex flex-row items-center disabled:shadow-none justify-center py-2 pl-2 pr-3 bg-blue-500 dark:hover:bg-blue-600 text-white font-bold hover:shadow-lg"
         disabled={value === ""}
       >
         Add
+        <MdAdd size={24} />
       </button>
     </Modal>
   );

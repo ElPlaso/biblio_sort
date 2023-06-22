@@ -6,6 +6,7 @@ import { AppDispatch } from "../../store/store";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { MdOutlineDirectionsRun } from "react-icons/md";
 
 export const logoutFromFirebase =
   (router: ReturnType<typeof useRouter>) => async (dispatch: AppDispatch) => {
@@ -30,9 +31,10 @@ export default function SignOutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="flex py-2 px-4 bg-red-500 hover:bg-red-600 dark:bg-gray-500 dark:hover:bg-gray-600 text-white font-bold rounded items-center justify-center w-full"
+      className="flex py-2 px-4 text-white bg-green-500 dark:hover:text-green-400 dark:bg-gray-100 dark:bg-opacity-10 dark:text-gray-400 hover:shadow-lg  justify-between font-bold items-center w-full"
     >
       Sign out
+      <MdOutlineDirectionsRun size={20} />
     </button>
   );
 }

@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import Switch from "../switch";
 import { BiImport } from "react-icons/bi";
-import { MdContentCopy, MdDelete, MdSave } from "react-icons/md";
+import { MdContentCopy, MdDeleteOutline, MdSave } from "react-icons/md";
 import { Tooltip } from "react-tooltip";
 import classnames from "classnames";
 import { useSelector, useDispatch } from "react-redux";
@@ -29,6 +29,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { useRouter } from "next/navigation";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import ToolBarActionButton from "../tool-bar/tool-bar-action-button";
 
 interface ToolBarProps {
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -224,7 +225,7 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
           <Tooltip id="save" place="bottom" />
         </a>
         {loading ? (
-          <Skeleton containerClassName="flex-1" height={35}/>
+          <Skeleton containerClassName="flex-1" height={35} />
         ) : !projectId || editingTitle ? (
           <input
             type="text"
@@ -244,7 +245,7 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
           </div>
         )}
       </div>
-      <div className="flex space-x-6">
+      <div className="flex space-x-6 items-center">
         <div className="flex space-x-3">
           <Switch
             label={"Prepend"}
@@ -261,45 +262,30 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
           />
         </div>
         <div className="flex space-x-2">
-          <a data-tooltip-id="import" data-tooltip-content="Import references">
-            <button
-              onClick={() => setModalIsOpen(true)}
-              className="bg-green-500 dark:hover:bg-green-500 dark:bg-green-600 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
-            >
-              <BiImport size={24} />
-            </button>
-            <Tooltip id="import" place="bottom" />
-          </a>
-
-          <a data-tooltip-id="copy" data-tooltip-content="Copy to clipboard">
-            <button
-              onClick={handleCopyToClipboard}
-              className={
-                "  disabled:bg-green-300 dark:disabled:bg-green-800 disabled:cursor-not-allowed bg-green-500 dark:bg-green-600 dark:hover:bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded"
-              }
-              disabled={items.length === 0}
-            >
-              <MdContentCopy size={24} />
-            </button>
-
-            <Tooltip id="copy" place="bottom" />
-          </a>
-
-          <a
-            data-tooltip-id="delete"
-            data-tooltip-content="Delete all references"
-          >
-            <button
-              onClick={handleClearItems}
-              className={
-                "disabled:bg-red-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed bg-red-500 dark:bg-gray-500 hover:bg-red-600 dark:hover:bg-gray-600 text-white font-bold py-2 px-2 rounded"
-              }
-              disabled={items.length === 0}
-            >
-              <MdDelete size={24} />
-            </button>
-            <Tooltip id="delete" place="bottom" />
-          </a>
+          <ToolBarActionButton
+            onClick={() => setModalIsOpen(true)}
+            id="import"
+            icon={<BiImport size={24} />}
+            place={"bottom"}
+            tip={"Import references"}
+            disabled={loading}
+          />
+          <ToolBarActionButton
+            onClick={handleCopyToClipboard}
+            id="copy"
+            icon={<MdContentCopy size={24} />}
+            place={"bottom"}
+            tip={"Copy to clipboard"}
+            disabled={items.length === 0 || loading}
+          />
+          <ToolBarActionButton
+            onClick={handleClearItems}
+            id="delete"
+            icon={<MdDeleteOutline size={24} />}
+            place={"bottom"}
+            tip={"Delete all references"}
+            disabled={items.length === 0 || loading}
+          />
         </div>
       </div>
     </div>

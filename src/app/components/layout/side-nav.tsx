@@ -4,6 +4,7 @@ import { RootState } from "../../store/store";
 import SignOutButton from "../auth/sign-out";
 import { usePathname } from "next/navigation";
 import ProjectList from "../project-list";
+import { MdLogin, MdChevronLeft } from "react-icons/md";
 
 export default function SideNav() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -24,16 +25,18 @@ export default function SideNav() {
         pathName === "/reset-password" ? (
         <div className="pl-4">
           <Link href={"./"}>
-            <div className="flex py-2 px-4 bg-blue-500 dark:bg-blue-600 dark:hover:bg-blue-500 hover:bg-blue-600 text-white font-bold rounded items-center justify-center">
-             Back
+            <div className="flex py-2 justify-between px-4 bg-blue-500 dark:hover:bg-blue-600 text-white font-bold hover:shadow-lg items-center">
+              Go back
+              <MdChevronLeft size={20} />
             </div>
           </Link>
         </div>
       ) : (
         <div className="pl-4">
           <Link href={"./login"}>
-            <div className="flex py-2 px-4 bg-blue-500 dark:bg-blue-600 dark:hover:bg-blue-500 hover:bg-blue-600 text-white font-bold rounded items-center justify-center">
+            <div className="flex py-2 justify-between px-4 bg-blue-500 dark:hover:bg-blue-600 text-white font-bold hover:shadow-lg items-center">
               Sign in
+              <MdLogin size={20} />
             </div>
           </Link>
         </div>

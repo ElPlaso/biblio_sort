@@ -39,7 +39,7 @@ export default function ReferenceInput() {
       />
       <button
         onClick={handleAddItem}
-        className="flex flex-row items-center py-2 pl-2 pr-3 bg-blue-500 dark:bg-gray-500 dark:hover:bg-gray-600 text-white font-bold hover:shadow-lg"
+        className="flex flex-row items-center py-2 pl-2 pr-3 bg-blue-500  dark:hover:bg-blue-600 text-white font-bold hover:shadow-lg"
       >
         <MdAdd size={24} />
         Add

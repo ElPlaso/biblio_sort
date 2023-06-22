@@ -89,7 +89,7 @@ export default function ProjectList() {
                 {
                   "text-black dark:text-white bg-gray-50 dark:bg-opacity-10 rounded-r-lg":
                     currentId == project.id,
-                  "text-gray-400": currentId != project.id,
+                  "text-gray-500 dark:text-gray-400": currentId != project.id,
                 }
               )}
             >
