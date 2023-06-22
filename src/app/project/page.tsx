@@ -15,6 +15,7 @@ import { AppDispatch, RootState } from "../store/store";
 import { setProject, setItems } from "../features/references/reference-slice";
 import { SortableItem } from "../types/sortable-item";
 import { uid } from "uid";
+import { setLoading } from "../features/projects/project-slice";
 
 // transforms an array of strings into an array of sortable items
 function transformItems(items: string[]): SortableItem[] {
@@ -35,6 +36,7 @@ export default function ProjectPage() {
 
   useEffect(() => {
     if (projectId && user) {
+      dispatch(setLoading(true));
       dispatch(checkProjectExists({ projectId: projectId, uid: user.uid }))
         .then((result) => {
           const projectExists = unwrapResult(result);
