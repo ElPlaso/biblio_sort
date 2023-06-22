@@ -22,6 +22,7 @@ import {
   updateProjectItemsAction,
   getTitle,
   updateProjectTitleAction,
+  getItems,
 } from "../../features/projects/project-slice";
 import { AppDispatch, RootState } from "../../store/store";
 import { SortableItem } from "@/app/types/sortable-item";
@@ -30,6 +31,7 @@ import { useRouter } from "next/navigation";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ToolBarActionButton from "../tool-bar/tool-bar-action-button";
+import { selectTheme } from "@/app/features/theme/theme-slice";
 
 interface ToolBarProps {
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -39,6 +41,17 @@ interface ToolBarProps {
 // transforms an array of items into an array of strings
 function transformItemsToStrings(items: SortableItem[]) {
   return items.map((item) => item.content);
+}
+
+// used for checking if items have been modified
+function itemsEqual(items1: string[], items2: string[]) {
+  if (items1 === items2) return true;
+  if (items1 == null || items2 == null) return false;
+  if (items1.length !== items2.length) return false;
+  for (var i = 0; i < items1.length; ++i) {
+    if (items1[i] !== items2[i]) return false;
+  }
+  return true;
 }
 
 export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
@@ -55,46 +68,63 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
   const loading = useSelector((state: RootState) => state.projects.loading);
+  const [initialItems, setInitialItems] = useState<string[]>([]);
 
   useEffect(() => {
     if (!projectId) return;
+    // get title of project with given id
     dispatch(getTitle(projectId)).then((result) => {
       const title = unwrapResult(result);
       setProjectTitle(title);
+    });
+    // get items of project with given id
+    dispatch(getItems(projectId)).then((result) => {
+      const items = unwrapResult(result);
+      setInitialItems(items);
     });
   }, [projectId, dispatch]);
 
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const handleSaveProject = () => {
+  const theme = useSelector(selectTheme);
+
+  const handleSaveProject = async (toSaveId: string | undefined) => {
     if (!user) {
       toast("Please sign in to create a project");
       return;
     }
-    if (projectId) {
+    if (toSaveId) {
       // update existing project
       const itemsAsStrings = transformItemsToStrings(items);
-      dispatch(
-        updateProjectItemsAction({
-          projectId: projectId,
-          items: itemsAsStrings,
-        })
-      )
-        // update title if it has changed
-        .then(() =>
-          dispatch(getTitle(projectId)).then((result) => {
-            const title = unwrapResult(result);
-            if (title !== projectTitle) {
-              dispatch(
-                updateProjectTitleAction({
-                  title: projectTitle,
-                  projectId: projectId,
-                })
-              );
-            }
-          })
-        )
-        .then((respose) => toast.success("Project saved"));
+      var title = await dispatch(getTitle(toSaveId)).then((result) => {
+        const title = unwrapResult(result);
+        return title;
+      });
+
+      const itemsChanged: boolean = !itemsEqual(itemsAsStrings, initialItems);
+
+      const makeChanges = async () => {
+        if (itemsChanged) {
+          await dispatch(
+            updateProjectItemsAction({
+              projectId: toSaveId,
+              items: itemsAsStrings,
+            })
+          );
+        }
+        if (title !== projectTitle) {
+          await dispatch(
+            updateProjectTitleAction({
+              title: projectTitle,
+              projectId: toSaveId,
+            })
+          );
+        }
+      };
+      // update if changes mave been made
+      if (itemsChanged || title !== projectTitle) {
+        makeChanges().then((respose) => toast.success("Project saved"));
+      }
     } else {
       // create new project
       dispatch(
@@ -108,8 +138,8 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
           const projectId = unwrapResult(response).projectId;
           router.push(`/project?id=${projectId}`);
         })
-        .then((respose) => toast.success("Project created"))
-        .catch((error) => {
+        .then(() => toast.success("Project created"))
+        .catch(() => {
           toast.error("Failed to create project");
         });
     }
@@ -217,7 +247,9 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
       <div className="flex space-x-2 items-center h-full w-[25%]">
         <a data-tooltip-id="save" data-tooltip-content="Save project">
           <button
-            onClick={handleSaveProject}
+            onClick={() => {
+              handleSaveProject(projectId);
+            }}
             className="hover:text-white text-green-500 hover:bg-green-500 p-2 hover:shadow-md rounded"
           >
             <MdSave size={24} />
@@ -235,14 +267,19 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
             placeholder="New project"
             onChange={(e) => setProjectTitle(e.target.value)}
             onBlur={() => setEditingTitle(false)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setEditingTitle(false);
+              }
+            }}
           />
         ) : (
-          <div
-            className="dark:text-white"
+          <button
+            className="dark:text-white cursor-text"
             onClick={() => setEditingTitle(true)}
           >
             {projectTitle.trim() === "" ? "New project" : projectTitle}
-          </div>
+          </button>
         )}
       </div>
       <div className="flex space-x-6 items-center">

@@ -80,7 +80,6 @@ const projectsSlice = createSlice({
                 state.projects.push({ id: action.payload.projectId, title: action.payload.title, items: action.payload.items });
             })
             .addCase(updateProjectItemsAction.fulfilled, (state, action: PayloadAction<{ projectId: string, items: string[] }>) => {
-                state.loading = true;
                 const project = state.projects.find(project => project.id === action.payload.projectId);
                 if (project) {
                     project.items = action.payload.items;
