@@ -31,6 +31,7 @@ import { useRouter } from "next/navigation";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ToolBarActionButton from "../tool-bar/tool-bar-action-button";
+import classNames from "classnames";
 import { selectTheme } from "@/app/features/theme/theme-slice";
 
 interface ToolBarProps {
@@ -257,8 +258,13 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
           <Tooltip id="save" place="bottom" />
         </a>
         {loading ? (
-          <Skeleton containerClassName="flex-1" height={35} />
-        ) : !projectId || editingTitle ? (
+          <Skeleton
+            containerClassName="flex-1"
+            height={35}
+            baseColor={theme == "dark" ? "#181818" : ""}
+            highlightColor={theme == "dark" ? "#282828" : ""}
+          />
+        ) : editingTitle ? (
           <input
             type="text"
             ref={inputRef}
@@ -275,7 +281,9 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
           />
         ) : (
           <button
-            className="dark:text-white cursor-text"
+            className={classNames("dark:text-white cursor-text", {
+              "text-gray-400 dark:text-opacity-20": projectTitle.trim() === "",
+            })}
             onClick={() => setEditingTitle(true)}
           >
             {projectTitle.trim() === "" ? "New project" : projectTitle}
