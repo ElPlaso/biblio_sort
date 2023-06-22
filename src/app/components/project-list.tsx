@@ -1,7 +1,7 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { MdAddCircle } from "react-icons/md";
-import { RootState } from "../store/store";
+import { AppDispatch, RootState } from "../store/store";
 import { AiOutlineFile } from "react-icons/ai";
 import FlipMove from "react-flip-move";
 import classnames from "classnames";
@@ -9,14 +9,18 @@ import { useSearchParams } from "next/navigation";
 import MoreButtonDropdown from "./more-button-dropdown";
 import { useEffect, useRef, useState } from "react";
 import { RxCrumpledPaper } from "react-icons/rx";
+import { deleteProjectAction } from "../features/projects/project-slice";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function ProjectList() {
   const projects = useSelector((state: RootState) => state.projects.projects);
   const sortedProjects = [...projects].reverse();
   const currentId = useSearchParams().get("id");
   const [hideDropdown, setHideDropdown] = useState<boolean>(false);
-
+  const router = useRouter();
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,6 +37,18 @@ export default function ProjectList() {
       }
     };
   }, []);
+
+  const deleteProject = (id: string) => {
+    dispatch(deleteProjectAction(id))
+      .then(() => {
+        if (currentId == id) {
+          router.replace("/");
+        }
+      })
+      .then(() => {
+        toast.success("Project discarded");
+      });
+  };
 
   return (
     <div className="flex flex-col h-full space-y-2">
@@ -90,13 +106,16 @@ export default function ProjectList() {
               >
                 <a
                   href="#"
-                  onClick={(e) => {}}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    deleteProject(project.id);
+                  }}
                   className="flex flex-row  justify-between items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
                   role="menuitem"
                   tabIndex={-1}
                   id="menu-item-1"
                 >
-                  <span>Remove project</span>
+                  <span>Discard project</span>
                   <RxCrumpledPaper size={20} />
                 </a>
               </MoreButtonDropdown>

@@ -94,6 +94,7 @@ const projectsSlice = createSlice({
             })
             .addCase(deleteProjectAction.fulfilled, (state, action: PayloadAction<string>) => {
                 state.projects = state.projects.filter(project => project.id !== action.payload);
+                state.loading = false;
             })
             .addCase(checkProjectExists.fulfilled, (state, action: PayloadAction<boolean>) => {
                 state.loading = true;
