@@ -106,6 +106,9 @@ export default function ProjectList() {
               </Link>
               <MoreButtonDropdown
                 hideDropdownOption={[hideDropdown, setHideDropdown]}
+                onButtonClick={() => {
+                  setDeleteConfirm(false);
+                }}
               >
                 {deleteConfirm ? (
                   <a

@@ -17,6 +17,8 @@ interface MoreButtonDropdownProps {
   position?: Position;
   // programmatically hide dropdown for more control
   hideDropdownOption?: hideDropdownProp;
+  // more control over button click
+  onButtonClick?: () => void;
 }
 
 export default function MoreButtonDropdown({
@@ -24,6 +26,7 @@ export default function MoreButtonDropdown({
   hideDropdownOption,
   horizontal,
   position,
+  onButtonClick,
 }: MoreButtonDropdownProps) {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
@@ -77,6 +80,7 @@ export default function MoreButtonDropdown({
               setDropdownOpen(true);
               hideDropdownOption && hideDropdownOption[1](false);
             }
+            onButtonClick && onButtonClick();
           }}
           id="menu-button"
           aria-haspopup="true"
