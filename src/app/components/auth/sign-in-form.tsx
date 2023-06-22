@@ -68,9 +68,9 @@ export default function SignInForm() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full">
+      <div className="flex flex-col items-center justify-center h-full font-lighter text-gray-400">
         <Loader />
-        Please wait a moment...
+        please wait a moment...
       </div>
     );
   }
