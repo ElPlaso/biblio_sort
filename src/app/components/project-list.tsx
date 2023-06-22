@@ -23,6 +23,7 @@ export default function ProjectList() {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
+  const loading = useSelector((state: RootState) => state.projects.loading);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -109,6 +110,7 @@ export default function ProjectList() {
                 onButtonClick={() => {
                   setDeleteConfirm(false);
                 }}
+                disabled={loading}
               >
                 {deleteConfirm ? (
                   <a

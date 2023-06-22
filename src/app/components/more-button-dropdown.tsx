@@ -19,6 +19,7 @@ interface MoreButtonDropdownProps {
   hideDropdownOption?: hideDropdownProp;
   // more control over button click
   onButtonClick?: () => void;
+  disabled?: boolean;
 }
 
 export default function MoreButtonDropdown({
@@ -27,6 +28,7 @@ export default function MoreButtonDropdown({
   horizontal,
   position,
   onButtonClick,
+  disabled,
 }: MoreButtonDropdownProps) {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
@@ -66,6 +68,7 @@ export default function MoreButtonDropdown({
           type="button"
           className={dropdownOpen ? "hidden" : ""}
           ref={buttonRef}
+          disabled={disabled ? disabled : false}
           onClick={() => {
             if (buttonRef.current) {
               const rect = buttonRef.current.getBoundingClientRect();
@@ -101,7 +104,7 @@ export default function MoreButtonDropdown({
           </button>
         )}
       </div>
-      {dropdownOpen && (
+      {dropdownOpen && !disabled && (
         <div
           ref={dropdownRef}
           style={dropdownStyle}
