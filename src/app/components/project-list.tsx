@@ -12,6 +12,7 @@ import { RxCrumpledPaper } from "react-icons/rx";
 import { deleteProjectAction } from "../features/projects/project-slice";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { BiCheck } from "react-icons/bi";
 
 export default function ProjectList() {
   const projects = useSelector((state: RootState) => state.projects.projects);
@@ -21,6 +22,7 @@ export default function ProjectList() {
   const router = useRouter();
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const dispatch = useDispatch<AppDispatch>();
+  const [deleteConfirm, setDeleteConfirm] = useState<boolean>(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,6 +47,7 @@ export default function ProjectList() {
           router.replace("/");
         }
       })
+      .then(() => setDeleteConfirm(false))
       .then(() => {
         toast.success("Project discarded");
       });
@@ -104,20 +107,37 @@ export default function ProjectList() {
               <MoreButtonDropdown
                 hideDropdownOption={[hideDropdown, setHideDropdown]}
               >
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    deleteProject(project.id);
-                  }}
-                  className="flex flex-row  justify-between items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
-                  role="menuitem"
-                  tabIndex={-1}
-                  id="menu-item-1"
-                >
-                  <span>Discard project</span>
-                  <RxCrumpledPaper size={20} />
-                </a>
+                {deleteConfirm ? (
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      deleteProject(project.id);
+                    }}
+                    className="flex flex-row  justify-between items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
+                    role="menuitem"
+                    tabIndex={-1}
+                    id="menu-item-1"
+                  >
+                    <span>Confirm discard</span>
+                    <BiCheck size={20} />
+                  </a>
+                ) : (
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setDeleteConfirm(true);
+                    }}
+                    className="flex flex-row  justify-between items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
+                    role="menuitem"
+                    tabIndex={-1}
+                    id="menu-item-1"
+                  >
+                    <span>Discard project</span>
+                    <RxCrumpledPaper size={20} />
+                  </a>
+                )}
               </MoreButtonDropdown>
             </div>
           ))}
