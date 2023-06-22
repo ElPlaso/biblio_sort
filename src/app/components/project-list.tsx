@@ -51,15 +51,15 @@ export default function ProjectList() {
             <Link href={`/project?id=${project.id}`} key={project.id}>
               <h2
                 className={classnames(
-                  "flex p-3 space-x-2 items-center text-gray-400 hover:text-black dark:text-gray-400 dark:hover:text-white",
+                  "flex p-3 space-x-2 items-center w-full text-gray-400 hover:text-black dark:text-gray-400 dark:hover:text-white",
                   {
                     "text-black dark:text-white bg-gray-50 dark:bg-opacity-10 rounded":
                       currentId == project.id,
                   }
                 )}
               >
-                <AiOutlineFile size={17} />
-                <span>
+                <AiOutlineFile size={17} className="flex-shrink-0" />
+                <span className="truncate">
                   {project.title.trim() != "" ? project.title : "New project"}
                 </span>
               </h2>
