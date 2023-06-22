@@ -86,13 +86,12 @@ export default function ProjectList() {
                 </h1>
               </Link>
               <MoreButtonDropdown
-                hideDropdown={hideDropdown}
-                setHideDropdown={setHideDropdown}
+                hideDropdownOption={[hideDropdown, setHideDropdown]}
               >
                 <a
                   href="#"
                   onClick={(e) => {}}
-                  className="w-full space-x-4 flex flex-row  items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
+                  className="flex flex-row  justify-between items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
                   role="menuitem"
                   tabIndex={-1}
                   id="menu-item-1"

@@ -8,15 +8,15 @@ import {
   removeItem,
 } from "../../features/references/reference-slice";
 import { AppDispatch } from "../../store/store";
-import { MdMoreHoriz } from "react-icons/md";
 import { MdRemoveCircleOutline, MdContentCopy } from "react-icons/md";
+import MoreButtonDropdown from "../more-button-dropdown";
+import { toast } from "react-hot-toast";
 
 export default function ReferenceList() {
   const items = useSelector(selectItems);
 
-  const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
-
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  // for programmatically hiding dropdown
+  const [hideDropdown, setHideDropdown] = useState<boolean>(false);
 
   const [editItem, setEditItem] = useState<{
     index: number;
@@ -34,24 +34,6 @@ export default function ReferenceList() {
   function handleItemDoubleClick(index: number, text: string) {
     setEditItem({ index, text });
   }
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownOpen &&
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setDropdownOpen(null);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [dropdownOpen]);
 
   // Redux toolkit creates a "readonly" version of the state.
   // It uses Immer under the hood, which makes original state drafts "immutable".
@@ -171,77 +153,42 @@ export default function ReferenceList() {
                         </div>
                       )}
                       {!snapshot.isDragging && (
-                        <div className="relative inline-block text-left">
-                          <div>
-                            <button
-                              type="button"
-                              className={
-                                dropdownOpen === item.id ? "hidden" : ""
-                              }
-                              onClick={() => {
-                                setDropdownOpen(item.id);
-                              }}
-                              id="menu-button"
-                              aria-haspopup="true"
-                            >
-                              <MdMoreHoriz size={20} />
-                            </button>
-
-                            {/* Display a different button when dropdown is open */}
-                            {dropdownOpen === item.id && (
-                              <button
-                                type="button"
-                                onClick={() => setDropdownOpen(null)}
-                                id="menu-close-button"
-                                aria-haspopup="true"
-                              >
-                                <MdMoreHoriz size={20} />
-                              </button>
-                            )}
-                          </div>
-
-                          {dropdownOpen === item.id && (
-                            <div
-                              ref={dropdownRef}
-                              className="absolute right-full top-1/2 transform -translate-y-1/4 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-darkColor"
-                              role="menu"
-                              aria-orientation="horizontal"
-                              aria-labelledby="menu-button"
-                              tabIndex={-1}
-                            >
-                              <div>
-                                <a
-                                  href="#"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    navigator.clipboard.writeText(item.content);
-                                  }}
-                                  className="flex flex-row w-full justify-between items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
-                                  role="menuitem"
-                                  tabIndex={-1}
-                                  id="menu-item-1"
-                                >
-                                  Copy
-                                  <MdContentCopy />
-                                </a>
-                                <a
-                                  href="#"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    handleRemoveItem(index);
-                                  }}
-                                  className="flex flex-row w-full justify-between items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
-                                  role="menuitem"
-                                  tabIndex={-1}
-                                  id="menu-item-0"
-                                >
-                                  Remove
-                                  <MdRemoveCircleOutline />
-                                </a>
-                              </div>
-                            </div>
-                          )}
-                        </div>
+                        <MoreButtonDropdown
+                          horizontal
+                          position="left"
+                          hideDropdownOption={[hideDropdown, setHideDropdown]}
+                        >
+                          <a
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              navigator.clipboard.writeText(item.content);
+                              setHideDropdown(true);
+                              toast.success("Item copied");
+                            }}
+                            className="flex flex-row justify-between items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
+                            role="menuitem"
+                            tabIndex={-1}
+                            id="menu-item-1"
+                          >
+                            Copy
+                            <MdContentCopy />
+                          </a>
+                          <a
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleRemoveItem(index);
+                            }}
+                            className="flex flex-row justify-between items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
+                            role="menuitem"
+                            tabIndex={-1}
+                            id="menu-item-0"
+                          >
+                            Remove
+                            <MdRemoveCircleOutline />
+                          </a>
+                        </MoreButtonDropdown>
                       )}
                     </div>
                   </li>

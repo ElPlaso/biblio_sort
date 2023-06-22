@@ -1,16 +1,29 @@
 import React, { useState, useRef, useEffect } from "react";
-import { MdMoreVert } from "react-icons/md";
+import { MdMoreVert, MdMoreHoriz } from "react-icons/md";
+
+type Position = "left" | "right";
+
+type hideDropdownProp = [
+  // whether to hide dropdown
+  boolean,
+  // for resetting hideDropdown to false
+  React.Dispatch<React.SetStateAction<boolean>>
+];
 
 interface MoreButtonDropdownProps {
   children?: React.ReactNode;
-  hideDropdown?: boolean;
-  setHideDropdown?: React.Dispatch<React.SetStateAction<boolean>>;
+  horizontal?: boolean;
+  // customise position of dropdown
+  position?: Position;
+  // programmatically hide dropdown for more control
+  hideDropdownOption?: hideDropdownProp;
 }
 
 export default function MoreButtonDropdown({
   children,
-  hideDropdown,
-  setHideDropdown,
+  hideDropdownOption,
+  horizontal,
+  position,
 }: MoreButtonDropdownProps) {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
@@ -38,13 +51,13 @@ export default function MoreButtonDropdown({
   }, [dropdownOpen]);
 
   useEffect(() => {
-    if (hideDropdown && dropdownOpen) {
+    if (hideDropdownOption && hideDropdownOption[0] && dropdownOpen) {
       setDropdownOpen(false);
     }
-  }, [hideDropdown]);
+  }, [hideDropdownOption]);
 
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative inline-block text-left dropdown-item">
       <div>
         <button
           type="button"
@@ -53,22 +66,26 @@ export default function MoreButtonDropdown({
           onClick={() => {
             if (buttonRef.current) {
               const rect = buttonRef.current.getBoundingClientRect();
+              let width = 208;
+
+              const left = position === "left" ? rect.left - width : rect.left;
               setDropdownStyle({
                 position: "fixed",
                 top: rect.bottom,
-                left: rect.left,
+                left: left,
               });
               setDropdownOpen(true);
-              setHideDropdown && setHideDropdown(false);
+              hideDropdownOption && hideDropdownOption[1](false);
             }
           }}
           id="menu-button"
           aria-haspopup="true"
         >
-          <MdMoreVert size={20} />
+          {horizontal ? <MdMoreHoriz size={20} /> : <MdMoreVert size={20} />}
         </button>
 
-        {/* Display a different button when dropdown is open */}
+        {/* Display a different button when dropdown is open, 
+            because the on click and handle click outside trigger at same time */}
         {dropdownOpen && (
           <button
             type="button"
@@ -76,7 +93,7 @@ export default function MoreButtonDropdown({
             id="menu-close-button"
             aria-haspopup="true"
           >
-            <MdMoreVert size={20} />
+            {horizontal ? <MdMoreHoriz size={20} /> : <MdMoreVert size={20} />}
           </button>
         )}
       </div>
@@ -84,7 +101,7 @@ export default function MoreButtonDropdown({
         <div
           ref={dropdownRef}
           style={dropdownStyle}
-          className="z-10 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-darkColor"
+          className="z-10 w-52 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-darkColor"
           role="menu"
           aria-orientation="horizontal"
           aria-labelledby="menu-button"
