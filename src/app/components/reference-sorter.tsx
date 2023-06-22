@@ -15,6 +15,8 @@ export default function ReferenceSorter() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const loading = useSelector((state: RootState) => state.projects.loading);
   const theme = useSelector(selectTheme);
+  const items = useSelector((state: RootState) => state.references.items);
+  const count = items.length;
 
   return (
     <div className="flex-grow flex-col min-h-full p-8 rounded-tl-3xl shadow-lg border dark:border-none bg-gray-50 dark:bg-opacity-10 space-y-4">
@@ -29,7 +31,7 @@ export default function ReferenceSorter() {
           <Skeleton
             height={55}
             containerClassName="space-y-2"
-            count={5}
+            count={count}
             baseColor={theme == "dark" ? "#181818" : ""}
             highlightColor={theme == "dark" ? "#282828" : ""}
           />
