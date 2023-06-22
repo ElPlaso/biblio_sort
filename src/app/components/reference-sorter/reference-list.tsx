@@ -7,7 +7,6 @@ import {
   setItems,
   removeItem,
 } from "../../features/references/reference-slice";
-// import { MdRemove } from "react-icons/md";
 import { AppDispatch } from "../../store/store";
 import { MdMoreHoriz } from "react-icons/md";
 import { MdRemoveCircleOutline, MdContentCopy } from "react-icons/md";
@@ -206,7 +205,7 @@ export default function ReferenceList() {
                               ref={dropdownRef}
                               className="absolute right-full top-1/2 transform -translate-y-1/4 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-darkColor"
                               role="menu"
-                              aria-orientation="vertical"
+                              aria-orientation="horizontal"
                               aria-labelledby="menu-button"
                               tabIndex={-1}
                             >

@@ -1,4 +1,3 @@
-import React from "react";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { MdAddCircle } from "react-icons/md";
@@ -7,15 +6,33 @@ import { AiOutlineFile } from "react-icons/ai";
 import FlipMove from "react-flip-move";
 import classnames from "classnames";
 import { useSearchParams } from "next/navigation";
+import MoreButtonDropdown from "./more-button-dropdown";
+import { useEffect, useRef, useState } from "react";
+import { RxCrumpledPaper } from "react-icons/rx";
 
 export default function ProjectList() {
   const projects = useSelector((state: RootState) => state.projects.projects);
-
   const sortedProjects = [...projects].reverse();
-
   const currentId = useSearchParams().get("id");
+  const [hideDropdown, setHideDropdown] = useState<boolean>(false);
 
-  console.log(currentId);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setHideDropdown(true);
+    };
+
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
 
   return (
     <div className="flex flex-col h-full space-y-2">
@@ -42,31 +59,52 @@ export default function ProjectList() {
           />
         </Link>
       </div>
-      <FlipMove className="project-list flex flex-col overflow-y-scroll">
-        {sortedProjects.map((project) => (
-          <div
-            key={project.id}
-            className="bg-white dark:bg-darkColor dark:hover:bg-darkColor color-transition-applied"
-          >
-            <Link href={`/project?id=${project.id}`} key={project.id}>
-              <h2
-                className={classnames(
-                  "flex p-3 space-x-2 items-center w-full text-gray-400 hover:text-black dark:text-gray-400 dark:hover:text-white",
-                  {
-                    "text-black dark:text-white bg-gray-50 dark:bg-opacity-10 rounded":
-                      currentId == project.id,
-                  }
-                )}
+      <div className="project-list overflow-y-scroll" ref={scrollContainerRef}>
+        <FlipMove className="project-list flex flex-col">
+          {sortedProjects.map((project) => (
+            <div
+              key={project.id}
+              className={classnames(
+                "flex flex-row p-3 hover:text-black  dark:hover:text-white",
+                {
+                  "text-black dark:text-white bg-gray-50 dark:bg-opacity-10 rounded-r-lg":
+                    currentId == project.id,
+                  "text-gray-400": currentId != project.id,
+                }
+              )}
+            >
+              <Link
+                href={`/project?id=${project.id}`}
+                key={project.id}
+                className="flex w-full truncate"
               >
-                <AiOutlineFile size={17} className="flex-shrink-0" />
-                <span className="truncate">
-                  {project.title.trim() != "" ? project.title : "New project"}
-                </span>
-              </h2>
-            </Link>
-          </div>
-        ))}
-      </FlipMove>
+                <h1 className="flex space-x-2 items-center w-full">
+                  <AiOutlineFile size={17} className="flex-shrink-0" />
+                  <span className="truncate">
+                    {project.title.trim() != "" ? project.title : "New project"}
+                  </span>
+                </h1>
+              </Link>
+              <MoreButtonDropdown
+                hideDropdown={hideDropdown}
+                setHideDropdown={setHideDropdown}
+              >
+                <a
+                  href="#"
+                  onClick={(e) => {}}
+                  className="w-full space-x-4 flex flex-row  items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
+                  role="menuitem"
+                  tabIndex={-1}
+                  id="menu-item-1"
+                >
+                  <span>Remove project</span>
+                  <RxCrumpledPaper size={20} />
+                </a>
+              </MoreButtonDropdown>
+            </div>
+          ))}
+        </FlipMove>
+      </div>
       <style>
         {`
         .project-list::-webkit-scrollbar {
