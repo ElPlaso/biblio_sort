@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import toast from "react-hot-toast";
 import Switch from "../switch";
 import { BiImport } from "react-icons/bi";
-import { MdContentCopy, MdDeleteOutline, MdSave } from "react-icons/md";
-import { Tooltip } from "react-tooltip";
+import { MdContentCopy, MdDeleteOutline } from "react-icons/md";
 import classnames from "classnames";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -13,46 +12,24 @@ import {
   selectPrepend,
   selectCopyWithLinks,
   setItems,
+  setTitle,
   togglePrepend,
   toggleCopyWithLinks,
 } from "../../features/references/reference-slice";
 import { renderWithLinksHrefOnly } from "../utils";
-import {
-  createProjectAction,
-  updateProjectItemsAction,
-  getTitle,
-  updateProjectTitleAction,
-  getItems,
-} from "../../features/projects/project-slice";
+import { getTitle } from "../../features/projects/project-slice";
 import { AppDispatch, RootState } from "../../store/store";
-import { SortableItem } from "@/app/types/sortable-item";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { useRouter } from "next/navigation";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ToolBarActionButton from "../tool-bar/tool-bar-action-button";
 import classNames from "classnames";
 import { selectTheme } from "@/app/features/theme/theme-slice";
+import SaveProjectButton from "../tool-bar/save-project-button";
 
 interface ToolBarProps {
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   modalIsOpen: boolean;
-}
-
-// transforms an array of items into an array of strings
-function transformItemsToStrings(items: SortableItem[]) {
-  return items.map((item) => item.content);
-}
-
-// used for checking if items have been modified
-function itemsEqual(items1: string[], items2: string[]) {
-  if (items1 === items2) return true;
-  if (items1 == null || items2 == null) return false;
-  if (items1.length !== items2.length) return false;
-  for (var i = 0; i < items1.length; ++i) {
-    if (items1[i] !== items2[i]) return false;
-  }
-  return true;
 }
 
 export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
@@ -60,28 +37,21 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
   const prepend = useSelector(selectPrepend);
   const copyWithLinks = useSelector(selectCopyWithLinks);
   const dispatch = useDispatch<AppDispatch>();
-  const [projectTitle, setProjectTitle] = useState("");
-  const user = useSelector((state: RootState) => state.auth.user);
+  const [titleInputValue, setTitleInputValue] = useState("");
   const projectId = useSelector(
     (state: RootState) => state.references.projectId
   );
   const [editingTitle, setEditingTitle] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const router = useRouter();
   const loading = useSelector((state: RootState) => state.projects.loading);
-  const [initialItems, setInitialItems] = useState<string[]>([]);
 
   useEffect(() => {
     if (!projectId) return;
     // get title of project with given id
     dispatch(getTitle(projectId)).then((result) => {
       const title = unwrapResult(result);
-      setProjectTitle(title);
-    });
-    // get items of project with given id
-    dispatch(getItems(projectId)).then((result) => {
-      const items = unwrapResult(result);
-      setInitialItems(items);
+      setTitleInputValue(title);
+      dispatch(setTitle(title));
     });
   }, [projectId, dispatch]);
 
@@ -89,68 +59,18 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
 
   const theme = useSelector(selectTheme);
 
-  const handleSaveProject = async (toSaveId: string | undefined) => {
-    if (!user) {
-      toast("Please sign in to create a project");
-      return;
+  const handleTitleChange = useCallback(() => {
+    if (titleInputValue.trim() !== "") {
+      dispatch(setTitle(titleInputValue));
     }
-    if (toSaveId) {
-      // update existing project
-      const itemsAsStrings = transformItemsToStrings(items);
-      var title = await dispatch(getTitle(toSaveId)).then((result) => {
-        const title = unwrapResult(result);
-        return title;
-      });
+    setEditingTitle(false);
+  }, [dispatch, titleInputValue]);
 
-      const itemsChanged: boolean = !itemsEqual(itemsAsStrings, initialItems);
-
-      const makeChanges = async () => {
-        if (itemsChanged) {
-          await dispatch(
-            updateProjectItemsAction({
-              projectId: toSaveId,
-              items: itemsAsStrings,
-            })
-          );
-        }
-        if (title !== projectTitle) {
-          await dispatch(
-            updateProjectTitleAction({
-              title: projectTitle,
-              projectId: toSaveId,
-            })
-          );
-        }
-      };
-      // update if changes mave been made
-      if (itemsChanged || title !== projectTitle) {
-        makeChanges().then((respose) => toast.success("Project saved"));
-      }
-    } else {
-      // create new project
-      dispatch(
-        createProjectAction({
-          title: projectTitle,
-          items: items.map((item) => item.content),
-          uid: user.uid,
-        })
-      )
-        .then((response) => {
-          const projectId = unwrapResult(response).projectId;
-          router.push(`/project?id=${projectId}`);
-        })
-        .then(() => toast.success("Project created"))
-        .catch(() => {
-          toast.error("Failed to create project");
-        });
-    }
-  };
-
-  // close the title input field when clicked outside
+  // close the title input field and handle title change when clicked outside
   useEffect(() => {
     function handleClickOutside(event: { target: any }) {
       if (inputRef.current && !inputRef.current.contains(event.target)) {
-        setEditingTitle(false);
+        handleTitleChange();
       }
     }
 
@@ -158,7 +78,7 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [handleTitleChange]);
 
   // focus the input field when title is clicked
   useEffect(() => {
@@ -246,17 +166,7 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
       )}
     >
       <div className="flex space-x-2 items-center h-full w-[25%]">
-        <a data-tooltip-id="save" data-tooltip-content="Save project">
-          <button
-            onClick={() => {
-              handleSaveProject(projectId);
-            }}
-            className="hover:text-white text-green-500 hover:bg-green-500 p-2 hover:shadow-md rounded"
-          >
-            <MdSave size={24} />
-          </button>
-          <Tooltip id="save" place="bottom" />
-        </a>
+        <SaveProjectButton />
         {loading ? (
           <Skeleton
             containerClassName="flex-1"
@@ -269,24 +179,25 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
             type="text"
             ref={inputRef}
             className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none color-transition-applied"
-            value={projectTitle}
+            value={titleInputValue}
             placeholder="New project"
-            onChange={(e) => setProjectTitle(e.target.value)}
-            onBlur={() => setEditingTitle(false)}
+            onChange={(e) => setTitleInputValue(e.target.value)}
+            onBlur={handleTitleChange}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                setEditingTitle(false);
+                handleTitleChange();
               }
             }}
           />
         ) : (
           <button
             className={classNames("dark:text-white cursor-text", {
-              "text-gray-400 dark:text-opacity-20": projectTitle.trim() === "",
+              "text-gray-400 dark:text-opacity-20":
+                titleInputValue.trim() === "",
             })}
             onClick={() => setEditingTitle(true)}
           >
-            {projectTitle.trim() === "" ? "New project" : projectTitle}
+            {titleInputValue.trim() === "" ? "New project" : titleInputValue}
           </button>
         )}
       </div>
