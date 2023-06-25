@@ -6,31 +6,15 @@ import {
 import { Tooltip } from "react-tooltip";
 import { useRouter } from "next/navigation";
 import { MdSave } from "react-icons/md";
-import { SortableItem } from "@/app/types/sortable-item";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "@/app/store/store";
 import toast from "react-hot-toast";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { selectItems } from "@/app/features/references/reference-slice";
-import { useEffect, useState } from "react";
+import { transformItemsToStrings } from "@/app/features/references/utils";
+import { useChangesMade } from "@/app/features/references/use-changes-made";
 
-// transforms an array of items into an array of strings
-function transformItemsToStrings(items: SortableItem[]) {
-  return items.map((item) => item.content);
-}
-
-// used for checking if items have been modified
-function itemsEqual(items1: string[], items2: string[]) {
-  if (items1 === items2) return true;
-  if (items1 == null || items2 == null) return false;
-  if (items1.length !== items2.length) return false;
-  for (var i = 0; i < items1.length; ++i) {
-    if (items1[i] !== items2[i]) return false;
-  }
-  return true;
-}
-
-export default function SaveProjectButton() {
+export default function SaveProjectButton(props: { disabled: boolean }) {
   const dispatch = useDispatch<AppDispatch>();
   const projectId = useSelector(
     (state: RootState) => state.references.projectId
@@ -41,16 +25,8 @@ export default function SaveProjectButton() {
     (state: RootState) => state.references.title
   );
   const router = useRouter();
-  const projects = useSelector((state: RootState) => state.projects.projects);
 
-  const [initialItems, setInitialItems] = useState([] as string[]);
-  const [initialTitle, setInitialTitle] = useState("");
-
-  useEffect(() => {
-    const currentProject = projects.find((project) => project.id === projectId);
-    setInitialItems(currentProject?.items!);
-    setInitialTitle(currentProject?.title!);
-  }, [projects, projectId]);
+  const { itemsChanged, titleChanged } = useChangesMade();
 
   const handleSaveProject = async () => {
     if (!user) {
@@ -59,16 +35,12 @@ export default function SaveProjectButton() {
     }
     if (projectId) {
       // update existing project
-
-      const itemsAsStrings = transformItemsToStrings(items);
-      const itemsChanged = !itemsEqual(itemsAsStrings, initialItems);
-      const titleChanged = currentTitle !== initialTitle;
       const makeChanges = async () => {
         if (itemsChanged) {
           await dispatch(
             updateProjectItemsAction({
               projectId: projectId,
-              items: itemsAsStrings,
+              items: transformItemsToStrings(items),
             })
           );
         }
@@ -109,7 +81,8 @@ export default function SaveProjectButton() {
     <a data-tooltip-id="save" data-tooltip-content="Save project">
       <button
         onClick={handleSaveProject}
-        className="hover:text-white text-green-500 hover:bg-green-500 p-2 hover:shadow-md rounded"
+        className="enabled:hover:text-white text-green-500 enabled:hover:bg-green-500 p-2 enabled:hover:shadow-md rounded disabled:opacity-50"
+        disabled={props.disabled}
       >
         <MdSave size={24} />
       </button>

@@ -26,6 +26,8 @@ import ToolBarActionButton from "../tool-bar/tool-bar-action-button";
 import classNames from "classnames";
 import { selectTheme } from "@/app/features/theme/theme-slice";
 import SaveProjectButton from "../tool-bar/save-project-button";
+import UndoChangesButton from "../tool-bar/undo-changes-button";
+import { useChangesMade } from "@/app/features/references/use-changes-made";
 
 interface ToolBarProps {
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,6 +46,11 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
   const [editingTitle, setEditingTitle] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const loading = useSelector((state: RootState) => state.projects.loading);
+  const currentTitle = useSelector(
+    (state: RootState) => state.references.title
+  );
+
+  const { itemsChanged, titleChanged } = useChangesMade();
 
   useEffect(() => {
     if (!projectId) return;
@@ -55,14 +62,16 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
     });
   }, [projectId, dispatch]);
 
+  useEffect(() => {
+    setTitleInputValue(currentTitle || "");
+  }, [currentTitle]);
+
   const [isScrolled, setIsScrolled] = useState(false);
 
   const theme = useSelector(selectTheme);
 
   const handleTitleChange = useCallback(() => {
-    if (titleInputValue.trim() !== "") {
-      dispatch(setTitle(titleInputValue));
-    }
+    dispatch(setTitle(titleInputValue));
     setEditingTitle(false);
   }, [dispatch, titleInputValue]);
 
@@ -165,8 +174,7 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
         }
       )}
     >
-      <div className="flex space-x-2 items-center h-full w-[25%]">
-        <SaveProjectButton />
+      <div className="flex space-x-3 items-center h-full w-full">
         {loading ? (
           <Skeleton
             containerClassName="flex-1"
@@ -201,7 +209,18 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
           </button>
         )}
       </div>
-      <div className="flex space-x-6 items-center">
+      <div className="flex space-x-6 items-center w-full justify-end">
+        <div className="flex space-x-1">
+          {projectId ? (
+            <>
+              <UndoChangesButton disabled={!(itemsChanged || titleChanged)} />
+              <SaveProjectButton disabled={!(itemsChanged || titleChanged)} />
+            </>
+          ) : (
+            // only and always allow save if new project
+            <SaveProjectButton disabled={false} />
+          )}
+        </div>
         <div className="flex space-x-3">
           <Switch
             label={"Prepend"}
