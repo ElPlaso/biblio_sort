@@ -167,14 +167,14 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
   return (
     <div
       className={classnames(
-        "flex items-center justify-between w-full sticky top-0 dark:text-white transition-all duration-100 space-x-2",
+        "flex lg:flex-row md:flex-col lg:justify-between md:items-start md:justify-center md:space-y-2 lg:items-center w-full sticky top-0 dark:text-white transition-all duration-100 space-x-2",
         {
           "shadow-lg rounded-full bg-white dark:bg-darkColor top-[100px] py-5 px-7 dark:shadow-xl z-20":
             isScrolled && !modalIsOpen,
         }
       )}
     >
-      <div className="flex space-x-3 items-center h-full w-full">
+      <div className="flex space-x-3 items-center h-full w-full lg:max-w-[250px] md:max-w-[500px] truncate">
         {loading ? (
           <Skeleton
             containerClassName="flex-1"
@@ -186,7 +186,8 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
           <input
             type="text"
             ref={inputRef}
-            className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none color-transition-applied"
+            maxLength={100}
+            className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none color-transition-applied text-left"
             value={titleInputValue}
             placeholder="New project"
             onChange={(e) => setTitleInputValue(e.target.value)}
@@ -199,17 +200,20 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
           />
         ) : (
           <button
-            className={classNames("dark:text-white cursor-text", {
-              "text-gray-400 dark:text-opacity-20":
-                titleInputValue.trim() === "",
-            })}
+            className={classNames(
+              "dark:text-white cursor-text w-full truncate text-left md:p-2",
+              {
+                "text-gray-400 dark:text-opacity-20":
+                  titleInputValue.trim() === "",
+              }
+            )}
             onClick={() => setEditingTitle(true)}
           >
             {titleInputValue.trim() === "" ? "New project" : titleInputValue}
           </button>
         )}
       </div>
-      <div className="flex space-x-6 items-center w-full justify-end">
+      <div className="flex space-x-6 items-center w-full lg:justify-end md:justify-between">
         <div className="flex space-x-1">
           {projectId ? (
             <>

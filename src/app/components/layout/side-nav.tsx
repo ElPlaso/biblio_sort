@@ -10,7 +10,7 @@ export default function SideNav() {
   const user = useSelector((state: RootState) => state.auth.user);
   const pathName = usePathname();
   return (
-    <nav className="fixed left-0 h-screen w-64 overflow-x-visible bg-white dark:bg-darkColor pt-28 pb-4 color-transition-applied">
+    <nav className="fixed left-0 h-screen lg:w-64 md:w-44 overflow-x-visible bg-white dark:bg-darkColor pt-28 pb-4 color-transition-applied">
       {user && user.emailVerified ? (
         <div className="flex flex-col h-full pb-16 space-y-4 transition-all">
           <div className="min-h-full">

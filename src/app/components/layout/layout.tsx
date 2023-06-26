@@ -39,7 +39,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="flex h-screen">
         <div className="flex flex-row flex-grow w-full">
           <SideNav />
-          <main className="flex-grow min-h-screen pt-24 pl-4 ml-64">{children}</main>
+          <main className="flex-grow min-h-screen pt-24 pl-4 lg:ml-64 md:ml-44">
+            {children}
+          </main>
         </div>
         <TopAppBar />
       </div>
