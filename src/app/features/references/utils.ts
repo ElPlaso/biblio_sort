@@ -26,3 +26,32 @@ export function itemsEqual(items1: string[], items2: string[]) {
   }
   return true;
 }
+
+// automatically generating citation from url
+
+import Parser from "@postlight/parser";
+
+export async function generateCitation(url: string) {
+  const result = await Parser.parse(url);
+
+  const title = result.title;
+  const author = result.author;
+  const date = result.date_published
+    ? new Date(result.date_published).getFullYear()
+    : null;
+
+  // IEEE citation format:
+  // [1] A. A. Author, "Title of document," Site Name, year. [Online]. Available: URL.
+  // [Accessed: Day- Month- Year].
+  // ommit any value if not available
+
+  let citation = `${author ? `${author}, ` : ""}${title ? `"${title}", ` : ""}`;
+
+  // append if not empty
+  citation += date ? `${date}. ` : "";
+
+  citation += url ? `[Online]. Available: ${url}. ` : "";
+  citation += `[Accessed: ${new Date().toLocaleDateString("en-GB")}]`;
+
+  return citation;
+}
