@@ -1,8 +1,11 @@
 export function renderWithLinks(text: string) {
-  const parts = text.split(/(https?:\/\/[^\s]+)/g);
+  // Use non-capturing group to exclude trailing comma and period after a URL
+  const urlPattern = /(https?:\/\/[^\s]+)(?<![.,])/g;
+
+  const parts = text.split(urlPattern);
 
   return parts.map((part, index) => {
-    const isLink = part.match(/(https?:\/\/[^\s]+)/);
+    const isLink = part.match(urlPattern);
     if (isLink) {
       return (
         <a
@@ -22,7 +25,7 @@ export function renderWithLinks(text: string) {
 }
 
 export function renderWithLinksHrefOnly(text: string) {
-  const urlPattern = /(https?:\/\/[^\s]+)/g;
+  const urlPattern = /(https?:\/\/[^\s]+)(?<![.,])/g;
   return text.replace(urlPattern, function (url) {
     return `<a href="${url}">${url}</a>`;
   });
