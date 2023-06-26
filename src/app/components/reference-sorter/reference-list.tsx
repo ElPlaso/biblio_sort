@@ -7,11 +7,16 @@ import {
   setItems,
   removeItem,
 } from "../../features/references/reference-slice";
-import { MdRemove } from "react-icons/md";
 import { AppDispatch } from "../../store/store";
+import { MdRemoveCircleOutline, MdContentCopy } from "react-icons/md";
+import MoreButtonDropdown from "../more-button-dropdown";
+import { toast } from "react-hot-toast";
 
 export default function ReferenceList() {
   const items = useSelector(selectItems);
+
+  // for programmatically hiding dropdown
+  const [hideDropdown, setHideDropdown] = useState<boolean>(false);
 
   const [editItem, setEditItem] = useState<{
     index: number;
@@ -115,7 +120,7 @@ export default function ReferenceList() {
                     }}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className={`color-transition-applied bg-white dark:bg-darkColor p-4 rounded mb-2 ${
+                    className={`color-transition-applied bg-white shadow-md dark:bg-darkColor p-4 rounded-lg mb-2 ${
                       snapshot.isDragging ||
                       (editItem && editItem.index === index)
                         ? "shadow-lg"
@@ -135,23 +140,46 @@ export default function ReferenceList() {
                           className="flex-grow mr-4 pl-1 -ml-1 focus:outline-none  dark:bg-darkColor"
                         />
                       ) : (
-                        <span
-                          onClick={() =>
-                            handleItemDoubleClick(index, item.content)
-                          }
-                          className="flex-grow cursor-text"
-                          dangerouslySetInnerHTML={{
-                            __html: renderWithLinks(item.content),
-                          }}
-                        ></span>
+                        <div className="flex-grow">
+                          <span
+                            onClick={() =>
+                              handleItemDoubleClick(index, item.content)
+                            }
+                            className="cursor-text"
+                            dangerouslySetInnerHTML={{
+                              __html: renderWithLinks(item.content),
+                            }}
+                          />
+                        </div>
                       )}
                       {!snapshot.isDragging && (
-                        <button
-                          onClick={() => handleRemoveItem(index)}
-                          className="bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-500 text-white font-bold py-2 px-2 rounded-full select-none"
-                        >
-                          <MdRemove size={20} />
-                        </button>
+                        <MoreButtonDropdown
+                          horizontal
+                          position="left"
+                          hideDropdownOption={[hideDropdown, setHideDropdown]}
+                          items={[
+                            {
+                              id: "copy",
+                              label: "Copy",
+                              onClick: (e) => {
+                                e.preventDefault();
+                                navigator.clipboard.writeText(item.content);
+                                setHideDropdown(true);
+                                toast.success("Item copied");
+                              },
+                              icon: <MdContentCopy />,
+                            },
+                            {
+                              id: "remove",
+                              label: "Remove",
+                              onClick: (e) => {
+                                e.preventDefault();
+                                handleRemoveItem(index);
+                              },
+                              icon: <MdRemoveCircleOutline />,
+                            },
+                          ]}
+                        />
                       )}
                     </div>
                   </li>

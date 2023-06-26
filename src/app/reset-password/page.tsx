@@ -48,9 +48,9 @@ export default function ResetPassword() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center h-full space-y-2">
+      <div className="flex flex-col items-center justify-center h-full space-y-2 font-lighter text-gray-400">
         <Loader />
-        Sending...
+        sending
       </div>
     );
   }

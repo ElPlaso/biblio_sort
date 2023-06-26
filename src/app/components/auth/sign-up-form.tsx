@@ -82,9 +82,9 @@ export default function SignUpForm() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center font-lighter text-gray-400">
         <Loader />
-        Please wait a moment...
+        please wait a moment...
       </div>
     );
   }

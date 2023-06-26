@@ -13,18 +13,8 @@ import { useSearchParams } from "next/navigation";
 import ReferenceSorter from "../components/reference-sorter";
 import { AppDispatch, RootState } from "../store/store";
 import { setProject, setItems } from "../features/references/reference-slice";
-import { SortableItem } from "../types/sortable-item";
-import { uid } from "uid";
-
-// transforms an array of strings into an array of sortable items
-function transformItems(items: string[]): SortableItem[] {
-  return items.map((item) => {
-    return {
-      id: uid(),
-      content: item,
-    };
-  });
-}
+import { setLoading } from "../features/projects/project-slice";
+import { transformItems } from "../features/references/utils";
 
 export default function ProjectPage() {
   const [projectExists, setProjectExists] = useState(true);
@@ -35,6 +25,7 @@ export default function ProjectPage() {
 
   useEffect(() => {
     if (projectId && user) {
+      dispatch(setLoading(true));
       dispatch(checkProjectExists({ projectId: projectId, uid: user.uid }))
         .then((result) => {
           const projectExists = unwrapResult(result);
@@ -54,7 +45,7 @@ export default function ProjectPage() {
           toast.error("An error occurred while checking if the project exists");
         });
     }
-  }, [projectId, dispatch, router]);
+  }, [projectId, dispatch, router, user]);
 
   if (!projectExists) {
     return null;

@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import toast from "react-hot-toast";
 import Switch from "../switch";
 import { BiImport } from "react-icons/bi";
-import { MdContentCopy, MdDelete, MdSave } from "react-icons/md";
-import { Tooltip } from "react-tooltip";
+import { MdContentCopy, MdDeleteOutline } from "react-icons/md";
 import classnames from "classnames";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -13,91 +12,89 @@ import {
   selectPrepend,
   selectCopyWithLinks,
   setItems,
+  setTitle,
   togglePrepend,
   toggleCopyWithLinks,
 } from "../../features/references/reference-slice";
 import { renderWithLinksHrefOnly } from "../utils";
-import {
-  createProjectAction,
-  updateProjectItemsAction,
-  getTitle,
-  updateProjectTitleAction,
-} from "../../features/projects/project-slice";
+import { getTitle } from "../../features/projects/project-slice";
 import { AppDispatch, RootState } from "../../store/store";
-import { SortableItem } from "@/app/types/sortable-item";
 import { unwrapResult } from "@reduxjs/toolkit";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import ToolBarActionButton from "../tool-bar/tool-bar-action-button";
+import classNames from "classnames";
+import { selectTheme } from "@/app/features/theme/theme-slice";
+import SaveProjectButton from "../tool-bar/save-project-button";
+import UndoChangesButton from "../tool-bar/undo-changes-button";
+import { useChangesMade } from "@/app/features/references/use-changes-made";
 
 interface ToolBarProps {
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  modalIsOpen: boolean;
 }
 
-// transforms an array of items into an array of strings
-function transformItemsToStrings(items: SortableItem[]) {
-  return items.map((item) => item.content);
-}
-
-export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
+export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
   const items = useSelector(selectItems);
   const prepend = useSelector(selectPrepend);
   const copyWithLinks = useSelector(selectCopyWithLinks);
   const dispatch = useDispatch<AppDispatch>();
-  const [projectTitle, setProjectTitle] = useState("");
-  const user = useSelector((state: RootState) => state.auth.user);
+  const [titleInputValue, setTitleInputValue] = useState("");
   const projectId = useSelector(
     (state: RootState) => state.references.projectId
   );
+  const [editingTitle, setEditingTitle] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const loading = useSelector((state: RootState) => state.projects.loading);
+  const currentTitle = useSelector(
+    (state: RootState) => state.references.title
+  );
+
+  const { itemsChanged, titleChanged } = useChangesMade();
 
   useEffect(() => {
     if (!projectId) return;
+    // get title of project with given id
     dispatch(getTitle(projectId)).then((result) => {
       const title = unwrapResult(result);
-      setProjectTitle(title);
+      setTitleInputValue(title);
+      dispatch(setTitle(title));
     });
   }, [projectId, dispatch]);
 
+  useEffect(() => {
+    setTitleInputValue(currentTitle || "");
+  }, [currentTitle]);
+
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const handleSaveProject = () => {
-    if (!user) {
-      toast("Please sign in to create a project");
-      return;
+  const theme = useSelector(selectTheme);
+
+  const handleTitleChange = useCallback(() => {
+    dispatch(setTitle(titleInputValue));
+    setEditingTitle(false);
+  }, [dispatch, titleInputValue]);
+
+  // close the title input field and handle title change when clicked outside
+  useEffect(() => {
+    function handleClickOutside(event: { target: any }) {
+      if (inputRef.current && !inputRef.current.contains(event.target)) {
+        handleTitleChange();
+      }
     }
-    if (projectId) {
-      // update existing project
-      const itemsAsStrings = transformItemsToStrings(items);
-      dispatch(
-        updateProjectItemsAction({
-          projectId: projectId,
-          items: itemsAsStrings,
-        })
-      )
-        // update title if it has changed
-        .then(() =>
-          dispatch(getTitle(projectId)).then((result) => {
-            const title = unwrapResult(result);
-            if (title !== projectTitle) {
-              dispatch(
-                updateProjectTitleAction({
-                  title: projectTitle,
-                  projectId: projectId,
-                })
-              );
-            }
-          })
-        )
-        .then((respose) => toast.success("Project saved"));
-    } else {
-      // create new project
-      dispatch(
-        createProjectAction({
-          title: projectTitle,
-          items: items.map((item) => item.content),
-          uid: user.uid,
-        })
-      );
-      setProjectTitle(""); // Clear the input field
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleTitleChange]);
+
+  // focus the input field when title is clicked
+  useEffect(() => {
+    if (editingTitle) {
+      inputRef.current?.focus();
     }
-  };
+  }, [editingTitle]);
 
   useEffect(() => {
     const checkScroll = () => {
@@ -170,35 +167,64 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
   return (
     <div
       className={classnames(
-        "flex items-center justify-between w-full sticky top-0 dark:text-white transition-all duration-100",
+        "flex lg:flex-row md:flex-col lg:justify-between md:items-start md:justify-center md:space-y-2 lg:items-center w-full sticky top-0 dark:text-white transition-all duration-100 space-x-2",
         {
-          "shadow-lg rounded-full bg-white dark:bg-darkColor top-[100px] py-5 px-7":
-            isScrolled,
+          "shadow-lg rounded-full bg-white dark:bg-darkColor top-[100px] py-5 px-7 dark:shadow-xl z-20":
+            isScrolled && !modalIsOpen,
         }
       )}
     >
-      <div className="flex space-x-2">
-        <a data-tooltip-id="save" data-tooltip-content="Save project">
+      <div className="flex space-x-3 items-center h-full w-full lg:max-w-[250px] md:max-w-[500px] truncate">
+        {loading ? (
+          <Skeleton
+            containerClassName="flex-1"
+            height={35}
+            baseColor={theme == "dark" ? "#181818" : ""}
+            highlightColor={theme == "dark" ? "#282828" : ""}
+          />
+        ) : editingTitle ? (
+          <input
+            type="text"
+            ref={inputRef}
+            maxLength={100}
+            className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none color-transition-applied text-left"
+            value={titleInputValue}
+            placeholder="New project"
+            onChange={(e) => setTitleInputValue(e.target.value)}
+            onBlur={handleTitleChange}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleTitleChange();
+              }
+            }}
+          />
+        ) : (
           <button
-            onClick={handleSaveProject}
-            className="hover:text-white text-green-500 hover:bg-green-500 p-2 hover:shadow-md rounded"
+            className={classNames(
+              "dark:text-white cursor-text w-full truncate text-left md:p-2",
+              {
+                "text-gray-400 dark:text-opacity-20":
+                  titleInputValue.trim() === "",
+              }
+            )}
+            onClick={() => setEditingTitle(true)}
           >
-            <MdSave size={24} />
+            {titleInputValue.trim() === "" ? "New project" : titleInputValue}
           </button>
-          <Tooltip id="save" place="bottom" />
-        </a>
-        <input
-          type="text"
-          disabled={!user}
-          className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none dark:outline-none color-transition-applied"
-          placeholder={
-            projectTitle.trim() === "" ? "New project" : projectTitle
-          }
-          value={projectTitle}
-          onChange={(e) => setProjectTitle(e.target.value)}
-        />
+        )}
       </div>
-      <div className="flex space-x-6">
+      <div className="flex space-x-6 items-center w-full lg:justify-end md:justify-between">
+        <div className="flex space-x-1">
+          {projectId ? (
+            <>
+              <UndoChangesButton disabled={!(itemsChanged || titleChanged)} />
+              <SaveProjectButton disabled={!(itemsChanged || titleChanged)} />
+            </>
+          ) : (
+            // only and always allow save if new project
+            <SaveProjectButton disabled={false} />
+          )}
+        </div>
         <div className="flex space-x-3">
           <Switch
             label={"Prepend"}
@@ -215,45 +241,30 @@ export default function ToolBar({ setModalIsOpen }: ToolBarProps) {
           />
         </div>
         <div className="flex space-x-2">
-          <a data-tooltip-id="import" data-tooltip-content="Import references">
-            <button
-              onClick={() => setModalIsOpen(true)}
-              className="bg-green-500 dark:hover:bg-green-500 dark:bg-green-600 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-            >
-              <BiImport size={24} />
-            </button>
-            <Tooltip id="import" place="bottom" />
-          </a>
-
-          <a data-tooltip-id="copy" data-tooltip-content="Copy to clipboard">
-            <button
-              onClick={handleCopyToClipboard}
-              className={
-                "  disabled:bg-green-200 dark:disabled:bg-green-800 disabled:cursor-not-allowed bg-green-500 dark:bg-green-600 dark:hover:bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-              }
-              disabled={items.length === 0}
-            >
-              <MdContentCopy size={24} />
-            </button>
-
-            <Tooltip id="copy" place="bottom" />
-          </a>
-
-          <a
-            data-tooltip-id="delete"
-            data-tooltip-content="Delete all references"
-          >
-            <button
-              onClick={handleClearItems}
-              className={
-                "disabled:bg-red-200 dark:disabled:bg-red-800 disabled:cursor-not-allowed bg-red-500 dark:bg-red-600 hover:bg-red-600 dark:hover:bg-red-500 text-white font-bold py-2 px-4 rounded"
-              }
-              disabled={items.length === 0}
-            >
-              <MdDelete size={24} />
-            </button>
-            <Tooltip id="delete" place="bottom" />
-          </a>
+          <ToolBarActionButton
+            onClick={() => setModalIsOpen(true)}
+            id="import"
+            icon={<BiImport size={24} />}
+            place={"bottom"}
+            tip={"Import references"}
+            disabled={loading}
+          />
+          <ToolBarActionButton
+            onClick={handleCopyToClipboard}
+            id="copy"
+            icon={<MdContentCopy size={24} />}
+            place={"bottom"}
+            tip={"Copy to clipboard"}
+            disabled={items.length === 0 || loading}
+          />
+          <ToolBarActionButton
+            onClick={handleClearItems}
+            id="delete"
+            icon={<MdDeleteOutline size={24} />}
+            place={"bottom"}
+            tip={"Delete all references"}
+            disabled={items.length === 0 || loading}
+          />
         </div>
       </div>
     </div>

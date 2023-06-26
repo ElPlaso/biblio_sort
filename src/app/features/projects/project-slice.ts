@@ -69,7 +69,10 @@ const projectsSlice = createSlice({
     name: 'projects',
     initialState,
     reducers: {
-
+        // set loading state
+        setLoading(state, action: PayloadAction<boolean>) {
+            state.loading = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -93,9 +96,9 @@ const projectsSlice = createSlice({
             })
             .addCase(deleteProjectAction.fulfilled, (state, action: PayloadAction<string>) => {
                 state.projects = state.projects.filter(project => project.id !== action.payload);
+                state.loading = false;
             })
             .addCase(checkProjectExists.fulfilled, (state, action: PayloadAction<boolean>) => {
-                state.loading = false;
                 state.error = null;
             })
             .addCase(getItems.fulfilled, (state, action: PayloadAction<string[]>) => {
@@ -103,10 +106,13 @@ const projectsSlice = createSlice({
                 state.error = null;
             })
             .addCase(getTitle.fulfilled, (state, action: PayloadAction<string>) => {
-                state.loading = false;
                 state.error = null;
             });
     },
 });
+
+export const {
+    setLoading,
+} = projectsSlice.actions;
 
 export default projectsSlice.reducer;

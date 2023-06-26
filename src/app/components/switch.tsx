@@ -21,17 +21,17 @@ export default function Switch(props: SwitchProps) {
         className="relative inline-block cursor-pointer"
       >
         <div
-          className={`block w-14 h-8 rounded-full ${
-            props.checked ? "bg-blue-500 dark:bg-blue-600" : "bg-gray-400 dark:bg-gray-600 color-transition-applied"
+          className={`block w-14 h-7 rounded-full ${
+            props.checked ? "bg-blue-500" : "bg-gray-400 dark:bg-darkColor color-transition-applied"
           }`}
         ></div>
         <div
-          className={`dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition ${
-            props.checked ? "transform translate-x-full" : ""
+          className={`dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition ${
+            props.checked ? "transform translate-x-7" : ""
           }`}
         ></div>
       </label>
-      <label htmlFor={props.id} className="ml-2 text-gray-700 dark:text-white">
+      <label htmlFor={props.id} className="ml-2 text-gray-700 dark:text-white text-sm">
         {props.label}
       </label>
     </div>
