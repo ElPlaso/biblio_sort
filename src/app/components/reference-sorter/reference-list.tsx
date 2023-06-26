@@ -146,10 +146,9 @@ export default function ReferenceList() {
                               handleItemDoubleClick(index, item.content)
                             }
                             className="cursor-text"
-                            dangerouslySetInnerHTML={{
-                              __html: renderWithLinks(item.content),
-                            }}
-                          />
+                          >
+                            {renderWithLinks(item.content)}
+                          </span>
                         </div>
                       )}
                       {!snapshot.isDragging && (
