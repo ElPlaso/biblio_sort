@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { renderWithLinks } from "../utils";
+import { renderWithLinks, renderWithLinksHrefOnly } from "../utils";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectItems,
   setItems,
   removeItem,
+  selectCopyWithLinks,
 } from "../../features/references/reference-slice";
 import { AppDispatch } from "../../store/store";
 import { MdRemoveCircleOutline, MdContentCopy } from "react-icons/md";
@@ -14,6 +15,7 @@ import { toast } from "react-hot-toast";
 
 export default function ReferenceList() {
   const items = useSelector(selectItems);
+  const copyWithLinks = useSelector(selectCopyWithLinks);
 
   // for programmatically hiding dropdown
   const [hideDropdown, setHideDropdown] = useState<boolean>(false);
@@ -65,6 +67,12 @@ export default function ReferenceList() {
     if (e.key === "Enter") {
       handleBlur(index);
     }
+  }
+
+  function handleCopy(content: string) {
+    navigator.clipboard.writeText(
+      copyWithLinks ? renderWithLinksHrefOnly(content) : content
+    );
   }
 
   function handleRemoveItem(index: number) {
@@ -137,19 +145,18 @@ export default function ReferenceList() {
                           onBlur={() => handleBlur(index)}
                           onKeyDown={(e) => handleItemEditKeyDown(e, index)}
                           autoFocus
-                          className="flex-grow mr-4 pl-1 -ml-1 focus:outline-none  dark:bg-darkColor"
+                          className="flex-grow mr-4 pl-1 -ml-1 focus:outline-none dark:bg-darkColor break-all"
                         />
                       ) : (
-                        <div className="flex-grow">
+                        <div className="flex-grow w-full whitespace-normal flex-wrap break-all">
                           <span
                             onClick={() =>
                               handleItemDoubleClick(index, item.content)
                             }
                             className="cursor-text"
-                            dangerouslySetInnerHTML={{
-                              __html: renderWithLinks(item.content),
-                            }}
-                          />
+                          >
+                            {renderWithLinks(item.content)}
+                          </span>
                         </div>
                       )}
                       {!snapshot.isDragging && (
@@ -163,7 +170,7 @@ export default function ReferenceList() {
                               label: "Copy",
                               onClick: (e) => {
                                 e.preventDefault();
-                                navigator.clipboard.writeText(item.content);
+                                handleCopy(item.content);
                                 setHideDropdown(true);
                                 toast.success("Item copied");
                               },

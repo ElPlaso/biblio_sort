@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@postlight/parser": "^2.2.3",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/node": "20.2.5",
     "@types/react": "18.2.8",
