@@ -137,10 +137,10 @@ export default function ReferenceList() {
                           onBlur={() => handleBlur(index)}
                           onKeyDown={(e) => handleItemEditKeyDown(e, index)}
                           autoFocus
-                          className="flex-grow mr-4 pl-1 -ml-1 focus:outline-none  dark:bg-darkColor"
+                          className="flex-grow mr-4 pl-1 -ml-1 focus:outline-none dark:bg-darkColor break-all"
                         />
                       ) : (
-                        <div className="flex-grow">
+                        <div className="flex-grow w-full whitespace-normal flex-wrap break-all">
                           <span
                             onClick={() =>
                               handleItemDoubleClick(index, item.content)
