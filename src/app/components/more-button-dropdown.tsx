@@ -11,7 +11,7 @@ type hideDropdownProp = [
 ];
 
 interface MoreButtonDropdownProps {
-  children?: React.ReactNode;
+  // children?: React.ReactNode;
   horizontal?: boolean;
   // customise position of dropdown
   position?: Position;
@@ -20,15 +20,16 @@ interface MoreButtonDropdownProps {
   // more control over button click
   onButtonClick?: () => void;
   disabled?: boolean;
+  items?: DropdownItem[];
 }
 
 export default function MoreButtonDropdown({
-  children,
   hideDropdownOption,
   horizontal,
   position,
   onButtonClick,
   disabled,
+  items,
 }: MoreButtonDropdownProps) {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
@@ -59,7 +60,7 @@ export default function MoreButtonDropdown({
     if (hideDropdownOption && hideDropdownOption[0] && dropdownOpen) {
       setDropdownOpen(false);
     }
-  }, [hideDropdownOption]);
+  }, [dropdownOpen, hideDropdownOption]);
 
   return (
     <div className="relative inline-block text-left dropdown-item">
@@ -114,7 +115,33 @@ export default function MoreButtonDropdown({
           aria-labelledby="menu-button"
           tabIndex={-1}
         >
-          {children}
+          {items &&
+            items.map((item, index, arr) => {
+              let roundingClasses = "";
+              // round children depending on position in dropdown list so all children can fit within dropdown container
+              if (arr.length === 1) {
+                roundingClasses = "rounded-t-md rounded-b-md";
+              } else if (index === 0) {
+                roundingClasses = "rounded-t-md";
+              } else if (index === arr.length - 1) {
+                roundingClasses = "rounded-b-md";
+              }
+
+              return (
+                <a
+                  key={item.id}
+                  href="#"
+                  onClick={item.onClick}
+                  className={`flex flex-row justify-between items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200 dark:hover:bg-gray-50 dark:hover:bg-opacity-10 ${roundingClasses}`}
+                  role="menuitem"
+                  tabIndex={-1}
+                  id={`menu-item-${item.id}`}
+                >
+                  <span>{item.label}</span>
+                  {item.icon}
+                </a>
+              );
+            })}
         </div>
       )}
     </div>

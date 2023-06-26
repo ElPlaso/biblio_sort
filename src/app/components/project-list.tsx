@@ -111,39 +111,32 @@ export default function ProjectList() {
                   setDeleteConfirm(false);
                 }}
                 disabled={loading}
-              >
-                {deleteConfirm ? (
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      deleteProject(project.id);
-                    }}
-                    className="flex flex-row  justify-between items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
-                    role="menuitem"
-                    tabIndex={-1}
-                    id="menu-item-1"
-                  >
-                    <span>Confirm discard</span>
-                    <BiCheck size={20} />
-                  </a>
-                ) : (
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setDeleteConfirm(true);
-                    }}
-                    className="flex flex-row  justify-between items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
-                    role="menuitem"
-                    tabIndex={-1}
-                    id="menu-item-1"
-                  >
-                    <span>Discard project</span>
-                    <RxCrumpledPaper size={20} />
-                  </a>
-                )}
-              </MoreButtonDropdown>
+                items={
+                  deleteConfirm
+                    ? [
+                        {
+                          id: "confirm",
+                          label: "Confirm discard",
+                          onClick: (e) => {
+                            e.preventDefault();
+                            deleteProject(project.id);
+                          },
+                          icon: <BiCheck size={20} />,
+                        },
+                      ]
+                    : [
+                        {
+                          id: "delete",
+                          label: "Discard project",
+                          onClick: (e) => {
+                            e.preventDefault();
+                            setDeleteConfirm(true);
+                          },
+                          icon: <RxCrumpledPaper size={20} />,
+                        },
+                      ]
+                }
+              />
             </div>
           ))}
         </FlipMove>

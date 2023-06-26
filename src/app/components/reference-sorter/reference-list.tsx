@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { renderWithLinks } from "../utils";
 import { useSelector, useDispatch } from "react-redux";
@@ -157,38 +157,29 @@ export default function ReferenceList() {
                           horizontal
                           position="left"
                           hideDropdownOption={[hideDropdown, setHideDropdown]}
-                        >
-                          <a
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              navigator.clipboard.writeText(item.content);
-                              setHideDropdown(true);
-                              toast.success("Item copied");
-                            }}
-                            className="flex flex-row justify-between items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
-                            role="menuitem"
-                            tabIndex={-1}
-                            id="menu-item-1"
-                          >
-                            Copy
-                            <MdContentCopy />
-                          </a>
-                          <a
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleRemoveItem(index);
-                            }}
-                            className="flex flex-row justify-between items-center text-gray-700 dark:text-white px-4 py-2 text-sm hover:bg-gray-200  dark:hover:bg-gray-50 dark:hover:bg-opacity-10"
-                            role="menuitem"
-                            tabIndex={-1}
-                            id="menu-item-0"
-                          >
-                            Remove
-                            <MdRemoveCircleOutline />
-                          </a>
-                        </MoreButtonDropdown>
+                          items={[
+                            {
+                              id: "copy",
+                              label: "Copy",
+                              onClick: (e) => {
+                                e.preventDefault();
+                                navigator.clipboard.writeText(item.content);
+                                setHideDropdown(true);
+                                toast.success("Item copied");
+                              },
+                              icon: <MdContentCopy />,
+                            },
+                            {
+                              id: "remove",
+                              label: "Remove",
+                              onClick: (e) => {
+                                e.preventDefault();
+                                handleRemoveItem(index);
+                              },
+                              icon: <MdRemoveCircleOutline />,
+                            },
+                          ]}
+                        />
                       )}
                     </div>
                   </li>
