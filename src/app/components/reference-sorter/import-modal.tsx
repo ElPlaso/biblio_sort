@@ -36,78 +36,54 @@ export default function ImportModal({
       isOpen={modalIsOpen}
       onRequestClose={() => setModalIsOpen(false)}
       contentLabel="Import References"
-      style={theme === "dark" ? darkStyles : lightStyles}
+      style={{
+        content: {
+          top: "50%",
+          left: "50%",
+          right: "auto",
+          bottom: "auto",
+          marginRight: "-50%",
+          transform: "translate(-50%, -50%)",
+          backgroundColor: theme === "dark" ? "rgb(18 18 18 )" : "white",
+          padding: "20px",
+          borderRadius: "4px",
+          height: "fit-content",
+          width: "fit-content",
+          overflow: "auto",
+          border: "none",
+          zIndex: 200,
+        },
+        overlay: {
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+        },
+      }}
     >
-      <div className="flex items-start justify-between ">
-        <div className="flex">
-          <MdContentPaste size={20} className="mt-1" />
-          <h3 className="text-xl ml-2">Paste</h3>
+      <div className="flex flex-col lg:h-[500px] md:h-[300px] lg:w-[600px] md:w-[400px]">
+        <div className="flex items-start justify-between ">
+          <div className="flex">
+            <MdContentPaste size={20} className="mt-1" />
+            <h3 className="text-xl ml-2">Paste</h3>
+          </div>
+          <button onClick={() => setModalIsOpen(false)}>
+            <MdClose size={24} />
+          </button>
         </div>
-        <button onClick={() => setModalIsOpen(false)}>
-          <MdClose size={24} />
+
+        <textarea
+          value={value}
+          onChange={handleImportChange}
+          className="h-full resize-none border p-1 dark:bg-darkColor outline-none dark:border-none mt-3 mb-2"
+        />
+
+        <button
+          onClick={handleImport}
+          className="flex flex-row items-center disabled:shadow-none justify-center py-2 pl-2 pr-3 bg-blue-500 dark:hover:bg-blue-600 text-white font-bold hover:shadow-lg"
+          disabled={value === ""}
+        >
+          Add
+          <MdAdd size={24} />
         </button>
       </div>
-
-      <textarea
-        value={value}
-        onChange={handleImportChange}
-        className="w-full mt-3 h-[460px] mb-2 resize-none border p-1 dark:bg-darkColor outline-none dark:border-none"
-      />
-
-      <button
-        onClick={handleImport}
-        className="w-full flex flex-row items-center disabled:shadow-none justify-center py-2 pl-2 pr-3 bg-blue-500 dark:hover:bg-blue-600 text-white font-bold hover:shadow-lg"
-        disabled={value === ""}
-      >
-        Add
-        <MdAdd size={24} />
-      </button>
     </Modal>
   );
 }
-
-// Styles
-const lightStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "white",
-    paddingLeft: "20px",
-    paddingRight: "20px",
-    borderRadius: "4px",
-    width: "600px",
-    height: "600px",
-    overflow: "auto",
-    zIndex: 200,
-  },
-  overlay: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-};
-
-const darkStyles = {
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "rgb(18 18 18 )",
-    paddingLeft: "20px",
-    paddingRight: "20px",
-    borderRadius: "4px",
-    width: "600px",
-    height: "600px",
-    overflow: "auto",
-    border: "none",
-    zIndex: 200,
-  },
-  overlay: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-};
