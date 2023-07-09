@@ -10,9 +10,11 @@ import { RootState } from "../store/store";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { selectTheme } from "../features/theme/theme-slice";
+import WebCiteModal from "./reference-sorter/web-cite-modal";
 
 export default function ReferenceSorter() {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [importModalIsOpen, setImportModalIsOpen] = useState(false);
+  const [webCiteModalIsOpen, setWebCiteModalIsOpen] = useState(false);
   const loading = useSelector((state: RootState) => state.projects.loading);
   const theme = useSelector(selectTheme);
   const items = useSelector((state: RootState) => state.references.items);
@@ -20,9 +22,21 @@ export default function ReferenceSorter() {
 
   return (
     <div className="flex-grow flex-col min-h-full p-8 rounded-tl-3xl shadow-lg border dark:border-none bg-gray-50 dark:bg-opacity-10 space-y-4">
-      <ToolBar setModalIsOpen={setModalIsOpen} modalIsOpen={modalIsOpen} />
+      <ToolBar
+        setImportOpen={setImportModalIsOpen}
+        setWebCiteOpen={setWebCiteModalIsOpen}
+        aModalIsOpen={importModalIsOpen || webCiteModalIsOpen}
+      />
 
-      <ImportModal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />
+      <ImportModal
+        modalIsOpen={importModalIsOpen}
+        setModalIsOpen={setImportModalIsOpen}
+      />
+
+      <WebCiteModal
+        modalIsOpen={webCiteModalIsOpen}
+        setModalIsOpen={setWebCiteModalIsOpen}
+      />
 
       <ReferenceInput />
 

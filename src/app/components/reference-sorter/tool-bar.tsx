@@ -1,10 +1,18 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import toast from "react-hot-toast";
 import Switch from "../switch";
 import { BiImport } from "react-icons/bi";
 import { MdContentCopy, MdDeleteOutline } from "react-icons/md";
+import { TbWorldWww } from "react-icons/tb";
 import classnames from "classnames";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -30,11 +38,16 @@ import UndoChangesButton from "../tool-bar/undo-changes-button";
 import { useChangesMade } from "@/app/features/references/use-changes-made";
 
 interface ToolBarProps {
-  setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  modalIsOpen: boolean;
+  setImportOpen: Dispatch<SetStateAction<boolean>>;
+  setWebCiteOpen: Dispatch<SetStateAction<boolean>>;
+  aModalIsOpen: boolean;
 }
 
-export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
+export default function ToolBar({
+  setImportOpen,
+  setWebCiteOpen,
+  aModalIsOpen,
+}: ToolBarProps) {
   const items = useSelector(selectItems);
   const prepend = useSelector(selectPrepend);
   const copyWithLinks = useSelector(selectCopyWithLinks);
@@ -170,7 +183,7 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
         "flex lg:flex-row md:flex-col lg:justify-between md:items-start md:justify-center md:space-y-2 lg:items-center w-full sticky top-0 dark:text-white transition-all duration-100 space-x-2",
         {
           "shadow-lg rounded-full bg-white dark:bg-darkColor top-[100px] py-5 px-7 dark:shadow-xl z-20":
-            isScrolled && !modalIsOpen,
+            isScrolled && !aModalIsOpen,
         }
       )}
     >
@@ -242,7 +255,15 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
         </div>
         <div className="flex space-x-2">
           <ToolBarActionButton
-            onClick={() => setModalIsOpen(true)}
+            onClick={() => setWebCiteOpen(true)}
+            id="web-cite"
+            icon={<TbWorldWww size={24} />}
+            place={"bottom"}
+            tip={"Cite from web"}
+            disabled={loading}
+          />
+          <ToolBarActionButton
+            onClick={() => setImportOpen(true)}
             id="import"
             icon={<BiImport size={24} />}
             place={"bottom"}
@@ -269,4 +290,22 @@ export default function ToolBar({ setModalIsOpen, modalIsOpen }: ToolBarProps) {
       </div>
     </div>
   );
+}
+
+{
+  /* <a
+          data-tooltip-id={"web-cite"}
+          data-tooltip-content={"Enter reference"}
+        >
+          <button
+            onClick={handleCitationFromWebToggle}
+            className={classNames({
+              "text-blue-500 hover:text-blue-600": citeFromWeb,
+              "text-gray-500 hover:text-gray-600": !citeFromWeb,
+            })}
+          >
+            <TbWorldWww size={30} />
+          </button>
+          <Tooltip id={"web-cite"} place={"bottom"} />
+        </a> */
 }
