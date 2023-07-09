@@ -1,5 +1,4 @@
 import React, { ChangeEvent } from "react";
-import Modal from "react-modal";
 import { MdAdd, MdContentPaste, MdClose } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -7,7 +6,7 @@ import {
   setImportValue,
   importItems,
 } from "../../features/references/reference-slice";
-import { selectTheme } from "../../features/theme/theme-slice";
+import BibModal from "./bib-modal";
 
 interface ImportModalProps {
   modalIsOpen: boolean;
@@ -20,7 +19,6 @@ export default function ImportModal({
 }: ImportModalProps) {
   const dispatch = useDispatch();
   const value = useSelector(selectImportValue);
-  const theme = useSelector(selectTheme);
 
   const handleImport = () => {
     dispatch(importItems());
@@ -31,33 +29,13 @@ export default function ImportModal({
     dispatch(setImportValue(e.target.value));
   }
 
+  function handleModalClose() {
+    setModalIsOpen(false);
+    dispatch(setImportValue(""));
+  }
+
   return (
-    <Modal
-      isOpen={modalIsOpen}
-      onRequestClose={() => setModalIsOpen(false)}
-      contentLabel="Import References"
-      style={{
-        content: {
-          top: "50%",
-          left: "50%",
-          right: "auto",
-          bottom: "auto",
-          marginRight: "-50%",
-          transform: "translate(-50%, -50%)",
-          backgroundColor: theme === "dark" ? "rgb(18 18 18 )" : "white",
-          padding: "20px",
-          borderRadius: "4px",
-          height: "fit-content",
-          width: "fit-content",
-          overflow: "auto",
-          border: "none",
-          zIndex: 200,
-        },
-        overlay: {
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-        },
-      }}
-    >
+    <BibModal modalIsOpen={modalIsOpen} handleModalClose={handleModalClose}>
       <div className="flex flex-col lg:h-[500px] md:h-[300px] lg:w-[600px] md:w-[400px]">
         <div className="flex items-start justify-between ">
           <div className="flex">
@@ -84,6 +62,6 @@ export default function ImportModal({
           <MdAdd size={24} />
         </button>
       </div>
-    </Modal>
+    </BibModal>
   );
 }

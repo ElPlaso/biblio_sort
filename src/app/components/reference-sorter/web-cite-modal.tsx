@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import Modal from "react-modal";
 import { MdClose, MdSearch } from "react-icons/md";
 import { TbWorldWww } from "react-icons/tb";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addItem } from "../../features/references/reference-slice";
-import { selectTheme } from "../../features/theme/theme-slice";
 import { generateCitation } from "@/app/features/references/utils";
 import CircleLoader from "../circle-loader/circle-loader";
+import BibModal from "./bib-modal";
 
 interface WebCiteModalProps {
   modalIsOpen: boolean;
@@ -22,7 +21,6 @@ export default function WebCiteModal({
   const [input, setInput] = useState<string>("");
   const [url, setUrl] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
-  const theme = useSelector(selectTheme);
   const dispatch = useDispatch();
 
   function handleAddCitation() {
@@ -78,32 +76,7 @@ export default function WebCiteModal({
   }
 
   return (
-    <Modal
-      isOpen={modalIsOpen}
-      onRequestClose={handleModalClose}
-      contentLabel="Import References"
-      style={{
-        content: {
-          top: "50%",
-          left: "50%",
-          right: "auto",
-          bottom: "auto",
-          marginRight: "-50%",
-          transform: "translate(-50%, -50%)",
-          backgroundColor: theme === "dark" ? "rgb(18 18 18 )" : "white",
-          padding: "20px",
-          borderRadius: "4px",
-          height: "fit-content",
-          width: "fit-content",
-          overflow: "auto",
-          border: "none",
-          zIndex: 200,
-        },
-        overlay: {
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-        },
-      }}
-    >
+    <BibModal modalIsOpen={modalIsOpen} handleModalClose={handleModalClose}>
       <div className="flex flex-col lg:w-[600px] md:w-[400px] space-y-3">
         <div className="flex items-start justify-between ">
           <div className="flex">
@@ -186,6 +159,6 @@ export default function WebCiteModal({
           </div>
         )}
       </div>
-    </Modal>
+    </BibModal>
   );
 }
