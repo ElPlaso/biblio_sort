@@ -19,6 +19,7 @@ export default function WebCiteModal({
 }: WebCiteModalProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [generatedCitation, setGeneratedCitation] = useState<string>("");
+  const [input, setInput] = useState<string>("");
   const [url, setUrl] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
   const theme = useSelector(selectTheme);
@@ -28,10 +29,11 @@ export default function WebCiteModal({
     dispatch(addItem(generatedCitation));
     setModalIsOpen(false);
     setGeneratedCitation("");
+    setUrl("");
   }
 
-  function handleUrlChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setUrl(e.target.value);
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setInput(e.target.value);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -41,8 +43,9 @@ export default function WebCiteModal({
   }
 
   async function handleGenerateCitation() {
-    setUrl("");
-    await generateCitationFromWeb(url);
+    setInput("");
+    setError(false);
+    await generateCitationFromWeb(input);
   }
 
   async function generateCitationFromWeb(url: string) {
@@ -51,10 +54,12 @@ export default function WebCiteModal({
       if (!url.startsWith("http://") && !url.startsWith("https://")) {
         url = "https://" + url;
       }
+      setUrl(url);
       const citation = await generateCitation(url);
       setGeneratedCitation(citation);
       setIsLoading(false);
     } catch (e: any) {
+      setError(true);
       setIsLoading(false);
       setGeneratedCitation("");
     }
@@ -63,7 +68,12 @@ export default function WebCiteModal({
   function handleModalClose() {
     setModalIsOpen(false);
     setGeneratedCitation("");
+    setInput("");
     setUrl("");
+    setError(false);
+  }
+
+  function handleCloseErrorMessage() {
     setError(false);
   }
 
@@ -108,8 +118,8 @@ export default function WebCiteModal({
         <div className="flex items-center justify-center space-x-2 w-full">
           <input
             type="text"
-            value={url}
-            onChange={handleUrlChange}
+            value={input}
+            onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             placeholder={"Enter or paste URL"}
             className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none color-transition-applied"
@@ -124,11 +134,28 @@ export default function WebCiteModal({
           </button>
         </div>
 
-        {(isLoading || generatedCitation) && (
+        {(isLoading || generatedCitation || error) && (
           <div className="w-full p-4 shadow-lg rounded-lg bg-white dark:bg-darkColor">
             {isLoading ? (
               <div className="w-full text-center">
                 <CircleLoader />
+              </div>
+            ) : error ? (
+              <div className="flex flex-col space-y-1">
+                <div className="flex flex-row w-full items-center justify-between ">
+                  <h1 className={"text-red-500 font-medium cursor-default"}>
+                    Error
+                  </h1>
+                  <div>
+                    <button
+                      onClick={handleCloseErrorMessage}
+                      className="items-center w-[50px] rounded-full text-gray-500 hover:text-gray-600 font-medium"
+                    >
+                      Okay
+                    </button>
+                  </div>
+                </div>
+                <div>An error occurred while trying to access: {url}</div>
               </div>
             ) : (
               <div className="flex flex-col space-y-1">
