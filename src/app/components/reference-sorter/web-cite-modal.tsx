@@ -116,6 +116,7 @@ export default function WebCiteModal({
           <div className="flex">
             <TbWorldWww size={20} className="mt-1" />
             <h3 className="text-xl ml-2">Web Cite</h3>
+            <span className="text-xl ml-2 text-blue-400">beta</span>
           </div>
           <button onClick={handleModalClose}>
             <MdClose size={24} />
