@@ -10,10 +10,17 @@ import {
 } from "../../features/references/reference-slice";
 import CircleLoader from "../circle-loader/circle-loader";
 import BibModal from "./bib-modal";
+import FlipMove from "react-flip-move";
+import { uid } from "uid";
 
 interface WebCiteModalProps {
   modalIsOpen: boolean;
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface GeneratedCitation {
+  id: string;
+  citation: string;
 }
 
 export default function WebCiteModal({
@@ -21,24 +28,28 @@ export default function WebCiteModal({
   setModalIsOpen,
 }: WebCiteModalProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [generatedCitations, setGeneratedCitations] = useState<string[]>([]);
+  const [generatedCitations, setGeneratedCitations] = useState<
+    GeneratedCitation[]
+  >([]);
   const [input, setInput] = useState<string>("");
   const [url, setUrl] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   function handleAddCitation(index: number) {
-    dispatch(addItem(generatedCitations[index]));
+    dispatch(addItem(generatedCitations[index].citation));
     removeCitation(index);
     setUrl("");
   }
 
   function handleAddAllCitations() {
     // convert array to line separated string
-    const citations = generatedCitations.join("\n\n");
-    dispatch(setImportValue(citations));
+    const citations = generatedCitations.map((citation) => citation.citation);
+    const citationsString = citations.join("\n\n");
+    dispatch(setImportValue(citationsString));
     dispatch(importItems());
     setModalIsOpen(false);
+    setGeneratedCitations([]);
   }
 
   function removeCitation(index: number) {
@@ -74,7 +85,12 @@ export default function WebCiteModal({
       setUrl(url);
       const citation = await generateCitation(url);
       // add citation to start of list
-      setGeneratedCitations((prev) => [citation, ...prev]);
+      // create an instance of GeneratedCitation
+      const citationObj: GeneratedCitation = {
+        id: uid(),
+        citation: citation,
+      };
+      setGeneratedCitations((prev) => [citationObj, ...prev]);
       setIsLoading(false);
     } catch (e: any) {
       setError(true);
@@ -154,38 +170,43 @@ export default function WebCiteModal({
               </div>
             )
           )}
-          {generatedCitations.map((citation, index) => (
-            <div className="w-full p-4 shadow-lg rounded-lg bg-white dark:bg-darkColor ">
-              <div className="flex flex-col space-y-1">
-                <div className="flex flex-row w-full items-center justify-between ">
-                  <h1 className={"text-blue-500 font-medium cursor-default"}>
-                    Generated Citation
-                  </h1>
-                  <div>
-                    <button
-                      onClick={() => handleAddCitation(index)}
-                      className="items-center w-[50px] rounded-full text-blue-500 hover:text-blue-600 font-medium"
-                    >
-                      Add
-                    </button>
-                    <button
-                      onClick={() => {
-                        setGeneratedCitations((prev) => {
-                          const newCitations = [...prev];
-                          newCitations.splice(index, 1);
-                          return newCitations;
-                        });
-                      }}
-                      className="items-center w-[50px] rounded-full text-gray-500 hover:text-gray-600 font-medium"
-                    >
-                      Discard
-                    </button>
+          <FlipMove className="space-y-2">
+            {generatedCitations.map((citation, index) => (
+              <div
+                key={citation.id}
+                className="w-full p-4 shadow-lg rounded-lg bg-white dark:bg-darkColor "
+              >
+                <div className="flex flex-col space-y-1">
+                  <div className="flex flex-row w-full items-center justify-between ">
+                    <h1 className={"text-blue-500 font-medium cursor-default"}>
+                      Generated Citation
+                    </h1>
+                    <div>
+                      <button
+                        onClick={() => handleAddCitation(index)}
+                        className="items-center w-[50px] rounded-full text-blue-500 hover:text-blue-600 font-medium"
+                      >
+                        Add
+                      </button>
+                      <button
+                        onClick={() => {
+                          setGeneratedCitations((prev) => {
+                            const newCitations = [...prev];
+                            newCitations.splice(index, 1);
+                            return newCitations;
+                          });
+                        }}
+                        className="items-center w-[50px] rounded-full text-gray-500 hover:text-gray-600 font-medium"
+                      >
+                        Discard
+                      </button>
+                    </div>
                   </div>
+                  <div>{citation.citation}</div>
                 </div>
-                <div>{citation}</div>
               </div>
-            </div>
-          ))}
+            ))}
+          </FlipMove>
           <style>
             {`
             .web-cite-list::-webkit-scrollbar {
