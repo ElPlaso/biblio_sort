@@ -145,6 +145,7 @@ export default function ProjectList() {
         {`
         .project-list::-webkit-scrollbar {
           width: 0px;
+        }
         `}
       </style>
     </div>

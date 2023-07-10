@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { MdClose, MdSearch } from "react-icons/md";
+import { MdAdd, MdClose, MdSearch } from "react-icons/md";
 import { TbWorldWww } from "react-icons/tb";
 import { useDispatch } from "react-redux";
 import { addItem } from "../../features/references/reference-slice";
 import { generateCitation } from "@/app/features/references/utils";
+import {
+  setImportValue,
+  importItems,
+} from "../../features/references/reference-slice";
 import CircleLoader from "../circle-loader/circle-loader";
 import BibModal from "./bib-modal";
 
@@ -17,17 +21,32 @@ export default function WebCiteModal({
   setModalIsOpen,
 }: WebCiteModalProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [generatedCitation, setGeneratedCitation] = useState<string>("");
+  const [generatedCitations, setGeneratedCitations] = useState<string[]>([]);
   const [input, setInput] = useState<string>("");
   const [url, setUrl] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
   const dispatch = useDispatch();
 
-  function handleAddCitation() {
-    dispatch(addItem(generatedCitation));
-    setModalIsOpen(false);
-    setGeneratedCitation("");
+  function handleAddCitation(index: number) {
+    dispatch(addItem(generatedCitations[index]));
+    removeCitation(index);
     setUrl("");
+  }
+
+  function handleAddAllCitations() {
+    // convert array to line separated string
+    const citations = generatedCitations.join("\n\n");
+    dispatch(setImportValue(citations));
+    dispatch(importItems());
+    setModalIsOpen(false);
+  }
+
+  function removeCitation(index: number) {
+    setGeneratedCitations((prev) => {
+      const newCitations = [...prev];
+      newCitations.splice(index, 1);
+      return newCitations;
+    });
   }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -54,18 +73,17 @@ export default function WebCiteModal({
       }
       setUrl(url);
       const citation = await generateCitation(url);
-      setGeneratedCitation(citation);
+      // add citation to start of list
+      setGeneratedCitations((prev) => [citation, ...prev]);
       setIsLoading(false);
     } catch (e: any) {
       setError(true);
       setIsLoading(false);
-      setGeneratedCitation("");
     }
   }
 
   function handleModalClose() {
     setModalIsOpen(false);
-    setGeneratedCitation("");
     setInput("");
     setUrl("");
     setError(false);
@@ -107,30 +125,37 @@ export default function WebCiteModal({
           </button>
         </div>
 
-        {(isLoading || generatedCitation || error) && (
-          <div className="w-full p-4 shadow-lg rounded-lg bg-white dark:bg-darkColor">
-            {isLoading ? (
+        <div className="web-cite-list lg:max-h-[400px] md:max-h-[300px] overflow-y-scroll space-y-2 px-2 pb-6">
+          {isLoading ? (
+            <div className="w-full p-4 shadow-lg rounded-lg bg-white dark:bg-darkColor">
               <div className="w-full text-center">
                 <CircleLoader />
               </div>
-            ) : error ? (
-              <div className="flex flex-col space-y-1">
-                <div className="flex flex-row w-full items-center justify-between ">
-                  <h1 className={"text-red-500 font-medium cursor-default"}>
-                    Error
-                  </h1>
-                  <div>
-                    <button
-                      onClick={handleCloseErrorMessage}
-                      className="items-center w-[50px] rounded-full text-gray-500 hover:text-gray-600 font-medium"
-                    >
-                      Okay
-                    </button>
+            </div>
+          ) : (
+            error && (
+              <div className="w-full p-4 shadow-lg rounded-lg bg-white dark:bg-darkColor">
+                <div className="flex flex-col space-y-1">
+                  <div className="flex flex-row w-full items-center justify-between ">
+                    <h1 className={"text-red-500 font-medium cursor-default"}>
+                      Error
+                    </h1>
+                    <div>
+                      <button
+                        onClick={handleCloseErrorMessage}
+                        className="items-center w-[50px] rounded-full text-gray-500 hover:text-gray-600 font-medium"
+                      >
+                        Dismiss
+                      </button>
+                    </div>
                   </div>
+                  <div>An error occurred while trying to access: {url}</div>
                 </div>
-                <div>An error occurred while trying to access: {url}</div>
               </div>
-            ) : (
+            )
+          )}
+          {generatedCitations.map((citation, index) => (
+            <div className="w-full p-4 shadow-lg rounded-lg bg-white dark:bg-darkColor ">
               <div className="flex flex-col space-y-1">
                 <div className="flex flex-row w-full items-center justify-between ">
                   <h1 className={"text-blue-500 font-medium cursor-default"}>
@@ -138,26 +163,45 @@ export default function WebCiteModal({
                   </h1>
                   <div>
                     <button
-                      onClick={handleAddCitation}
+                      onClick={() => handleAddCitation(index)}
                       className="items-center w-[50px] rounded-full text-blue-500 hover:text-blue-600 font-medium"
                     >
                       Add
                     </button>
                     <button
                       onClick={() => {
-                        setGeneratedCitation("");
+                        setGeneratedCitations((prev) => {
+                          const newCitations = [...prev];
+                          newCitations.splice(index, 1);
+                          return newCitations;
+                        });
                       }}
                       className="items-center w-[50px] rounded-full text-gray-500 hover:text-gray-600 font-medium"
                     >
-                      Cancel
+                      Discard
                     </button>
                   </div>
                 </div>
-                <div>{generatedCitation}</div>
+                <div>{citation}</div>
               </div>
-            )}
-          </div>
-        )}
+            </div>
+          ))}
+          <style>
+            {`
+            .web-cite-list::-webkit-scrollbar {
+              width: 0px;
+            }
+            `}
+          </style>
+        </div>
+        <button
+          onClick={handleAddAllCitations}
+          className="flex flex-row items-center disabled:shadow-none justify-center py-2 pl-2 pr-3 bg-blue-500 dark:hover:bg-blue-600 text-white font-bold hover:shadow-lg"
+          disabled={generatedCitations.length === 0}
+        >
+          Add All
+          <MdAdd size={24} />
+        </button>
       </div>
     </BibModal>
   );
