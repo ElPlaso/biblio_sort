@@ -80,7 +80,7 @@ export default function ProjectList() {
         </Link>
       </div>
       <div className="project-list overflow-y-scroll" ref={scrollContainerRef}>
-        <FlipMove className="project-list flex flex-col">
+        <FlipMove className="flex flex-col">
           {sortedProjects.map((project) => (
             <div
               key={project.id}
@@ -145,6 +145,7 @@ export default function ProjectList() {
         {`
         .project-list::-webkit-scrollbar {
           width: 0px;
+        }
         `}
       </style>
     </div>
