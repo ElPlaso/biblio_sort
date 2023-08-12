@@ -200,7 +200,7 @@ export default function ToolBar({
             type="text"
             ref={inputRef}
             maxLength={100}
-            className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none color-transition-applied text-left"
+            className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none   text-left"
             value={titleInputValue}
             placeholder="New project"
             onChange={(e) => setTitleInputValue(e.target.value)}

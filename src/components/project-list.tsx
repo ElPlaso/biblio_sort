@@ -62,7 +62,7 @@ export default function ProjectList() {
         </h1>
         <Link
           className={classnames(
-            "rounded-lg  w-full px-3 py-2 flex items-center justify-between border z-20 hover:shadow-md color-transition-applied",
+            "rounded-lg  w-full px-3 py-2 flex items-center justify-between border z-20 hover:shadow-md  ",
             {
               "bg-gray-200 dark:bg-opacity-10": !currentId,
               "bg-white dark:bg-darkColor": currentId,

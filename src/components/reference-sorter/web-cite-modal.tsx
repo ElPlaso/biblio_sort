@@ -130,7 +130,7 @@ export default function WebCiteModal({
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             placeholder={"Enter or paste URL"}
-            className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none color-transition-applied"
+            className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none  "
           />
 
           <button
