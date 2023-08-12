@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { MdAdd, MdClose, MdSearch } from "react-icons/md";
 import { TbWorldWww } from "react-icons/tb";
 import { useDispatch } from "react-redux";
-import { addItem } from "../../features/references/reference-slice";
-import { generateCitation } from "@/app/features/references/utils";
+import { addItem } from "@/lib/features/references/reference-slice";
+import { generateCitation } from "@/lib/features/references/utils";
 import {
   setImportValue,
   importItems,
-} from "../../features/references/reference-slice";
+} from "@/lib/features/references/reference-slice";
 import CircleLoader from "../circle-loader/circle-loader";
 import BibModal from "./bib-modal";
 import FlipMove from "react-flip-move";

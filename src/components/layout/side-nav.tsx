@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import Link from "next/link";
-import { RootState } from "../../store/store";
+import { RootState } from "@/lib/store/store";
 import SignOutButton from "../auth/sign-out";
 import { usePathname } from "next/navigation";
 import ProjectList from "../project-list";

@@ -1,4 +1,4 @@
-import LayoutWrapper from "./components/layout/layout-wrapper";
+import LayoutWrapper from "@/components/layout/layout-wrapper";
 import "./globals.css";
 import { Inter } from "next/font/google";
 

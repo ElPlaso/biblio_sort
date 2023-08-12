@@ -2,17 +2,17 @@ import {
   createProjectAction,
   updateProjectItemsAction,
   updateProjectTitleAction,
-} from "../../features/projects/project-slice";
+} from "@/lib/features/projects/project-slice";
 import { Tooltip } from "react-tooltip";
 import { useRouter } from "next/navigation";
 import { MdSave } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
-import { AppDispatch, RootState } from "@/app/store/store";
+import { AppDispatch, RootState } from "@/lib/store/store";
 import toast from "react-hot-toast";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { selectItems } from "@/app/features/references/reference-slice";
-import { transformItemsToStrings } from "@/app/features/references/utils";
-import { useChangesMade } from "@/app/features/references/use-changes-made";
+import { selectItems } from "@/lib/features/references/reference-slice";
+import { transformItemsToStrings } from "@/lib/features/references/utils";
+import { useChangesMade } from "@/lib/features/references/use-changes-made";
 
 export default function SaveProjectButton(props: { disabled: boolean }) {
   const dispatch = useDispatch<AppDispatch>();

@@ -1,6 +1,6 @@
-import { setTitle, setItems } from "@/app/features/references/reference-slice";
-import { useChangesMade } from "@/app/features/references/use-changes-made";
-import { transformItems } from "@/app/features/references/utils";
+import { setTitle, setItems } from "@/lib/features/references/reference-slice";
+import { useChangesMade } from "@/lib/features/references/use-changes-made";
+import { transformItems } from "@/lib/features/references/utils";
 import { useDispatch } from "react-redux";
 import { Tooltip } from "react-tooltip";
 import { MdUndo } from "react-icons/md";

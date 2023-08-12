@@ -2,15 +2,15 @@
 
 import { SetStateAction, useState } from "react";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth } from "../../../../firebase";
+import { auth } from "../../../firebase";
 import GoogleSignIn from "./google-sign-in";
-import { AppDispatch, RootState } from "@/app/store/store";
+import { AppDispatch, RootState } from "@/lib/store/store";
 import {
   loginStart,
   loginSuccess,
   loginFailure,
-} from "@/app/features/auth/auth-slice";
-import AuthUser from "@/app/types/auth-user";
+} from "@/lib/features/auth/auth-slice";
+import AuthUser from "@/lib/types/auth-user";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createProject, deleteProject, getProjects, updateProjectItems, projectExists, getProjectItems, getProjectTitle, updateProjectTitle } from '@/app/services/db-service';
+import { createProject, deleteProject, getProjects, updateProjectItems, projectExists, getProjectItems, getProjectTitle, updateProjectTitle } from '@/lib/services/db-service';
 
 interface Project {
     id: string;

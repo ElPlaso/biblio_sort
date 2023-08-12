@@ -7,8 +7,8 @@ import {
   setItems,
   removeItem,
   selectCopyWithLinks,
-} from "../../features/references/reference-slice";
-import { AppDispatch } from "../../store/store";
+} from "@/lib/features/references/reference-slice";
+import { AppDispatch } from "@/lib/store/store";
 import { MdRemoveCircleOutline, MdContentCopy } from "react-icons/md";
 import MoreButtonDropdown from "../more-button-dropdown";
 import { toast } from "react-hot-toast";

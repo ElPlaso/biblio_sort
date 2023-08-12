@@ -6,10 +6,10 @@ import ImportModal from "./reference-sorter/import-modal";
 import ReferenceInput from "./reference-sorter/reference-input";
 import ReferenceList from "./reference-sorter/reference-list";
 import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
+import { RootState } from "@/lib/store/store";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { selectTheme } from "../features/theme/theme-slice";
+import { selectTheme } from "@/lib/features/theme/theme-slice";
 import WebCiteModal from "./reference-sorter/web-cite-modal";
 
 export default function ReferenceSorter() {

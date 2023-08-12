@@ -5,7 +5,7 @@ import {
   selectInputValue,
   addItem,
   setInputValue,
-} from "../../features/references/reference-slice";
+} from "@/lib/features/references/reference-slice";
 
 export default function ReferenceInput() {
   const inputValue = useSelector(selectInputValue);

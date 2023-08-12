@@ -1,6 +1,6 @@
 import Modal from "react-modal";
 import { useSelector } from "react-redux";
-import { selectTheme } from "@/app/features/theme/theme-slice";
+import { selectTheme } from "@/lib/features/theme/theme-slice";
 
 interface BibModalProps {
   modalIsOpen: boolean;

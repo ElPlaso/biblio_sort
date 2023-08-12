@@ -23,19 +23,19 @@ import {
   setTitle,
   togglePrepend,
   toggleCopyWithLinks,
-} from "../../features/references/reference-slice";
+} from "@/lib/features/references/reference-slice";
 import { renderWithLinksHrefOnly } from "../utils";
-import { getTitle } from "../../features/projects/project-slice";
-import { AppDispatch, RootState } from "../../store/store";
+import { getTitle } from "@/lib/features/projects/project-slice";
+import { AppDispatch, RootState } from "@/lib/store/store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ToolBarActionButton from "../tool-bar/tool-bar-action-button";
 import classNames from "classnames";
-import { selectTheme } from "@/app/features/theme/theme-slice";
+import { selectTheme } from "@/lib/features/theme/theme-slice";
 import SaveProjectButton from "../tool-bar/save-project-button";
 import UndoChangesButton from "../tool-bar/undo-changes-button";
-import { useChangesMade } from "@/app/features/references/use-changes-made";
+import { useChangesMade } from "@/lib/features/references/use-changes-made";
 
 interface ToolBarProps {
   setImportOpen: Dispatch<SetStateAction<boolean>>;

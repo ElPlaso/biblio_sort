@@ -7,13 +7,13 @@ import {
   sendEmailVerification,
   signOut,
 } from "firebase/auth";
-import { auth } from "../../../../firebase";
-import { AppDispatch, RootState } from "../../store/store";
+import { auth } from "../../../firebase";
+import { AppDispatch, RootState } from "@/lib/store/store";
 import {
   signupStart,
   signupFailure,
   signupComplete,
-} from "../../features/auth/auth-slice";
+} from "@/lib/features/auth/auth-slice";
 import { useDispatch } from "react-redux";
 import GoogleSignIn from "./google-sign-in";
 import { toast } from "react-hot-toast";

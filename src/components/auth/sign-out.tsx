@@ -1,8 +1,8 @@
 "use strict";
 import { signOut } from "firebase/auth";
-import { logout } from "../../features/auth/auth-slice";
-import { auth } from "../../../../firebase";
-import { AppDispatch } from "../../store/store";
+import { logout } from "@/lib/features/auth/auth-slice";
+import { auth } from "../../../firebase";
+import { AppDispatch } from "@/lib/store/store";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";

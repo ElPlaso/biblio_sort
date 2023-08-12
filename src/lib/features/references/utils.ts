@@ -1,4 +1,4 @@
-import { SortableItem } from "@/app/types/sortable-item";
+import { SortableItem } from "@/lib/types/sortable-item";
 import { uid } from "uid";
 
 // transforms an array of items into an array of strings

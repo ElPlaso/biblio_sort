@@ -1,17 +1,17 @@
 "use client";
 
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { AppDispatch } from "../../store/store";
+import { AppDispatch } from "@/lib/store/store";
 import {
   loginStart,
   loginSuccess,
   loginFailure,
-} from "../../features/auth/auth-slice";
-import { auth } from "../../../../firebase";
+} from "@/lib/features/auth/auth-slice";
+import { auth } from "../../../firebase";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
-import AuthUser from "../../types/auth-user";
+import AuthUser from "@/lib/types/auth-user";
 import { toast } from "react-hot-toast";
 
 const provider = new GoogleAuthProvider();

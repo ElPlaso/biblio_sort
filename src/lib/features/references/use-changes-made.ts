@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "@/app/store/store";
+import { RootState } from "@/lib/store/store";
 import { selectItems } from "./reference-slice";
 import { itemsEqual, transformItemsToStrings } from "./utils";
 

@@ -1,5 +1,5 @@
-import { RootState } from "@/app/store/store";
-import { SortableItem } from "@/app/types/sortable-item";
+import { RootState } from "@/lib/store/store";
+import { SortableItem } from "@/lib/types/sortable-item";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ReferenceState {

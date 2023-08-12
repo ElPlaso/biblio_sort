@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { MdAddCircle } from "react-icons/md";
-import { AppDispatch, RootState } from "../store/store";
+import { AppDispatch, RootState } from "@/lib/store/store";
 import { AiOutlineFile } from "react-icons/ai";
 import FlipMove from "react-flip-move";
 import classnames from "classnames";
@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 import MoreButtonDropdown from "./more-button-dropdown";
 import { useEffect, useRef, useState } from "react";
 import { RxCrumpledPaper } from "react-icons/rx";
-import { deleteProjectAction } from "../features/projects/project-slice";
+import { deleteProjectAction } from "@/lib/features/projects/project-slice";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { BiCheck } from "react-icons/bi";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useDispatch, useSelector } from "react-redux";
-import { setTheme, selectTheme } from "../features/theme/theme-slice";
+import { setTheme, selectTheme } from "@/lib/features/theme/theme-slice";
 import { useEffect } from "react";
 import { IoSunnyOutline, IoMoonOutline } from "react-icons/io5";
 

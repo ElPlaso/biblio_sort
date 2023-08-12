@@ -5,7 +5,7 @@ import {
   selectImportValue,
   setImportValue,
   importItems,
-} from "../../features/references/reference-slice";
+} from "@/lib/features/references/reference-slice";
 import BibModal from "./bib-modal";
 
 interface ImportModalProps {

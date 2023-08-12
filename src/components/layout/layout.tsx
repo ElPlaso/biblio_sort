@@ -1,12 +1,12 @@
 "use client'";
-import { fetchProjects } from "@/app/features/projects/project-slice";
+import { fetchProjects } from "@/lib/features/projects/project-slice";
 import { useDispatch } from "react-redux";
 import SideNav from "./side-nav";
 import TopAppBar from "./top-app-bar";
 import { useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/app/store/store";
+import { AppDispatch, RootState } from "@/lib/store/store";
 import { Toaster } from "react-hot-toast";
-import { authStateObserver } from "@/app/services/auth-service";
+import { authStateObserver } from "@/lib/services/auth-service";
 import { useEffect } from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {

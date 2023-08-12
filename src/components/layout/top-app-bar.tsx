@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { RootState } from "@/lib/store/store";
 import ThemeModeToggle from "../theme-mode-toggle";
 
 export default function TopAppBar() {

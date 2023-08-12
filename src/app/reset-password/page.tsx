@@ -5,10 +5,10 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../../firebase";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
-import { resetEmailSending, resetEmailSent } from "../features/auth/auth-slice";
+import { resetEmailSending, resetEmailSent } from "@/lib/features/auth/auth-slice";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/store";
-import Loader from "../components/loader/loader";
+import { RootState } from "@/lib/store/store";
+import Loader from "@/components/loader/loader";
 import { useRouter } from "next/navigation";
 
 export default function ResetPassword() {

@@ -8,13 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   checkProjectExists,
   getItems,
-} from "../features/projects/project-slice";
+} from "@/lib/features/projects/project-slice";
 import { useSearchParams } from "next/navigation";
-import ReferenceSorter from "../components/reference-sorter";
-import { AppDispatch, RootState } from "../store/store";
-import { setProject, setItems } from "../features/references/reference-slice";
-import { setLoading } from "../features/projects/project-slice";
-import { transformItems } from "../features/references/utils";
+import ReferenceSorter from "@/components/reference-sorter";
+import { AppDispatch, RootState } from "@/lib/store/store";
+import { setProject, setItems } from "@/lib/features/references/reference-slice";
+import { setLoading } from "@/lib/features/projects/project-slice";
+import { transformItems } from "@/lib/features/references/utils";
 
 export default function ProjectPage() {
   const [projectExists, setProjectExists] = useState(true);
