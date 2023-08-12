@@ -28,7 +28,7 @@ export default function BibModal({
           bottom: "auto",
           marginRight: "-50%",
           transform: "translate(-50%, -50%)",
-          backgroundColor: theme === "dark" ? "rgb(18 18 18 )" : "white",
+          backgroundColor: theme === "dark" ? "rgb(83 83 83 )" : "white",
           padding: "20px",
           borderRadius: "4px",
           height: "fit-content",

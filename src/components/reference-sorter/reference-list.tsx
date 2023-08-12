@@ -128,7 +128,7 @@ export default function ReferenceList() {
                     }}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className={`  bg-white shadow-md dark:bg-darkColor p-4 rounded-lg mb-2 ${
+                    className={`  bg-white shadow-md dark:bg-darkSecondary p-4 rounded-lg mb-2 ${
                       snapshot.isDragging ||
                       (editItem && editItem.index === index)
                         ? "shadow-lg"
@@ -145,7 +145,7 @@ export default function ReferenceList() {
                           onBlur={() => handleBlur(index)}
                           onKeyDown={(e) => handleItemEditKeyDown(e, index)}
                           autoFocus
-                          className="flex-grow mr-4 pl-1 -ml-1 focus:outline-none dark:bg-darkColor break-all"
+                          className="flex-grow mr-4 pl-1 -ml-1 focus:outline-none dark:bg-darkSecondary break-all"
                         />
                       ) : (
                         <div className="flex-grow w-full whitespace-normal flex-wrap break-all">

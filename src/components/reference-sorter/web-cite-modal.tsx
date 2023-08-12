@@ -130,7 +130,7 @@ export default function WebCiteModal({
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             placeholder={"Enter or paste URL"}
-            className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none  "
+            className="bg-white dark:bg-darkGray rounded p-2 w-full border border-gray-300 dark:border-none outline-none  "
           />
 
           <button
@@ -144,14 +144,14 @@ export default function WebCiteModal({
 
         <div className="web-cite-list lg:max-h-[400px] md:max-h-[300px] overflow-y-scroll space-y-2 px-2 pb-6">
           {isLoading ? (
-            <div className="w-full p-4 shadow-lg rounded-lg bg-white dark:bg-darkColor">
+            <div className="w-full p-4 shadow-lg rounded-lg bg-white dark:bg-darkGray">
               <div className="w-full text-center">
                 <CircleLoader />
               </div>
             </div>
           ) : (
             error && (
-              <div className="w-full p-4 shadow-lg rounded-lg bg-white dark:bg-darkColor">
+              <div className="w-full p-4 shadow-lg rounded-lg bg-white dark:bg-darkGray">
                 <div className="flex flex-col space-y-1">
                   <div className="flex flex-row w-full items-center justify-between ">
                     <h1 className={"text-red-500 font-medium cursor-default"}>
@@ -175,7 +175,7 @@ export default function WebCiteModal({
             {generatedCitations.map((citation, index) => (
               <div
                 key={citation.id}
-                className="w-full p-4 shadow-lg rounded-lg bg-white dark:bg-darkColor "
+                className="w-full p-4 shadow-lg rounded-lg bg-white dark:bg-darkGray"
               >
                 <div className="flex flex-col space-y-1">
                   <div className="flex flex-row w-full items-center justify-between ">

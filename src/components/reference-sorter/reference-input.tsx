@@ -34,7 +34,7 @@ export default function ReferenceInput() {
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           placeholder={"Add reference"}
-          className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none  "
+          className="bg-white dark:bg-darkSecondary dark:bg-opacity-50 rounded p-2 w-full border border-gray-300 dark:border-none outline-none  "
         />
 
         <button

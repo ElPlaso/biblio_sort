@@ -182,7 +182,7 @@ export default function ToolBar({
       className={classnames(
         "flex lg:flex-row md:flex-col lg:justify-between md:items-start md:justify-center md:space-y-2 lg:items-center w-full sticky top-0 dark:text-white transition-all duration-100 space-x-2",
         {
-          "shadow-lg rounded-full bg-white dark:bg-darkColor top-[100px] py-5 px-7 dark:shadow-xl z-20":
+          "shadow-lg rounded-full bg-white dark:bg-darkSecondary top-[100px] py-5 px-7 dark:shadow-xl z-20":
             isScrolled && !aModalIsOpen,
         }
       )}
@@ -200,7 +200,7 @@ export default function ToolBar({
             type="text"
             ref={inputRef}
             maxLength={100}
-            className="bg-white dark:bg-darkColor rounded p-2 w-full border border-gray-300 dark:border-none outline-none   text-left"
+            className="bg-white dark:bg-darkSecondary dark:bg-opacity-50 rounded p-2 w-full border border-gray-300 dark:border-none outline-none  text-left"
             value={titleInputValue}
             placeholder="New project"
             onChange={(e) => setTitleInputValue(e.target.value)}

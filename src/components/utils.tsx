@@ -12,7 +12,7 @@ export function renderWithLinks(text: string) {
           key={index}
           href={part}
           target="_blank"
-          className="text-blue-600"
+          className="text-blue-600 dark:text-blue-400"
           rel="noopener noreferrer"
         >
           {part}

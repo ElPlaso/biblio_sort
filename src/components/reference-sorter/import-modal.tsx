@@ -50,7 +50,7 @@ export default function ImportModal({
         <textarea
           value={value}
           onChange={handleImportChange}
-          className="h-full resize-none border p-1 dark:bg-darkColor outline-none dark:border-none mt-3 mb-2"
+          className="h-full resize-none border p-1 dark:bg-darkGray outline-none dark:border-none mt-3 mb-2"
         />
 
         <button
