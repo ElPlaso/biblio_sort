@@ -7,9 +7,11 @@ import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/store/store";
 import { Toaster } from "react-hot-toast";
 import { authStateObserver } from "@/lib/services/auth-service";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState(true);
+
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     authStateObserver();
@@ -38,8 +40,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       />
       <div className="flex h-screen">
         <div className="flex flex-row flex-grow w-full">
-          <SideNav />
-          <main className="flex-grow min-h-screen pt-24 pl-4 lg:ml-64 md:ml-44">
+          <SideNav isOpen={isOpen} setIsOpen={setIsOpen} />
+          <main
+            className={`flex-grow min-h-screen pt-24 pl-4 lg:ml-64 md:ml-44 transition-all  duration-300 ease-in-out ${!isOpen && "lg:ml-10 md:ml-14"} `}
+          >
             {children}
           </main>
         </div>

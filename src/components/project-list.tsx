@@ -57,9 +57,6 @@ export default function ProjectList() {
   return (
     <div className="flex flex-col h-full space-y-2">
       <div className="pl-4">
-        <h1 className="text-2xl font-bold w-full text-gray-600 ml-2 mb-3 dark:text-white">
-          Projects
-        </h1>
         <Link
           className={classnames(
             "rounded-lg  w-full px-3 py-2 flex items-center justify-between border z-20 hover:shadow-md  ",
