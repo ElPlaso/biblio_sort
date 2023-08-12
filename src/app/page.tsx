@@ -1,7 +1,7 @@
 "use client";
 
-import ReferenceSorter from "./components/reference-sorter";
-import { setProject } from "./features/references/reference-slice";
+import ReferenceSorter from "@/components/reference-sorter";
+import { setProject } from "@/lib/features/references/reference-slice";
 import { useDispatch } from "react-redux";
 
 export default function Home() {
