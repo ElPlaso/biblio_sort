@@ -37,17 +37,8 @@ export default function SideNav({ isOpen, setIsOpen }: SideNavProps) {
       )}
 
       {user && user.emailVerified ? (
-        <div className="flex flex-col h-full pb-40 space-y-4 pt-2">
-          <div className="min-h-full">
-            <ProjectList />
-          </div>
-          <div
-            className={`px-2 fixed bottom-0 lg:w-60 opacity-100 py-4 transition-opacity duration-500 ease-in-out ${
-              !isOpen && "opacity-0"
-            }`}
-          >
-            <SignOutButton />
-          </div>
+        <div className="flex flex-col h-full pb-40">
+          <ProjectList />
         </div>
       ) : pathName === "/login" ||
         pathName === "/register" ||

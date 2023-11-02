@@ -1,13 +1,39 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store/store";
 import ThemeModeToggle from "../theme-mode-toggle";
+import MoreButtonDropdown from "../more-button-dropdown";
+import { MdOutlineDirectionsRun } from "react-icons/md";
+import { signOut } from "firebase/auth";
+import { logout } from "@/lib/features/auth/auth-slice";
+import { auth } from "../../../firebase";
+import { AppDispatch } from "@/lib/store/store";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
+export const logoutFromFirebase =
+  (router: ReturnType<typeof useRouter>) => async (dispatch: AppDispatch) => {
+    try {
+      await signOut(auth);
+      toast.success("Signed out");
+      router.push("/login");
+      dispatch(logout());
+    } catch (error) {
+      toast.error("Failed to sign out");
+    }
+  };
 
 export default function TopAppBar() {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const user = useSelector((state: RootState) => state.auth.user);
   const userFirstLetter = user?.displayName?.charAt(0).toUpperCase();
+
+  const handleLogout = () => {
+    logoutFromFirebase(router)(dispatch);
+  };
 
   return (
     <header className="flex justify-between items-center w-full fixed top-0 p-[25px] shadow-sm dark:shadow-2xl dark:bg-darkColor bg-white h-24  ">
@@ -22,12 +48,12 @@ export default function TopAppBar() {
           BiblioSort
         </h1>
       </Link>
-      <div className="flex items-center">
+      <div className="flex items-center justify-center">
         <ThemeModeToggle />
         {user && user.emailVerified ? (
           user.photoUrl ? (
             <Image
-              className="ml-4 rounded-full cursor-pointer"
+              className="ml-4 rounded-full cursor-pointer hover:border hover:shadow-lg"
               src={user.photoUrl}
               alt="User profile"
               title={`Logged in as ${user.displayName}`}
@@ -43,6 +69,21 @@ export default function TopAppBar() {
             </div>
           )
         ) : null}
+        <MoreButtonDropdown
+          horizontal
+          position="left"
+          items={[
+            {
+              id: "sign Out",
+              label: "Sign Out",
+              onClick: (e) => {
+                e.preventDefault();
+                handleLogout();
+              },
+              icon: <MdOutlineDirectionsRun size={20} />,
+            },
+          ]}
+        />
       </div>
     </header>
   );

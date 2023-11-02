@@ -9,6 +9,8 @@ export default function LayoutWrapper({
 }: {
   children: React.ReactNode;
 }) {
+  
+
   return (
     <Provider store={store}>
       <Layout>{children}</Layout>
